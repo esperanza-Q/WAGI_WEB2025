@@ -72,15 +72,6 @@ class User(AbstractUser): #기본적으로 username, password, email, is_active 
         help_text="재학증명서 등 학교 인증용 서류(PDF, 최대 10MB)를 업로드하세요."
     ) 
     verified_at = models.DateTimeField(null=True, blank=True) #관리자가 승인한 날짜/시간 저장
-    verified_by = models.ForeignKey( #이 사용자를 인증한 관리자(User)를 가리키는 외래키
-        "self",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="verified_users",
-        help_text="이 사용자를 인증한 관리자",
-        limit_choices_to={"is_staff": True},
-    )
     department = models.ForeignKey(
         Department, 
         on_delete=models.SET_NULL, #학과가 삭제되더라도 유저 정보는 유지

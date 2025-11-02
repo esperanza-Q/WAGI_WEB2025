@@ -138,3 +138,5 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AUTH_USER_MODEL = "accounts.User" #커스텀 유저 모델 사용
