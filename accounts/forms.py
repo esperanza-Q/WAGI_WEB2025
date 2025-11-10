@@ -1,0 +1,125 @@
+import re
+from django import forms
+from django.contrib.auth import get_user_model
+from .models import College, Department
+from django.core.exceptions import ValidationError
+
+User = get_user_model()
+
+class SignupForm(forms.ModelForm):
+    college = forms.ModelChoiceField(
+        queryset=College.objects.all().order_by("college_name"),
+        required=True, 
+        label="단과대학",
+    )
+    
+    department = forms.ModelChoiceField(
+        queryset=Department.objects.none(),
+        required=True,
+        label="학과",
+    )
+
+    username = forms.CharField(
+        label="아이디(학번)",
+        help_text=None,
+        widget=forms.TextInput(attrs={"placeholder": "예) 20200000"}),
+    )
+
+    password1 = forms.CharField(
+        label="비밀번호",
+        widget=forms.PasswordInput,
+        strip=False,
+        help_text="8자 이상 입력해주세요.(영문, 숫자, 특수문자 포함)",
+    )
+
+    password2 = forms.CharField(
+        label="비밀번호 확인",
+        widget=forms.PasswordInput,
+        strip=False,
+    )
+
+    display_name = forms.CharField(max_length=100, label="닉네임")
+    email = forms.EmailField(label="이메일")  
+    verification_document = forms.FileField(
+        required=False,
+        label="학교 인증 서류(PDF, 선택)",
+        help_text="PDF(최대 10MB). 추후에도 업로드 가능",
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            "department",
+            "display_name",
+            "email",
+            "verification_document",
+            "username",
+        ]
+    
+    def __init__(self, *args, **kwargs):
+        college_id = kwargs.pop("college_id", None)  # ← view에서 넘겨줄 값
+        super().__init__(*args, **kwargs)
+
+        self.fields["username"].label = "아이디(학번)"
+        self.fields["username"].help_text = None
+
+        college_id = (self.data.get("college") or self.initial.get("college"))
+        if college_id:
+            try:
+                self.fields["department"].queryset = Department.objects.filter(
+                    college_id=college_id
+                ).order_by("dept_name")
+            except (TypeError, ValueError):
+                self.fields["department"].queryset = Department.objects.none()
+        else:
+            self.fields["department"].queryset = Department.objects.none()
+
+    def clean_username(self):
+        u = self.cleaned_data["username"].strip()
+        # 학번 규칙: 숫자 5~10자리 (원하면 길이 조정)
+        if not re.fullmatch(r"\d{5,10}", u):
+            raise ValidationError("학번은 숫자 5~10자리여야 합니다.")
+        if User.objects.filter(username=u).exists():
+            raise ValidationError("이미 사용 중인 학번입니다.")
+        return u
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].lower()
+        if User.objects.filter(email__iexact=email).exists():
+            raise ValidationError("이미 등록된 이메일입니다.")
+        return email 
+    
+    def clean_password2(self):
+        pw1 = self.cleaned_data.get("password1")
+        pw2 = self.cleaned_data.get("password2")
+        if pw1 and pw2 and pw1 != pw2:
+            raise ValidationError("비밀번호가 일치하지 않습니다.")
+        return pw2
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        user.username     = self.cleaned_data["username"].strip()
+        user.email = self.cleaned_data["email"].lower()
+        user.display_name = (self.cleaned_data.get("display_name") or "").strip()
+        user.department = self.cleaned_data["department"]
+
+        user.set_password(self.cleaned_data["password1"])
+
+        doc = self.cleaned_data.get("verification_document")
+        if doc:
+            user.verification_document = doc
+
+        if commit:
+            user.save()
+        return user
+    
+class LoginForm(forms.Form):
+    username = forms.CharField(label="아이디", max_length=150)
+    password = forms.CharField(
+        label="비밀번호",
+        widget=forms.PasswordInput,
+        strip=False,
+    )
+
+    

@@ -57,9 +57,9 @@ class Department(models.Model):
 #유저
 class User(AbstractUser): #기본적으로 username, password, email, is_active 등 이미 포함되어 있음
     #user_id = models.CharField(max_length=50, unique=True) #username이랑 중복된다고 생각해서 제거
-    display_name = models.CharField(max_length=100) #닉네임(중복 허용)
-    student_id = models.CharField(max_length=20, unique=True) #학번
-    email = models.EmailField(unique=True)
+    username = models.CharField("학번", max_length=20, unique=True)
+    display_name = models.CharField(max_length=100) 
+    email = models.EmailField("이메일", unique=True, blank=True, null=True)
     is_verified = models.BooleanField(default=False) #학교 인증 여부
     verification_document = models.FileField( #학교 인증용 서류
         upload_to=verification_doc_upload_path,
@@ -84,13 +84,13 @@ class User(AbstractUser): #기본적으로 username, password, email, is_active 
         verbose_name_plural = "유저 목록"
         ordering = ["-date_joined", "id"] #가입날 최신순으로, id는 오름차순
         indexes = [
-            models.Index(fields=["student_id"]),
+            models.Index(fields=["username"]),
             models.Index(fields=["email"]),
             models.Index(fields=["department"]),
             models.Index(fields=["is_verified"]),
         ]
         
     def __str__(self):
-        return self.student_id #학번(student_id)으로 구분
+        return self.username #학번(username)으로 구분
 
 

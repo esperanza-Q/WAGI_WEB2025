@@ -21,8 +21,8 @@ class DepartmentAdmin(admin.ModelAdmin):
 #유저
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "display_name", "student_id", "email", "is_verified", "verified_at", "department", "college")
-    search_fields = ("username", "display_name", "student_id", "email", "department__dept_name", "department__college__college_name")
+    list_display = ("username", "display_name", "email", "is_verified", "verified_at", "department", "college")
+    search_fields = ("username", "display_name", "email", "department__dept_name", "department__college__college_name")
     list_filter = ("is_verified", "department", "department__college")
     readonly_fields = ("verified_at",)
     actions = ["approve_users", "unapprove_users"]

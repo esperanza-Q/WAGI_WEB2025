@@ -1,0 +1,12 @@
+{% extends "b_base.html" %}
+{% block content %}
+<h1>로그인</h1>
+<form method="post">
+  {% csrf_token %}
+  <div>{{ form.username.label_tag }} {{ form.username }} {{ form.username.errors }}</div>
+  <div>{{ form.password.label_tag }} {{ form.password }} {{ form.password.errors }}</div>
+  {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+  <button type="submit">로그인</button>
+</form>
+<p><a href="{% url 'accounts:signup' %}">회원가입</a></p>
+{% endblock %}
