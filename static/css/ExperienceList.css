@@ -1,0 +1,365 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+* {
+  font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+:root {
+  --purple-dark: #69395A;
+  --purple-light: #8E6781;
+  --purple-light-2: #B395AA;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  background: linear-gradient(130deg, #dfd0d8 0%, #6d3965f6 90%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  height: 60px;
+  background: rgba(250, 250, 250, 0.07);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.main-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.main-nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav-links a {
+  color: var(--purple-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.main-nav-links a:hover {
+    color: #9c3d7e;
+}
+
+.main-header-r {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.mypage-btn {
+  background: transparent;
+  color: var(--purple-dark);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.mypage-btn:hover {
+  color: #9c3d7e;
+}
+
+.login-btn {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--purple-dark);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* 메인 콘텐츠 */
+main {
+  flex: 1;
+  padding: 6rem 3rem 2rem 3rem;
+  max-width: 1016px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.search-section {
+  margin-top: 40px;
+  margin-bottom:10px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: rgba(245, 217, 242, 0.22);
+  border: 0.1px solid var(--purple-dark);
+  border-radius: 40px;
+  padding: 5px 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  flex: 1;
+  font-size: 15px;
+  outline: none;
+  color: var(--purple-dark);
+}
+
+.search-bar input::placeholder {
+  color: var(--purple-light);
+}
+
+.search-bar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.search-btn {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.search-btn:hover {
+  transform: scale(1.1);
+}
+
+.filter-tabs ul {
+  display: flex;
+  gap: 4rem;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.filter-tabs button {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  padding: 5px 13px;
+  font-size: 15px;
+  cursor: pointer;
+  color: var(--purple-dark);
+  font-weight: 400;
+}
+
+.filter-tabs button.active {
+  background: rgba(123, 82, 115, 0.512);
+  border: 0.1px solid var(--purple-dark);
+}
+
+.sub-filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sub-filters ul {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin-bottom: -10px;
+}
+
+.sub-filters button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--purple-light);
+  cursor: pointer;
+}
+
+.sub-filters button.active {
+  font-weight: 600;
+  color: var(--purple-dark);
+}
+
+.divider {
+  width: calc(100%);
+  height: 1px;
+  background: var(--purple-dark);
+  margin-bottom: 2rem;
+}
+
+.write-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.write-btn:hover {
+  background: rgba(255, 255, 255, 0.412);
+  transform: translateY(-1px);
+}
+
+.post-list {
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  max-width: 800px;
+}
+
+.post-card {
+  background: rgba(245, 217, 242, 0.22);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(102, 71, 131, 0.678);
+  border-radius: 12px;
+  padding: 1.3rem 1.7rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.post-card:hover {
+  background: rgba(255, 255, 255, 0.208);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.post-category {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--purple-dark);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.post-date {
+  color: var(--purple-dark);
+  border-radius: 15px;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.post-title {
+  color: var(--purple-dark);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.post-nickname {
+  color: var(--purple-dark);
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
+
+.post-period {
+  color: var(--purple-light);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--purple-light);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.post-like {
+  color: var(--purple-dark);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.post-like-img{
+  margin-right: 5px;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.page-btn {
+  padding: 0.5rem 0.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 40px;
+}
+
+.page-btn.active,
+.page-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+
+.footer {
+  text-align: center;
+  padding: 50px 10px 20px 10px;
+  color: var(--purple-dark);
+  font-size: 15px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.129);
+}
+
+.footer .member {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.8;
+}
