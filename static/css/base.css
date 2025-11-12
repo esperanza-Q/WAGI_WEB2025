@@ -1,0 +1,125 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+* {
+  font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+:root {
+  --purple-dark: #69395A;
+  --purple-light: #8E6781;
+  --purple-light-2: #B395AA;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  background: linear-gradient(130deg, #dfd0d8 0%, #6d3965f6 90%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-repeat: no-repeat;
+}
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  height: 60px;
+  background: rgba(250, 250, 250, 0.07);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.main-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.main-nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav-links a {
+  color: var(--purple-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.main-nav-links a:hover {
+    color: #9c3d7e;
+}
+
+.main-header-r {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.mypage-btn {
+  background: transparent;
+  color: var(--purple-dark);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.mypage-btn:hover {
+  color: #9c3d7e;
+}
+
+.login-btn {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--purple-dark);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* 메인 콘텐츠 */
+main {
+  flex: 1;
+  padding: 6rem 3rem 2rem 3rem;
+  max-width: 1016px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.footer {
+  text-align: center;
+  padding: 50px 10px 20px 10px;
+  color: var(--purple-dark);
+  font-size: 15px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.129);
+}
+
+.footer .member {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.8;
+}
