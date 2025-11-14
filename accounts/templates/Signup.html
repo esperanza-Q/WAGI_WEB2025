@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/base.css">
+  <link rel="stylesheet" href="../../static/css/Signup.css">
 </head>
 
 <body>
@@ -28,7 +28,41 @@
   </header>
 
   <main>
-   <!--메인 콘텐츠 넣으면 됩니다-->
+  <!--메인 콘텐츠 넣으면 됩니다-->
+    <div class="signup-wrapper">
+      <div class="signup-top">
+        <p>회원가입</p>
+      </div>
+
+      <form method="post" class="signup-form">
+        <div class="signup-box">
+          <input type="text" placeholder="이메일">
+          <input type="text" placeholder="성명">
+          <input type="text" placeholder="닉네임">
+          <input type="password" placeholder="비밀번호">
+          <input type="password" placeholder="비밀번호 확인">
+          <div class="signup-academic">
+            <select>
+              <option>1학년</option>
+              <option>2학년</option>
+              <option>3학년</option>
+              <option>4학년</option>
+              <option>휴학</option>
+              <option>졸업</option>
+            </select>
+            <input type="text" placeholder="단과대">
+          </div>
+          <input type="text" placeholder="학과">
+        </div>  
+
+        <div class="signup-submit">
+          <input type="submit" value="가입하기">
+        </div> 
+      </form>
+
+      
+        
+    </div>
   </main>
 
   <footer class="footer">
