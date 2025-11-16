@@ -167,10 +167,16 @@ main {
   box-shadow: none;
   outline:none;
   color:var(--purple-dark);
+  font-size:15px
 }
 
 .verification-info input::placeholder{
   color:var(--purple-dark);
+}
+
+.verification-info input:focus{
+  border-color:var(--purple-dark);
+  border-width:1px;
 }
 
 .verification-img{
@@ -213,6 +219,10 @@ main {
   outline:none;
   color:rgba(235, 212, 228, 1);
   cursor:pointer;
+}
+
+.verification-img button:hover{
+  background: rgba(105,37,90,0.22);
 }
 
 .verify-img-preview{
@@ -258,6 +268,10 @@ main {
   align-items:center;
 }
 
+.verification-submit input:hover{
+  background: rgba(105,37,90,0.22);
+}
+
 .verification-submit input{
   width:100%;
   height:49px;
@@ -274,6 +288,7 @@ main {
   outline:none;
   color:rgba(235, 212, 228, 1);
   cursor:pointer;
+  font-size:16px
 }
 
 .footer {
