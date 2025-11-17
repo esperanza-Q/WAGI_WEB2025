@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 로드맵 - 상세</title>
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 -->
+<header>
+    <div>LOGO</div>
+    <nav>
+        <a>활동 찾기</a>
+        <a>자소서/면접 꿀팁</a>
+        <a>모집</a>
+        <a href="{% url 'career:roadmap_list' %}">나의 로드맵</a>
+    </nav>
+    <div>
+        <a>마이페이지</a>
+        <a>로그인</a>
+    </div>
+</header>
+
+<h1>나의 로드맵</h1>
+<h2>상세 보기</h2>
+
+<!-- 시안처럼: 왼쪽 이미지, 오른쪽 텍스트 영역 -->
+<section>
+
+    <div style="display: table; width: 100%;">
+        <!-- 왼쪽: 이미지/첨부 미리보기 영역 -->
+        <div style="display: table-cell; width: 50%; vertical-align: top;">
+            <h3>이미지 / 자료</h3>
+
+            {% if entry.image %}
+                <div>
+                    <img src="{{ entry.image.url }}" alt="이미지" style="max-width: 100%;">
+                </div>
+            {% else %}
+                <div>
+                    <p>등록된 이미지가 없습니다.</p>
+                </div>
+            {% endif %}
+
+            {% if entry.attachment %}
+                <div>
+                    <p>첨부 파일:
+                        <a href="{{ entry.attachment.url }}" download>
+                            다운로드
+                        </a>
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- 오른쪽: 상세 텍스트 영역 -->
+        <div style="display: table-cell; width: 50%; vertical-align: top;">
+            <!-- 날짜 / 카테고리 / 제목 -->
+            <div>
+                <p>날짜: {{ entry.date }}</p>
+
+                <p>
+                    카테고리:
+                    {% if entry.category == "club" %}동아리{% endif %}
+                    {% if entry.category == "contest" %}공모전{% endif %}
+                    {% if entry.category == "academic" %}학회{% endif %}
+                    {% if entry.category == "intern" %}인턴{% endif %}
+                    {% if entry.category == "other" %}기타{% endif %}
+                </p>
+
+                {% if entry.period_text %}
+                    <p>기간: {{ entry.period_text }}</p>
+                {% endif %}
+
+                <h3>{{ entry.title }}</h3>
+
+                {% if entry.tags %}
+                    <p>태그: {{ entry.tags }}</p>
+                {% endif %}
+            </div>
+
+            <!-- 본문 -->
+            <div>
+                <h4>본문</h4>
+                <p>{{ entry.description|linebreaksbr }}</p>
+            </div>
+
+            <!-- 버튼 영역: 목록 / 수정 / 삭제 -->
+            <div>
+                <a href="{% url 'career:roadmap_list' %}">목록으로</a> |
+                <a href="{% url 'career:roadmap_update' entry.pk %}">수정</a> |
+                <a href="{% url 'career:roadmap_delete' entry.pk %}">삭제</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+</body>
+</html>
