@@ -2,6 +2,7 @@ import re
 from django import forms
 from django.contrib.auth import get_user_model
 from .models import College, Department
+from .models import GradeChoices
 from django.core.exceptions import ValidationError
 
 User = get_user_model()
@@ -25,6 +26,12 @@ class SignupForm(forms.ModelForm):
         widget=forms.TextInput(attrs={"placeholder": "예) 20200000"}),
     )
 
+    grade = forms.ChoiceField(
+        label="학년",
+        choices= GradeChoices.choices,
+        required=True,
+    )
+
     password1 = forms.CharField(
         label="비밀번호",
         widget=forms.PasswordInput,
@@ -42,8 +49,8 @@ class SignupForm(forms.ModelForm):
     email = forms.EmailField(label="이메일")  
     verification_document = forms.FileField(
         required=False,
-        label="학교 인증 서류(PDF, 선택)",
-        help_text="PDF(최대 10MB). 추후에도 업로드 가능",
+        label="학교 인증 서류",
+        help_text="최대 10MB. 추후에도 업로드 가능",
     )
 
     class Meta:
@@ -54,6 +61,7 @@ class SignupForm(forms.ModelForm):
             "email",
             "verification_document",
             "username",
+            "grade",
         ]
     
     def __init__(self, *args, **kwargs):
@@ -103,6 +111,7 @@ class SignupForm(forms.ModelForm):
         user.email = self.cleaned_data["email"].lower()
         user.display_name = (self.cleaned_data.get("display_name") or "").strip()
         user.department = self.cleaned_data["department"]
+        user.grade = self.cleaned_data["grade"]
 
         user.set_password(self.cleaned_data["password1"])
 
@@ -115,7 +124,7 @@ class SignupForm(forms.ModelForm):
         return user
     
 class LoginForm(forms.Form):
-    username = forms.CharField(label="아이디", max_length=150)
+    username = forms.CharField(label="아이디(학번)", max_length=150)
     password = forms.CharField(
         label="비밀번호",
         widget=forms.PasswordInput,

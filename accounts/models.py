@@ -53,23 +53,36 @@ class Department(models.Model):
 
     def __str__(self):
          return f"{self.college.college_name} / {self.dept_name}"
+    
+class GradeChoices(models.IntegerChoices):
+    G1 = 1, "1학년"
+    G2 = 2, "2학년"
+    G3 = 3, "3학년"
+    G4 = 4, "4학년"
+    LEAVE = 5, "휴학"
+    GRAD = 6, "졸업생"
 
 #유저
 class User(AbstractUser): #기본적으로 username, password, email, is_active 등 이미 포함되어 있음
     #user_id = models.CharField(max_length=50, unique=True) #username이랑 중복된다고 생각해서 제거
     username = models.CharField("학번", max_length=20, unique=True)
     display_name = models.CharField(max_length=100) 
+    grade = models.PositiveSmallIntegerField("학년",
+    choices=GradeChoices.choices,
+    null=True,
+    blank=True,
+    help_text="현재 학년을 선택하세요. (1~4학년, 휴학, 졸업생)"
+)
     email = models.EmailField("이메일", unique=True, blank=True, null=True)
     is_verified = models.BooleanField(default=False) #학교 인증 여부
     verification_document = models.FileField( #학교 인증용 서류
         upload_to=verification_doc_upload_path,
         null=True,
         blank=True, 
-        validators = [
-            FileExtensionValidator(["pdf"]), 
+        validators = [ 
             validate_file_size,
         ],
-        help_text="재학증명서 등 학교 인증용 서류(PDF, 최대 10MB)를 업로드하세요."
+        help_text="재학증명서 등 학교 인증용 서류(최대 10MB)를 업로드하세요."
     ) 
     verified_at = models.DateTimeField(null=True, blank=True) #관리자가 승인한 날짜/시간 저장
     department = models.ForeignKey(
@@ -88,6 +101,7 @@ class User(AbstractUser): #기본적으로 username, password, email, is_active 
             models.Index(fields=["email"]),
             models.Index(fields=["department"]),
             models.Index(fields=["is_verified"]),
+            models.Index(fields=["grade"]),
         ]
         
     def __str__(self):
