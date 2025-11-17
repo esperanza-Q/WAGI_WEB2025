@@ -1,0 +1,6 @@
+<h1>{{ review.title }}</h1>
+<p>{{ review.content }}</p>
+<p>별점: {{ review.rating }}</p>
+<p>학년: {{ review.grade_at_time }}</p>
+<p>작성자: {{ review.user.username }}</p>
+<a href="{% url 'review_like' review.id %}">좋아요</a>
