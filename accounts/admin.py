@@ -1,6 +1,5 @@
 from django.contrib import admin
-from django.utils import timezone
-from .models import User, College, Department
+from .models import User, College, Department, Verification
 
 # Register your models here.
 #단과대
@@ -21,10 +20,9 @@ class DepartmentAdmin(admin.ModelAdmin):
 #유저
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "display_name", "email", "is_verified", "verified_at", "department", "college", "grade")
+    list_display = ("username", "display_name", "email", "is_verified", "department", "college", "grade")
     search_fields = ("username", "display_name", "email", "department__dept_name", "department__college__college_name", "grade")
     list_filter = ("is_verified", "department", "department__college", "grade",)
-    readonly_fields = ("verified_at",)
     actions = ["approve_users", "unapprove_users"]
     ordering = ("-date_joined",)
     list_select_related = ("department", "department__college")
@@ -37,17 +35,39 @@ class UserAdmin(admin.ModelAdmin):
     # approve_users: 선택한 사용자들의 is_verified를 True로 설정하고 verified_at에 현재 시간 저장
     @admin.action(description="선택 사용자 인증 승인 처리")
     def approve_users(self, request, queryset):
-        updated = queryset.update(is_verified=True, verified_at=timezone.now())
+        updated = queryset.update(is_verified=True)
         self.message_user(request, f"{updated}명의 사용자를 승인했습니다.")
 
     # unapprove_users: 선택한 사용자들의 is_verified를 False로 설정하고 verified_at을 None으로 설정
     @admin.action(description="선택 사용자 인증 승인 취소")
     def unapprove_users(self, request, queryset):
-        updated = queryset.update(is_verified=False, verified_at=None)
+        updated = queryset.update(is_verified=False)
         self.message_user(request, f"{updated}명의 사용자 승인을 취소했습니다.")
 
-    # 저장 시 verified 상태에 따라 시간 자동 반영
-    def save_model(self, request, obj, form, change):
-        if change and "is_verified" in form.changed_data:
-            obj.verified_at = timezone.now() if obj.is_verified else None
-        super().save_model(request, obj, form, change)
+@admin.register(Verification)
+class VerificationAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user",               # User(학번) 연결
+        "real_name",          # 성명
+        "verification_document",
+        "is_verified",
+    )
+    search_fields = (
+        "real_name",
+        "user__username",
+    )
+    list_filter = ("is_verified",)
+
+    @admin.action(description="선택 인증요청 승인 + 유저 is_verified=True 처리")
+    def is_verified_selected(self, request, queryset):
+        count = 0
+        for ver in queryset.select_related("user"):
+            if not ver.is_verified:
+                ver.is_verified = True
+                ver.save(update_fields=["is_verified"])
+            if not ver.user.is_verified:
+                ver.user.is_verified = True
+                ver.user.save(update_fields=["is_verified"])
+                count += 1
+        self.message_user(request, f"{count}명의 사용자를 인증 처리했습니다.")
