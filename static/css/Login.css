@@ -112,7 +112,7 @@ main {
 }
 
 .login-wrapper{
-  width:488px; height:453px;
+  width:488px; height:auto;
     
   display:flex;
   flex-direction:column;
@@ -124,6 +124,7 @@ main {
   background-color:rgba(255,228,247,0.18);
   padding:40px;
   text-align:center;
+  margin-top:40px;
 }
 
 .login-top{
