@@ -1,0 +1,9 @@
+<h2>QnA 목록</h2>
+
+<ul>
+    {% for q in qnas %}
+        <li>{{ q.title }}</li>
+    {% empty %}
+        <li>작성된 질문이 없습니다.</li>
+    {% endfor %}
+</ul>
