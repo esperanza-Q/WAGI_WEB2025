@@ -1,0 +1,7 @@
+<h1>후기 작성</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">작성하기</button>
+</form>
