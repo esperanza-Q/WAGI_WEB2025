@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import College, Department
+from .models import College, Department, Verification
 from .models import GradeChoices
 from django.core.exceptions import ValidationError
 
@@ -47,11 +47,6 @@ class SignupForm(forms.ModelForm):
 
     display_name = forms.CharField(max_length=100, label="닉네임")
     email = forms.EmailField(label="이메일")  
-    verification_document = forms.FileField(
-        required=False,
-        label="학교 인증 서류",
-        help_text="최대 10MB. 추후에도 업로드 가능",
-    )
 
     class Meta:
         model = User
@@ -59,7 +54,6 @@ class SignupForm(forms.ModelForm):
             "department",
             "display_name",
             "email",
-            "verification_document",
             "username",
             "grade",
         ]
@@ -115,10 +109,6 @@ class SignupForm(forms.ModelForm):
 
         user.set_password(self.cleaned_data["password1"])
 
-        doc = self.cleaned_data.get("verification_document")
-        if doc:
-            user.verification_document = doc
-
         if commit:
             user.save()
         return user
@@ -131,4 +121,15 @@ class LoginForm(forms.Form):
         strip=False,
     )
 
+class VerificationForm(forms.ModelForm):
+    class Meta:
+        model = Verification
+        fields = ["real_name", "verification_document"]
+        labels = {
+            "real_name": "성명",
+            "verification_document": "인증 서류",
+        }
+        help_texts = {
+            "verification_document": "재학증명서, 학생증 등 인증용 이미지/서류(최대 10MB)",
+        }
     
