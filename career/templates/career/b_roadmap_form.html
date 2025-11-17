@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 로드맵 - 글쓰기</title>
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 (시안 동일 텍스트) -->
+<header>
+    <div>LOGO</div>
+    <nav>
+        <a>활동 찾기</a>
+        <a>자소서/면접 꿀팁</a>
+        <a>모집</a>
+        <a href="{% url 'career:roadmap_list' %}">나의 로드맵</a>
+    </nav>
+    <div>
+        <a>마이페이지</a>
+        <a>로그인</a>
+    </div>
+</header>
+
+<h1>나의 로드맵</h1>
+<h2>나의 로드맵 남기기</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- 제목 -->
+    <div>
+        <label for="id_title">제목</label><br>
+        <input type="text"
+               id="id_title"
+               name="title"
+               placeholder="활동 제목 간단히 입력해주세요 (예: 동기 3기 프로젝트)"
+               value="{{ form.title.value|default_if_none:'' }}">
+    </div>
+    <br>
+
+    <!-- 카테고리 선택 -->
+    <div>
+        <label>카테고리 선택 (동아리/학회/공모전/인턴/기타)</label><br>
+
+        <label>
+            <input type="radio" name="category" value="club"
+                   {% if form.category.value == "club" %}checked{% endif %}>
+            동아리
+        </label>
+
+        <label>
+            <input type="radio" name="category" value="contest"
+                   {% if form.category.value == "contest" %}checked{% endif %}>
+            공모전
+        </label>
+
+        <label>
+            <input type="radio" name="category" value="academic"
+                   {% if form.category.value == "academic" %}checked{% endif %}>
+            학회
+        </label>
+
+        <label>
+            <input type="radio" name="category" value="intern"
+                   {% if form.category.value == "intern" %}checked{% endif %}>
+            인턴
+        </label>
+
+        <label>
+            <input type="radio" name="category" value="other"
+                   {% if form.category.value == "other" %}checked{% endif %}>
+            기타
+        </label>
+    </div>
+    <br>
+
+    <!-- 날짜/기간 -->
+    <div>
+        <label for="id_date">날짜/기간 (YYYY-MM-DD)</label><br>
+        <input type="date"
+               id="id_date"
+               name="date"
+               value="{{ form.date.value|default_if_none:'' }}">
+    </div>
+    <br>
+
+    <!-- 본문 -->
+    <div>
+        <label for="id_description">본문</label><br>
+        <textarea id="id_description"
+                  name="description"
+                  rows="10"
+                  placeholder="본문을 입력하세요">{{ form.description.value|default_if_none:'' }}</textarea>
+    </div>
+    <br>
+
+    <!-- 사진, 자료 첨부 (시안의 + 버튼, 네모 박스 재현) -->
+    <div>
+        <label>사진, 자료 첨부</label><br><br>
+
+
+        <div>
+            <span> 파일 첨부</span><br>
+            <input type="file" name="attachment" id="id_attachment">
+        </div>
+    </div>
+    <br>
+
+    <!-- 태그 추가 -->
+    <div>
+        <label for="id_tags">태그 추가</label><br>
+        <input type="text"
+               id="id_tags"
+               name="tags"
+               placeholder="태그를 쉼표(,)로 구분해서 입력해주세요"
+               value="{{ form.tags.value|default_if_none:'' }}">
+    </div>
+    <br><br>
+
+    <!-- 작성 완료하기 버튼 -->
+    <div>
+        <button type="submit">작성 완료하기</button>
+    </div>
+
+</form>
+
+</body>
+</html>

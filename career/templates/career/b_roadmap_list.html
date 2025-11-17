@@ -1,0 +1,80 @@
+<!-- backend/career/templates/career/roadmap_list.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 로드맵</title>
+</head>
+
+<body>
+
+<!-- 상단 네비게이션 -->
+<header>
+    <div>LOGO</div>
+    <nav>
+        <a>활동 찾기</a>
+        <a>자소서/면접 꿀팁</a>
+        <a>모집</a>
+        <a href="{% url 'career:roadmap_list' %}">나의 로드맵</a>
+    </nav>
+    <div>
+        <a>마이페이지</a>
+        <a>로그인</a>
+    </div>
+</header>
+
+<!-- 페이지 제목 -->
+<h1>나의 로드맵</h1>
+
+<!-- 연도별 타임라인 영역 -->
+<section>
+
+    {% if grouped_entries %}
+        {% for year, year_entries in grouped_entries.items %}
+            <div>
+                <!-- 연도 표시 -->
+                <h2>{{ year }}</h2>
+
+                <!-- 해당 연도의 로드맵 항목들 -->
+                <ul>
+                    {% for entry in year_entries %}
+                        <li>
+                            <!-- 날짜 + 제목(상세로 링크) + 카테고리 -->
+                            <div>
+                                <span>{{ entry.date }}</span><br>
+                                <a href="{% url 'career:roadmap_detail' entry.pk %}">
+                                    {{ entry.title }}
+                                </a><br>
+                                <span>
+                                    카테고리:
+                                    {% if entry.category == "club" %}동아리{% endif %}
+                                    {% if entry.category == "contest" %}공모전{% endif %}
+                                    {% if entry.category == "academic" %}학회{% endif %}
+                                    {% if entry.category == "intern" %}인턴{% endif %}
+                                    {% if entry.category == "other" %}기타{% endif %}
+                                </span><br>
+                                {% if entry.tags %}
+                                    <span>태그: {{ entry.tags }}</span>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>아직 등록된 로드맵이 없습니다.</p>
+    {% endif %}
+
+</section>
+
+<!-- + 버튼 (글쓰기 페이지로 이동) -->
+<section>
+    <a href="{% url 'career:roadmap_create' %}">
+        + 나의 로드맵 남기기
+    </a>
+</section>
+
+</body>
+</html>
