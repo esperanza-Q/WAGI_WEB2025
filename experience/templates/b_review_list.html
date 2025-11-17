@@ -1,0 +1,11 @@
+<h1>Review List</h1>
+<p>리뷰 목록이 정상적으로 뜨는지 테스트 중!</p>
+
+{% for review in reviews %}
+    <div>
+        <h2>{{ review.title }}</h2>
+        <p>{{ review.content|truncatewords:20 }}</p>
+    </div>
+{% empty %}
+    <p>아직 리뷰가 없습니다.</p>
+{% endfor %}
