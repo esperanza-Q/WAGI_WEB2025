@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Review
-from .forms import ReviewForm
+from .forms import ReviewForm, ReviewImageMultipleForm
+from .models import ReviewImage
 from django.db.models import Q
 
 def review_list(request):
@@ -23,14 +24,22 @@ def review_list(request):
 def review_create(request):
     if request.method == "POST":
         form = ReviewForm(request.POST)
+        image_form = ReviewImageMultipleForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
             review.save()
+            images = request.FILES.getlist('images')
+            for img in images:
+                ReviewImage.objects.create(review=review, image=img)
             return redirect("review_list")
     else:
         form = ReviewForm()
-    return render(request, "b_review_create.html", {"form": form})
+        image_form = ReviewImageMultipleForm()
+    return render(request, "b_review_create.html", {
+        "form": form,
+        "image_form": image_form
+    })
 
 from .models import ReviewLike
 
