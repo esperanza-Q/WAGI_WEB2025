@@ -14,7 +14,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
+  background: linear-gradient(130deg, #f0e4ed 0%, #6d3965f6 90%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -95,128 +95,19 @@ body {
 }
 
 .login-btn:hover {
-  background: rgba(105,37,90,0.22);
+  background: rgba(255, 255, 255, 0.45);
 }
 
 /* 메인 콘텐츠 */
 main {
   flex: 1;
-  padding: 6rem 3rem 2rem 3rem;
-  max-width: 1016px;
+  padding: 6rem 2rem 2rem 2rem;
+  max-width: 800px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
-  display:flex;
-  justify-content:center;
-  align-items:center;
 }
 
-.login-wrapper{
-  width:488px; height:auto;
-    
-  display:flex;
-  flex-direction:column;
-
-  border-radius:30px;
-  box-shadow:inset 0 0 0 2px rgba(110,57,104,0.22),
-              0 4px 4px rgba(0,0,0,0.25);
-
-  background-color:rgba(255,228,247,0.18);
-  padding:40px;
-  text-align:center;
-  margin-top:80px;
-  margin-bottom: 100px;
-}
-
-.login-top{
-  flex:5;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.login-logo{
-  width:200px;
-  height:auto;
-  object-fit:contain;
-}
-
-.login-bottom{
-  flex:5;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-
-.login-bottom input{
-  width:100%;
-  height:49px;
-  padding:0 12px;
-
-  box-sizing:border-box;
-  border:2px solid rgba(110,57,104,0.22);
-  margin-bottom: 16px;
-  border-radius: 10px;
-
-  background-color:rgba(105,57,90,0.22);
-    
-  box-shadow: none;
-  outline:none;
-  font-size:15px;
-  color:var(--purple-dark);
-}
-
-.login-bottom button{
-  width:100%;
-  height:49px;
-  padding:0 12px;
-
-  box-sizing:border-box;
-  border:2px solid rgba(110,57,104,0.22);
-  border-radius: 10px;
-
-  background-color:rgba(105,57,90,0.22);
-    
-  box-shadow: none;
-  outline:none;
-
-  color:#ffffff;
-  font-size:16px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  cursor: pointer;
-  font-weight: 400;
-}
-
-.login-bottom input::placeholder{
-  color:var(--purple-light);
-}
-
-.login-bottom input:focus{
-  border-color:var(--purple-dark);
-  border-width:1px;
-}
-
-.login-bottom button:hover{
-  background: rgba(76, 25, 65, 0.268);
-}
-
-.signup-btn{
-  display:block;
-  text-align:center;
-    
-  font-size:14px;
-  padding:10px;
-  text-decoration: none;
-  color:var(--purple-dark);
-  font-weight: 400;
-  cursor:pointer;
-}
-
-.signup-btn:hover {
-  color: #9c3d7e;
-}
 
 .footer {
   text-align: center;
@@ -224,7 +115,7 @@ main {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.138);
+  background: rgba(255, 255, 255, 0.129);
 }
 
 .footer .member {
@@ -232,4 +123,3 @@ main {
   font-size: 14px;
   opacity: 0.8;
 }
-

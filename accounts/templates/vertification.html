@@ -4,19 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/Verification.css">
-  
+  <link rel="stylesheet" href="../../static/css/verification.css">
 </head>
 
 <body>
   <header class="main-header">
     <div class="logo">
-        <a href="../home/templates/HomePage.html">
+        <a href="../../home/templates/home.html">
             <img class="main-logo" src="../../static/img/main-logo.svg"></a>
     </div>
     <nav class="main-nav">
       <ul class="main-nav-links">
-        <li><a href="../experience/templates/ExperienceList.html">활동 후기</a></li>
+        <li><a href="../../experience/templates/experience-list.html">활동 후기</a></li>
         <li><a href="#">자소서·면접·포폴</a></li>
         <li><a href="#">모집</a></li>
         <li><a href="#">나의 로드맵</a></li>
@@ -31,17 +30,11 @@
   <main>
     <div class="verification-wrapper">
       <div class="verification-top">
-        <h1>학생 인증</h1>
+        <div class="vertification-title">학생 인증</div>
         <p>수정브릿지는 성신여대 학생 전용 서비스입니다.<br>학생 인증을 완료해야 이용하실 수 있습니다.</p>
       </div>
       
       <form method="post" class="verification-form">
-        <div class="verification-info">
-          <input type="text" placeholder="학번">
-          <input type="text" placeholder="성명">
-          <input type="text" placeholder="가입한 이메일">
-        </div>
-
         <div class="verification-img">
           <input class="verify-img-input" type="file" accept="image/*">
 
@@ -57,10 +50,14 @@
             <button type="button" class="verify-reset-btn">사진 초기화</button>
           </div>
         </div>
-        
-        <div class="verification-submit">
-          <input type="submit" value="인증하기">
+
+        <div class="verification-info">
+          <input type="text" placeholder="성명">
         </div>
+        
+        <button class="verification-submit" type="submit">
+          인증하기
+        </button>
       </form>
     </div>
   </main>
@@ -70,7 +67,7 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="../../static/js/Verification.js"></script>
+  <script src="../../static/js/verification.js"></script>
 </body>
 </html>
 
