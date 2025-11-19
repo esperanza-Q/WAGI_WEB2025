@@ -1,0 +1,276 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+* {
+  font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+:root {
+  --purple-dark: #69395A;
+  --purple-light: #8E6781;
+  --purple-light-2: #B395AA;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-repeat: no-repeat;
+}
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  height: 60px;
+  background: rgba(250, 250, 250, 0.07);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.main-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.main-nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav-links a {
+  color: var(--purple-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.main-nav-links a:hover {
+    color: #9c3d7e;
+}
+
+.main-header-r {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.mypage-btn {
+  background: transparent;
+  color: var(--purple-dark);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.mypage-btn:hover {
+  color: #9c3d7e;
+}
+
+.login-btn {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--purple-dark);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* 메인 콘텐츠 */
+main {
+  flex: 1;
+  padding: 6rem 3rem 2rem 3rem;
+  max-width: 1016px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.otherQnA-wrapper{
+    width:800px; height:auto;
+
+    display:flex;
+    flex-direction:column;
+}
+
+.otherQnA-post-top{
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  margin-top:20px;
+}
+
+.otherQnA-post-title{
+    color:var(--purple-dark);
+    font-size:25px;
+    font-weight: 500;
+}
+
+.otherQnA-post-bottom{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  width:100%;
+  height:auto;
+  margin-top:15px;
+}
+
+.otherQnA-post-bottom-title{
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  height:auto;
+}
+
+.otherQnA-post-bottom-title input{
+    width:100%; height:40px;
+    padding:0 12px; margin-top:7px; margin-bottom: 16px;
+    box-sizing:border-box;
+    border:2px solid rgba(110,57,104,0.22);
+  
+    border-radius: 10px;
+
+    background-color:rgba(105,57,90,0.22);
+        
+    box-shadow: none;
+    outline:none;
+    font-size:15px;
+    color:var(--purple-dark);
+}
+
+.otherQnA-post-bottom-title input:focus, .otherQnA-post-bottom-detail textarea:focus{
+  border-color:var(--purple-dark);
+  border-width:1px;
+}
+
+.otherQnA-post-bottom p{
+    color:var(--purple-dark);
+    margin-bottom:0;
+}
+
+.otherQnA-post-bottom-detail{
+  display:flex;
+  flex-direction:column;
+
+  width:100%;
+  height:auto;
+}
+
+.otherQnA-post-bottom-detail textarea{
+    width:100%; height:auto;
+    min-height:300px; max-height:400px;
+    padding:8px 12px; margin-top:7px;
+    box-sizing:border-box;
+    border:2px solid rgba(110,57,104,0.22);
+  
+    border-radius: 10px;
+
+    background-color:rgba(105,57,90,0.22);
+        
+    box-shadow: none;
+    outline:none;
+    font-size:15px;
+    color:var(--purple-dark);
+    margin-bottom: 16px;
+
+    resize:none;
+    overflow-y:auto;
+
+    /**스크롤바 firefox 방식**/
+    scrollbar-color:rgba(105, 57, 90, 0.35) rgba(255, 255, 255, 0.15);
+    scrollbar-width:thin;
+}
+
+/**스크롤바 webkit 방식**/
+.otherQnA-post-bottom-detail textarea::-webkit-scrollbar{
+  width:8px;
+}
+
+.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-track{
+  background:rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+
+.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-thumb{
+  background:rgba(105, 57, 90, 0.35);
+  border-radius:10px;
+}
+
+.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-thumb:hover{
+  background:rgba(105, 57, 90, 0.6);
+}
+
+.otherQnA-post-submit{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.otherQnA-post-submit input{
+  width:300px;
+  height:49px;
+  padding:0 12px;
+
+  box-sizing:border-box;
+  border:2px solid rgba(110,57,104,0.22);
+  
+  border-radius: 10px;
+
+  background-color:rgba(105,57,90,0.22);
+    
+  box-shadow: none;
+  outline:none;
+  
+  color:#ffffff;
+  font-size:16px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  font-weight: 200;
+}
+
+.otherQnA-post-submit input:hover{
+  background: rgba(76, 25, 65, 0.268);
+}
+
+.footer {
+  text-align: center;
+  padding: 50px 10px 20px 10px;
+  color: var(--purple-dark);
+  font-size: 15px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.129);
+}
+
+.footer .member {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.8;
+}
