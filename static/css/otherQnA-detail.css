@@ -14,7 +14,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(130deg, #dfd0d8 0%, #6d3965f6 90%);
+  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -95,7 +95,7 @@ body {
 }
 
 .login-btn:hover {
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(105,37,90,0.22);
 }
 
 /* 메인 콘텐츠 */
@@ -106,8 +106,130 @@ main {
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
+.otherQnA-detail-wrapper{
+  width:800px; height:auto;
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+}
+
+.otherQnA-detail-top{
+  width:100%; height:auto;
+  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
+  border:1px solid rgba(105,57,90,0.54);
+  border-radius:30px;
+  display:flex;
+  flex-direction:column;
+  padding:15px 0;
+  gap:10px;
+}
+
+.otherQnA-detail-title{
+  display:flex;
+  flex:none;
+  padding:0 30px;
+  color:var(--purple-dark);
+  font-size:25px;
+  font-weight: 500;
+  align-items:center;
+}
+
+.otherQnA-detail-info{
+  display:flex;
+  flex:none;
+  padding:0 30px;
+  align-items:center;
+  gap:8px;
+}
+
+.otherQnA-detail-userId{
+  color:var(--purple-dark);
+}
+
+.otherQnA-detail-date{
+  color:var(--purple-light);
+}
+
+.otherQnA-detail-question{
+  width:100%;
+  min-height:200px; max-height:300px;
+  overflow-y:auto;
+  padding:4px 15px;
+  box-sizing:border-box;
+  border:1px solid rgba(105,57,90,0.54);
+  
+  border-radius: 30px;
+
+  background-color:rgba(245,217,242,0.22);
+    
+  box-shadow: none;
+  outline:none;
+  font-size:15px;
+  color:var(--purple-dark);
+
+  /**스크롤바 firefox 방식**/
+  scrollbar-color:rgba(105, 57, 90, 0.35) rgba(255, 255, 255, 0.15);
+  scrollbar-width:thin;
+}
+
+.otherQnA-detail-bottom{
+  width:100%; height:auto;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.otherQnA-detail-bottom > div{
+  color:var(--purple-dark);
+}
+
+.otherQnA-detail-answer{
+  width:100%;
+  min-height:200px; max-height:300px;
+  overflow-y:auto;
+  padding:4px 15px;
+
+  box-sizing:border-box;
+  border:1px solid rgba(105,57,90,0.54);
+  
+  border-radius: 30px;
+
+  background-color:rgba(105,57,90,0.15);
+    
+  box-shadow: none;
+  outline:none;
+  font-size:15px;
+  color:var(--purple-dark);
+  margin-bottom: 16px;
+
+  /**스크롤바 firefox 방식**/
+  scrollbar-color:rgba(105, 57, 90, 0.35) rgba(255, 255, 255, 0.15);
+  scrollbar-width:thin;
+}
+
+/**스크롤바 webkit 방식**/
+.otherQnA-detail-answer::-webkit-scrollbar, .otherQnA-detail-question::-webkit-scrollbar{
+  width:8px;
+}
+
+.otherQnA-detail-answer::-webkit-scrollbar-track, .otherQnA-detail-question::-webkit-scrollbar-track{
+  background:rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+
+.otherQnA-detail-answer::-webkit-scrollbar-thumb, .otherQnA-detail-question::-webkit-scrollbar-thumb{
+  background:rgba(105, 57, 90, 0.35);
+  border-radius:10px;
+}
+
+.otherQnA-detail-answer::-webkit-scrollbar-thumb:hover, .otherQnA-detail-question::-webkit-scrollbar-thumb:hover{
+  background:rgba(105, 57, 90, 0.6);
+}
 
 .footer {
   text-align: center;
@@ -115,7 +237,7 @@ main {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.129);
+  background: rgba(255, 255, 255, 0.138);
 }
 
 .footer .member {
@@ -123,3 +245,4 @@ main {
   font-size: 14px;
   opacity: 0.8;
 }
+
