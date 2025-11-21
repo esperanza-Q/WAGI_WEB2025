@@ -14,7 +14,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(130deg, #dfd0d8 0%, #6d3965f6 90%);
+  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -94,10 +94,6 @@ body {
   font-size: 16px;
 }
 
-.login-btn:hover {
-  background: rgba(255, 255, 255, 0.45);
-}
-
 /* 메인 콘텐츠 */
 main {
   flex: 1;
@@ -106,8 +102,128 @@ main {
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
+a{text-decoration:none;}
+
+.other-profile-userInfo{
+  width:800px; height:auto;
+  margin-top:30px; margin-bottom:30px;
+  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
+  border:1px solid rgba(105,57,90,0.54);
+  border-radius:30px;
+  display:flex;
+  flex-direction:column;
+  padding:20px;
+}
+
+.other-profile-userImg{
+  width:150px; height:150px;
+  margin-bottom:15px;
+  border-radius:50%;
+  background-color:rgba(179, 149, 170, 0.27);
+  border:1px solid var(--purple-light-2);
+
+  /**유저 프로필 사진**/
+  background-image:url('#');
+}
+
+.other-profile-userId{
+  color:var(--purple-dark);
+  font-size:25px;
+  font-weight: 500;
+  align-items:center;
+  margin-bottom:3px;
+}
+
+.other-profile-academic{
+  width:max-content; height:max-content;
+  padding:0 5px; margin-bottom:15px;
+  color:rgba(110, 57, 104, 0.9);
+  background-color:rgba(105, 57, 90, 0.22);
+  border:1px solid var(--purple-light);
+  border-radius:30px;
+  font-size:13px;
+}
+
+.other-profile-userEmail{
+  color:var(--purple-dark);
+  font-size:18px;
+}
+
+.otherQnA-list-wrapper{
+  width:700px; height:auto;
+}
+
+.other-profile-menu{
+  width:100%; height:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:25px;
+}
+
+.other-profile-roadmap, .other-profile-qna{
+  width:auto; height:auto;
+  padding:3px 15px;
+  background:rgba(105, 57, 90, 0.22);
+  border:1px solid var(--purple-light);
+  border-radius:30px;
+  color:rgba(110, 57, 104, 0.9);
+  margin-right:10px;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.other-profile-roadmap:hover, .other-profile-qna:hover,
+.otherQnA-list-writeBtn:hover, .otherQnA-list-card:hover{
+  background: rgba(76, 25, 65, 0.268);
+}
+
+.other-profile-menu a:nth-child(3){
+  margin-left:auto;
+}
+
+.otherQnA-list-writeBtn{
+  width:auto; height:auto;
+  background-color:var(--purple-light-2);
+  border:none; border-radius:10px;
+  color:var(--purple-dark);
+  font-size:17px;
+  padding:3px 15px;
+  cursor:pointer;
+}
+
+.otherQnA-list{
+  display:flex;
+  justify-content:center;
+  flex-direction:column;
+  gap:20px;
+  width:100%; height:auto;
+}
+
+.otherQnA-list-card{
+  width:100%; height:50px;
+  padding:3px 15px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  background-color:rgba(105, 57, 90, 0.15);
+  border:none; border-radius:10px;
+  color:var(--purple-dark);
+}
+
+.otherQnA-list-card span{
+  margin-right:5px;
+}
+
+.otherQnA-list-card span:nth-child(4){
+  margin-left:auto;
+}
 
 .footer {
   text-align: center;
@@ -115,7 +231,7 @@ main {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.129);
+  background: rgba(255, 255, 255, 0.138);
 }
 
 .footer .member {

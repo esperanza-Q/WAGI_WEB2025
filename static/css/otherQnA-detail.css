@@ -116,6 +116,7 @@ main {
   display:flex;
   flex-direction:column;
   gap:25px;
+  margin-top:30px;
 }
 
 .otherQnA-detail-top{
