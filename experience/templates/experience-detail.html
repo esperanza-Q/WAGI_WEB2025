@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/experience-detail.css">
+  <link rel="stylesheet" href="../../static/css/board-detail-common.css">
 </head>
 
 <body>
@@ -28,34 +28,109 @@
   </header>
 
   <main>
-    <div class="detail-container">
-      <!-- 상단 헤더 영역 -->
-      <div class="post-header">
-        <div class="post-info">
-          <h1 class="post-title">카카오 FE 인턴 합격 자소서</h1>
-          <div class="post-meta">
-            <span class="author">닉네임</span>
-            <span class="field">자소서 지원분야</span>
-          </div>
+  <div class="container">
+
+    <!-- 상단 헤더 -->
+    <div class="detail-header">
+      <div class="detail-info">
+        <div class="detail-title">컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기</div>
+        <span class="detail-nickname">닉네임</span>
+
+        <div class="detail-bottom">
+        <div class="detail-sub">
+          <span class="detail-category">동아리</span>
+          <span class="detail-period">활동 기간</span>
         </div>
-        <div class="share-section">
-          <button class="share-btn">
-            <span class="share-count">63</span>
-          </button>
+
+        <div class="detail-like-btn">
+          <img class="post-like-img" src="../../static/img/like.svg">
+          63
         </div>
-      </div>
-      
-      <!-- 합격 여부 태그 -->
-      <div class="status-tags">
-        <span class="status-tag pass">합격 여부</span>
-        <span class="status-tag interview">전형 유형</span>
+        </div>
       </div>
     </div>
-  </main>
+
+
+    <!-- 이미지 + 후기 내용 -->
+    <div class="detail-body">
+
+      <!-- 왼쪽: 이미지 슬라이더 -->
+      <div class="detail-image-box">
+        <button class="image-scroll-btn left">&#8592;</button>
+        <div class="detail-image-scroll">
+          <img src="../../static/img/sample-img.png" alt="활동 이미지">
+          <img src="../../static/img/sample-img.png" alt="활동 이미지">
+          <img src="../../static/img/sample-img.png" alt="활동 이미지">
+        </div>
+        <button class="image-scroll-btn right">&#8594;</button>
+      </div>
+
+      <!-- 오른쪽: 후기 내용 -->
+      <div class="detail-text-box">
+        <div class="detail-text-title">후기 내용</div>
+        <div class="detail-text-content">
+          올해 한 학기 동안 컴퓨터정보학과 알고리즘 동아리에 참여하면서 정말 많은 경험을 할 수 있었습니다.
+          처음에는 알고리즘 문제를 푸는 게 무척 어렵게 느껴졌고,
+          매주 스터디를 통해 꾸준히 연습하다 보니 문제 접근 방식이 점점 익숙해졌습니다.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="detail-rating">
+    <div class="detail-rating-label">평점</div>
+    <span class="rating-value">4.5</span>
+    <span class="rating-divider">/</span>
+    <span class="rating-max">5</span>
+    </div>
+
+    <div class="detail-tags">
+      <span>#태그1</span>
+      <span>#태그2</span>
+      <span>#태그3</span>
+    </div>
+
+    <div class="divider"></div>
+
+
+    <!-- 댓글 작성 -->
+    <form method="POST" class="detail-comment-box">
+      <textarea name="detail-comment-content" placeholder="댓글 작성하기" required></textarea>
+        <div class="comment-btn-wrap">
+          <button type="submit" class="comment-submit-btn">
+        보내기
+      </button>
+    </div>
+    </form>
+
+
+    <!-- 댓글 리스트 -->
+    <div class="comment-list">
+      <div class="comment-item">
+        <div class="comment-top">
+          <span class="comment-nickname">닉네임</span>
+          <span class="comment-date">2025.10.05</span>
+        </div>
+
+        <p class="comment-text">
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+        </p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
 
   <footer class="footer">
     <p>© SSWU_WAGI 3기 CampusBridge</p>
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
+
+  <script src="../../static/js/experience-detail.js"></script>
 </body>
 </html>
