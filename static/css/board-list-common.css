@@ -248,22 +248,25 @@ main {
 
 /* 공통 작성 버튼 */
 .write-btn {
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.25);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 8px;
+  padding: 0.5rem 1.1rem;
+  background: linear-gradient(90deg, #f6effc 0%, #e7effb 100%);
+  color: var(--purple-dark);
+  border: 1.5px solid #e0d0f0;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
   text-decoration: none;
   display: inline-block;
+  box-shadow: 0 2px 8px rgba(107,76,125,0.07);
+  letter-spacing: 0.2px;
 }
 
 .write-btn:hover {
-  background: rgba(255, 255, 255, 0.412);
-  transform: translateY(-1px);
+  background: linear-gradient(90deg, #ede2fa 0%, #e7effb 100%);
+  color: var(--purple-dark);
+  border-color: #cbb6e6;
 }
 
 /* 공통 카드 링크 */
