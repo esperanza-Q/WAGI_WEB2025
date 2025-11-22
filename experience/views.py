@@ -1,25 +1,40 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Review
+from .models import Review, ReviewLike, ActivityCategory
 from .forms import ReviewForm, ReviewImageMultipleForm
 from .models import ReviewImage
-from django.db.models import Q
+from django.db.models import Count, Q
 
 def review_list(request):
-    category = request.GET.get('category')
+    category = request.GET.get('category', '')
+    search = request.GET.get('search', '')
     query = request.GET.get('q')
 
-    reviews = Review.objects.all()
-
+    reviews = Review.objects.all().annotate(
+        like_count=Count('reviewlike', filter=Q(reviewlike__is_agree=True))
+    )
+    # 카테고리 필터
     if category:
         reviews = reviews.filter(category=category)
-
+    # 검색 기능
+    if search:
+        reviews = reviews.filter(
+            Q(title__icontains=search) |
+            Q(content__icontains=search)
+        )
+    
     if query:
         reviews = reviews.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query)
         )
+    context = {
+        'reviews': reviews,
+        'selected_category': category,
+        'search_query': search,
+        'categories': ActivityCategory.choices,
+    }
 
-    return render(request, "b_review_list.html", {"reviews": reviews})
+    return render(request, "b_review_list.html", {"reviews": reviews}, context)
 
 def review_create(request):
     if request.method == "POST":
