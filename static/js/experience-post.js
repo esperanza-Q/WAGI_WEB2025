@@ -66,6 +66,21 @@ function syncInputFiles() {
     input.files = dataTransfer.files;
 }
 
+// 폼 제출 시 파일 최소 1개 체크
+const form = document.querySelector(".write-form");
+
+form.addEventListener("submit", function (e) {
+    if (selectedFiles.length === 0) {
+        e.preventDefault();
+        alert("최소 1개 이상의 사진을 업로드해야 합니다!");
+        return;
+    }
+
+    // 태그 hidden 값 업데이트
+    hiddenTags.value = JSON.stringify(tags);
+});
+
+
 // 태그 저장 관련
 const tagInput = document.getElementById("tag-input");
 const addTagBtn = document.getElementById("add-tag-btn");

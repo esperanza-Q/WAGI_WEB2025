@@ -192,6 +192,31 @@ main {
   align-items: stretch
 }
 
+/* 첨부 파일 있다면 표시 */
+.detail-files {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  margin-top: -20px;
+  padding: 5px 10px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 20px;
+  border: 1px solid rgba(200,180,220,0.18);
+  box-shadow: 0 2px 8px rgba(107,76,125,0.06);
+  font-size: 13px;
+  color: var(--purple-dark);
+  width: fit-content;
+}
+.detail-file-img {
+  color: var(--purple-light);
+}
+.detail-file-content {
+  color: var(--purple-light);
+  font-weight: 500;
+  word-break: break-all;
+}
+
 .detail-image-box {
   position: relative;
   width: 360px;
