@@ -1,11 +1,33 @@
-<h1>활동 후기 게시판</h1>
-<p>리뷰 목록이 정상적으로 뜨는지 테스트 중!</p>
+<h2>활동 후기 게시판</h2>
 
-{% for review in reviews %}
+<!-- 카테고리 필터 버튼 -->
+<div>
+    <a href="{% url 'review_list' %}">전체</a>
+    {% for value, label in categories %}
+        <a href="?category={{ value }}">{{ label }}</a>
+    {% endfor %}
+</div>
+
+<!-- 검색 기능 -->
+<form method="get">
+    <input type="text" name="search" placeholder="검색" value="{{ search_query }}">
+    <button type="submit">검색</button>
+</form>
+
+<p>
+    <a href="{% url 'review_create' %}">글쓰기</a>
+</p>
+<hr>
+
+
+<!-- 게시글 목록 -->
+{% for r in reviews %}
     <div>
-        <h2>{{ review.title }}</h2>
-        <p>{{ review.content|truncatewords:20 }}</p>
+        <h3><a href="{% url 'review_detail' r.id %}">{{ r.title }}</a></h3>
+        <p>[{{ r.get_category_display }}] / 작성자: {{ r.user.username }} / 날짜: {{ r.created_at|date:"Y-m-d" }}</p>
+        <p>좋아요: {{ r.like_count }}</p>
+        <hr>
     </div>
 {% empty %}
-    <p>아직 리뷰가 없습니다.</p>
+    <p>게시글이 없습니다.</p>
 {% endfor %}
