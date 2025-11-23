@@ -315,6 +315,12 @@ main {
   margin-bottom: 0.5rem;
 }
 
+/*동아리, 모집중*/
+.post-header-box{
+  display: flex;
+  gap: 10px;
+}
+
 .post-category {
   background: rgba(82, 36, 95, 0.122);
   color: var(--purple-dark);

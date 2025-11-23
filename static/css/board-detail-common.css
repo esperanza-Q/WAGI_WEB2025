@@ -192,6 +192,28 @@ main {
   align-items: stretch
 }
 
+.detail-middle-box{
+  display: flex;
+  gap: 10px;
+}
+
+/* 합격 연도 + 전형 유형 & 동아리 모집 분야 */
+.detail-important{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  margin-top: -20px;
+  padding: 5px 10px;
+  background: rgba(110, 57, 104, 0.2);
+  border-radius: 20px;
+  border: 1px solid rgb(200, 181, 218);
+  box-shadow: 0 2px 8px rgba(107,76,125,0.06);
+  font-size: 13px;
+  color: var(--purple-dark);
+  width: fit-content;
+}
+
 /* 첨부 파일 있다면 표시 */
 .detail-files {
   display: flex;
@@ -309,6 +331,69 @@ main {
   color: var(--purple-light);
 }
 
+.detail-tip-box{
+  flex: 1;
+  height: 200px;
+  overflow-y: auto;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(200, 180, 220, 0.3);
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+
+  scrollbar-width: none;
+  margin-bottom: 20px;
+}
+
+.detail-tip-box::-webkit-scrollbar {
+  display: none;
+}
+
+.detail-tip-title {
+  margin: 10px 5px 12px;
+  color: var(--purple-dark);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.detail-tip-content {
+  margin: 0 5px;
+  line-height: 1.6;
+  color: var(--purple-light);
+}
+
+.detail-link-box{
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(200, 180, 220, 0.3);
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  overflow: visible; /* 스크롤 없앰 */
+}
+
+.detail-link-title {
+  margin: 10px 5px 12px;
+  color: var(--purple-dark);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.detail-link-content {
+  margin: 0 5px;
+  line-height: 1.6;
+  color: var(--purple-light);
+  word-break: break-all;
+  white-space: pre-line;
+  padding: 0;
+  overflow: visible; /* 스크롤 없앰 */
+}
+
 .detail-rating {
   display: flex;
   align-items: center;
@@ -333,7 +418,7 @@ main {
 .detail-tags span {
   display: inline-block;
   padding: 6px 12px;
-  margin-right: 8px;
+  margin-riㅋght: 8px;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 12px;
   font-size: 14px;
@@ -429,6 +514,7 @@ main {
   color: var(--purple-light);
   font-size: 15px;
   line-height: 1.6;
+  word-break: break-all;
 }
 
 .footer {
