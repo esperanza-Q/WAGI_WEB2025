@@ -1,6 +1,68 @@
-<h1>{{ review.title }}</h1>
+<h2>{{ review.title }}</h2>
+
+<p>작성자: {{ review.user.display_name }}</p>
+<p>활동 기간: {{ review.grade }} / {{ review.year_term }}</p>
+<p>좋아요: {{ like_count }}</p>
+
+<hr>
+
+<!-- 이미지 출력 -->
+{% if images %}
+    <div>
+        {% for img in images %}
+            <img src="{{ img.image.url }}" style="max-width:300px; margin:10px;">
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- 후기 본문 -->
 <p>{{ review.content }}</p>
-<p>별점: {{ review.rating }}</p>
-<p>학년: {{ review.grade_at_time }}</p>
-<p>작성자: {{ review.user.username }}</p>
-<a href="{% url 'review_like' review.id %}">좋아요</a>
+
+{% if request.user == review.user %}
+    <a href="{% url 'review_edit' review.id %}">수정</a>
+    <a href="{% url 'review_delete' review.id %}">삭제</a>
+{% endif %}
+<hr>
+
+<!-- 좋아요 버튼 -->
+{% if user.is_authenticated %}
+    {% if user_like %}
+        <form action="{% url 'toggle_like' review.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">좋아요 취소</button>
+        </form>
+    {% else %}
+        <form action="{% url 'toggle_like' review.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">좋아요</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p>좋아요를 누르려면 로그인하세요.</p>
+{% endif %}
+
+<!-- 댓글 목록 -->
+<h3>댓글</h3>
+{% for c in comments %}
+    <div>
+        <strong>{{ c.user.display_name }}</strong> ({{ c.created_at|date:"Y-m-d H:i" }})<br>
+        {{ c.content }}
+        <a href="{% url 'delete_comment' review.id c.id %}">삭제</a>
+    </div>
+{% empty %}
+    <p>댓글이 없습니다.</p>
+{% endfor %}
+
+<!-- 댓글 작성 -->
+{% if user.is_authenticated %}
+    <form method="post" action="{% url 'add_comment' review.id %}">
+        {% csrf_token %}
+        <textarea name="content" rows="3" placeholder="댓글 작성..."></textarea>
+        <button type="submit">등록</button>
+    </form>
+{% else %}
+    <p>댓글을 작성하려면 로그인하세요.</p>
+{% endif %}
+
+<!-- 뒤로가기 -->
+<a href="{% url 'review_list' %}">← 목록으로</a>

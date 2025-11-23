@@ -75,16 +75,7 @@ class User(AbstractUser): #기본적으로 username, password, email, is_active 
 )
     email = models.EmailField("이메일", unique=True, blank=True, null=True)
     is_verified = models.BooleanField(default=False) #학교 인증 여부
-    verification_document = models.FileField( #학교 인증용 서류
-        upload_to=verification_doc_upload_path,
-        null=True,
-        blank=True, 
-        validators = [ 
-            validate_file_size,
-        ],
-        help_text="재학증명서 등 학교 인증용 서류(최대 10MB)를 업로드하세요."
-    ) 
-    verified_at = models.DateTimeField(null=True, blank=True) #관리자가 승인한 날짜/시간 저장
+
     department = models.ForeignKey(
         Department, 
         on_delete=models.SET_NULL, #학과가 삭제되더라도 유저 정보는 유지
@@ -106,5 +97,32 @@ class User(AbstractUser): #기본적으로 username, password, email, is_active 
         
     def __str__(self):
         return self.username #학번(username)으로 구분
+    
+class Verification(models.Model):
+    # 회원가입해서 만들어진 User의 pk를 외래키로 연결
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="verification",
+        verbose_name="유저",
+    )
 
+    username = models.CharField("학번", max_length=20)
+    real_name = models.CharField("성명", max_length=50)
 
+    verification_document = models.FileField(
+        "인증 이미지/서류",
+        upload_to=verification_doc_upload_path,
+        validators=[validate_file_size],
+        help_text="재학증명서 등 학교 인증용 서류(최대 10MB)를 업로드하세요.",
+    )
+
+    is_verified = models.BooleanField("관리자 승인 여부", default=False)
+
+    class Meta:
+        verbose_name = "인증 요청"
+        verbose_name_plural = "인증 요청 목록"
+        ordering = ["-id"]
+
+    def __str__(self):
+        return f"{self.student_id}"
