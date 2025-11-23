@@ -25,7 +25,7 @@
     <div>
         <h3><a href="{% url 'review_detail' r.id %}">{{ r.title }}</a></h3>
         <p>[{{ r.get_category_display }}] / 작성자: {{ r.user.username }} / 날짜: {{ r.created_at|date:"Y-m-d" }}</p>
-        <p>좋아요: {{ r.like_count }}</p>
+        <p>좋아요: {{ r.like_count_db }}</p>
         <hr>
     </div>
 {% empty %}

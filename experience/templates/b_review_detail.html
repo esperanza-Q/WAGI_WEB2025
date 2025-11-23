@@ -15,11 +15,13 @@
     </div>
 {% endif %}
 
-<hr>
-
 <!-- 후기 본문 -->
 <p>{{ review.content }}</p>
 
+{% if request.user == review.user %}
+    <a href="{% url 'review_edit' review.id %}">수정</a>
+    <a href="{% url 'review_delete' review.id %}">삭제</a>
+{% endif %}
 <hr>
 
 <!-- 좋아요 버튼 -->
@@ -39,15 +41,13 @@
     <p>좋아요를 누르려면 로그인하세요.</p>
 {% endif %}
 
-<hr>
-
 <!-- 댓글 목록 -->
 <h3>댓글</h3>
 {% for c in comments %}
     <div>
         <strong>{{ c.user.display_name }}</strong> ({{ c.created_at|date:"Y-m-d H:i" }})<br>
         {{ c.content }}
-        <hr>
+        <a href="{% url 'delete_comment' review.id c.id %}">삭제</a>
     </div>
 {% empty %}
     <p>댓글이 없습니다.</p>
