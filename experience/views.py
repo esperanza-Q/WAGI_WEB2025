@@ -11,8 +11,9 @@ def review_list(request):
     query = request.GET.get('q')
 
     reviews = Review.objects.all().annotate(
-        like_count=Count('reviewlike', filter=Q(reviewlike__is_agree=True))
+        like_count_db=Count('reviewlike', filter=Q(reviewlike__is_agree=True))
     )
+
     # 카테고리 필터
     if category:
         reviews = reviews.filter(category=category)
@@ -57,21 +58,6 @@ def review_create(request):
         "image_form": image_form
     })
 
-def review_like(request, review_id, value):
-    review = get_object_or_404(Review, id=review_id)
-
-    like, created = ReviewLike.objects.get_or_create(
-        review=review,
-        user=request.user,
-        defaults={'is_agree': value}
-    )
-
-    if not created:
-        like.is_agree = value
-        like.save()
-
-    return redirect("review_detail", review_id=review.id)
-
 def review_detail(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     images = review.images.all()
@@ -88,7 +74,7 @@ def review_detail(request, review_id):
         "like_count": like_count,
         "user_like": user_like,
     }
-    return render(request, "reviews/review_detail.html", context)
+    return render(request, "b_review_detail.html", context)
 
 @login_required
 def toggle_like(request, review_id):
@@ -103,6 +89,7 @@ def toggle_like(request, review_id):
         like.save()
 
     return redirect("review_detail", review_id=review_id)
+
 @login_required
 def add_comment(request, review_id):
     review = get_object_or_404(Review, id=review_id)
@@ -116,3 +103,70 @@ def add_comment(request, review_id):
         )
 
     return redirect("review_detail", review_id=review_id)
+
+@login_required
+def delete_comment(request, review_id, comment_id):
+    comment = get_object_or_404(ReviewComment, id=comment_id, review_id=review_id)
+
+    # 작성자 본인만 삭제 가능
+    if comment.user != request.user:
+        return redirect("review_detail", review_id=review_id)
+
+    comment.delete()
+    return redirect("review_detail", review_id=review_id)
+
+@login_required
+def review_edit(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+
+    # 작성자만 수정 가능
+    if review.user != request.user:
+        return redirect("review_detail", review_id=review.id)
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST, instance=review)
+        image_form = ReviewImageMultipleForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+
+            # 새 이미지 추가
+            new_images = request.FILES.getlist('images')
+            for img in new_images:
+                ReviewImage.objects.create(review=review, image=img)
+
+            return redirect("review_detail", review_id=review.id)
+
+    else:
+        form = ReviewForm(instance=review)
+        image_form = ReviewImageMultipleForm()
+
+    return render(request, "b_review_edit.html", {
+        "form": form,
+        "image_form": image_form,
+        "review": review
+    })
+
+@login_required
+def delete_image(request, image_id):
+    image = get_object_or_404(ReviewImage, id=image_id)
+    
+    # 작성자 본인만 삭제 가능
+    if image.review.user != request.user:
+        return redirect("review_detail", review_id=image.review.id)
+
+    review_id = image.review.id
+    image.delete()
+
+    return redirect("review_edit", review_id=review_id)
+
+@login_required
+def review_delete(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+
+    # 작성자 본인만 삭제 가능
+    if review.user != request.user:
+        return redirect("review_detail", review_id=review.id)
+
+    review.delete()
+    return redirect("review_list")

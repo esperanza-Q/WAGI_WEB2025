@@ -37,6 +37,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"[{self.get_category_display()}] {self.title}"
+
 class ReviewImage(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to="review_images/")
@@ -44,10 +45,11 @@ class ReviewImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.review.title}"
+
 class ReviewLike(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    is_agree = models.BooleanField()  # True=동의해요, False=동의하지 않아요
+    is_agree = models.BooleanField(default=False)  # True=좋아요
 
     class Meta:
         unique_together = ('review', 'user')  # 중복 방지
