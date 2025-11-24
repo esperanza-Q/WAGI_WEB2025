@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/signup.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="../../home/templates/home.html">
+            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="../../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="#">자소서·면접·포폴</a></li>
+        <li><a href="#">모집</a></li>
+        <li><a href="#">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <button class="mypage-btn">마이페이지</button>
+      <button class="login-btn">로그인</button>
+    </div>
+  </header>
+
+  <main>
+  <div class="container">
+
+    <div class="signup-wrapper">
+
+      <div class="signup-top">
+        <div class="signup-title">회원가입</div>
+      </div>
+
+      <form method="post" class="signup-form">
+        <div class="signup-box">
+
+          <input type="text" placeholder="이메일">
+          <input type="text" placeholder="학번">
+          <input type="text" placeholder="닉네임">
+          <input type="password" placeholder="비밀번호">
+          <input type="password" placeholder="비밀번호 확인">
+
+          <div class="signup-academic">
+            <select>
+              <option>1학년</option>
+              <option>2학년</option>
+              <option>3학년</option>
+              <option>4학년</option>
+              <option>휴학</option>
+              <option>졸업</option>
+            </select>
+
+            <input type="text" placeholder="단과대">
+          </div>
+          <input type="text" placeholder="학과">
+        </div>
+        <button class="signup-submit" type="submit">가입하기</button>
+      </form>
+
+    </div>
+
+  </div>
+  </main>
+
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+</body>
+</html>
+
+
