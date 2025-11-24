@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/board-list-common.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="../../home/templates/home.html">
+            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="#">자소서·면접·포폴</a></li>
+        <li><a href="#">모집</a></li>
+        <li><a href="#">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <button class="mypage-btn">마이페이지</button>
+      <button class="login-btn">로그인</button>
+    </div>
+  </header>
+
+  <main>
+  <div class="container">
+   <div class="search-section">
+      <form class="search-bar" method="GET" action="">
+        <input type="search" placeholder="활동명으로 검색하기" class="search-input">
+        <button type="submit">
+            <img src="../../static/img/search.svg" alt="검색">
+        </button>
+      </form>
+      <nav class="filter-tabs">
+        <ul>
+            <li><a href="?" class="active">전체</a></li>
+            <li><a href="?category=동아리">동아리</a></li>
+            <li><a href="?category=학회">공모전</a></li>
+            <li><a href="?category=공모전">스터디</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="sub-filter-bar">
+        <div class="sub-filters">
+            <ul>
+                <li><a href="?" class="active">최신순</a></li>
+                <li><a href="?ordering=rating">모집중</a></li>
+                <li><a href="?ordering=likes">모집완료</a></li>
+                <li><a href="?custom=true">맞춤 필터링</a></li>
+            </ul>
+        </div>
+       <a class="write-btn" href="./recruit-post.html">글쓰기</a>
+    </div>
+
+    <div class="divider"></div>
+
+    <!--mock 데이터-->
+    <div class="post-list">
+      <a href="./recruit-detail.html" class="post-card-link">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-header-box">
+            <div class="post-category">동아리</div>
+            <div class="post-category">모집중</div>
+            </div>
+            <div class="post-date">2024.11.12</div>
+          </div>
+          <div class="post-title">컴공 과동아리 신입 부원 모집</div>
+          <div class="post-nickname">코딩러버</div>
+          <div class="post-period">2024.03 - 2024.11</div>
+          <div class="post-footer">
+            <div class="post-field">모집 분야</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="./recruit-detail.html" class="post-card-link">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-header-box">
+            <div class="post-category">동아리</div>
+            <div class="post-category">모집중</div>
+            </div>
+            <div class="post-date">2024.11.12</div>
+          </div>
+          <div class="post-title">컴공 과동아리 신입 부원 모집</div>
+          <div class="post-nickname">코딩러버</div>
+          <div class="post-period">2024.03 - 2024.11</div>
+          <div class="post-footer">
+            <div class="post-field">모집 분야</div>
+          </div>
+        </div>
+      </a>
+
+            <a href="./recruit-detail.html" class="post-card-link">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-header-box">
+            <div class="post-category">동아리</div>
+            <div class="post-category">모집중</div>
+            </div>
+            <div class="post-date">2024.11.12</div>
+          </div>
+          <div class="post-title">컴공 과동아리 신입 부원 모집</div>
+          <div class="post-nickname">코딩러버</div>
+          <div class="post-period">2024.03 - 2024.11</div>
+          <div class="post-footer">
+            <div class="post-field">모집 분야</div>
+          </div>
+        </div>
+      </a>
+            <a href="./recruit-detail.html" class="post-card-link">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-header-box">
+            <div class="post-category">동아리</div>
+            <div class="post-category">모집중</div>
+            </div>
+            <div class="post-date">2024.11.12</div>
+          </div>
+          <div class="post-title">컴공 과동아리 신입 부원 모집</div>
+          <div class="post-nickname">코딩러버</div>
+          <div class="post-period">2024.03 - 2024.11</div>
+          <div class="post-footer">
+            <div class="post-field">모집 분야</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="./recruit-detail.html" class="post-card-link">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-header-box">
+            <div class="post-category">동아리</div>
+            <div class="post-category">모집중</div>
+            </div>
+            <div class="post-date">2024.11.12</div>
+          </div>
+          <div class="post-title">컴공 과동아리 신입 부원 모집</div>
+          <div class="post-nickname">코딩러버</div>
+          <div class="post-period">2024.03 - 2024.11</div>
+          <div class="post-footer">
+            <div class="post-field">모집 분야</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="./recruit-detail.html" class="post-card-link">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-header-box">
+            <div class="post-category">동아리</div>
+            <div class="post-category">모집중</div>
+            </div>
+            <div class="post-date">2024.11.12</div>
+          </div>
+          <div class="post-title">컴공 과동아리 신입 부원 모집</div>
+          <div class="post-nickname">코딩러버</div>
+          <div class="post-period">2024.03 - 2024.11</div>
+          <div class="post-footer">
+            <div class="post-field">모집 분야</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="./recruit-detail.html" class="post-card-link">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-header-box">
+            <div class="post-category">동아리</div>
+            <div class="post-category">모집중</div>
+            </div>
+            <div class="post-date">2024.11.12</div>
+          </div>
+          <div class="post-title">컴공 과동아리 신입 부원 모집</div>
+          <div class="post-nickname">코딩러버</div>
+          <div class="post-period">2024.03 - 2024.11</div>
+          <div class="post-footer">
+            <div class="post-field">모집 분야</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="./recruit-detail.html" class="post-card-link">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-header-box">
+            <div class="post-category">동아리</div>
+            <div class="post-category">모집중</div>
+            </div>
+            <div class="post-date">2024.11.12</div>
+          </div>
+          <div class="post-title">컴공 과동아리 신입 부원 모집</div>
+          <div class="post-nickname">코딩러버</div>
+          <div class="post-period">2024.03 - 2024.11</div>
+          <div class="post-footer">
+            <div class="post-field">모집 분야</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+      <button class="page-btn">&lt;</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">&gt;</button>
+    </div>
+  </div>
+  </main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+  
+</body>
+</html>
+
+
