@@ -125,4 +125,4 @@ class Verification(models.Model):
         ordering = ["-id"]
 
     def __str__(self):
-        return f"{self.student_id}"
+        return f"{self.username}"
