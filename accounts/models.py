@@ -124,5 +124,11 @@ class Verification(models.Model):
         verbose_name_plural = "인증 요청 목록"
         ordering = ["-id"]
 
+    def save(self, *args, **kwargs):
+        """User와 학번(username) 자동 동기화"""
+        if self.user and self.username != self.user.username:
+            self.username = self.user.username
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.student_id}"
+        return f"{self.username}"

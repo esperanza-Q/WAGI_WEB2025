@@ -59,6 +59,8 @@ class VerificationAdmin(admin.ModelAdmin):
     )
     list_filter = ("is_verified",)
 
+    actions = ["is_verified_selected"]
+
     @admin.action(description="선택 인증요청 승인 + 유저 is_verified=True 처리")
     def is_verified_selected(self, request, queryset):
         count = 0
