@@ -59,11 +59,12 @@ def logout_view(request):
     return redirect("home")
 
 def departments_api(request):
-    college_id = request.GET.get("college_id")
+    college_id = request.GET.get("college") or request.GET.get("college_id")
     if not college_id:
         return JsonResponse({"departments": []})
-    qs = Department.objects.filter(college_id=college_id).order_by("dept_name") \
-                           .values("id", "dept_name")
+    qs = Department.objects.filter(
+        college__id=college_id  
+    ).order_by("dept_name").values("id", "dept_name")
     return JsonResponse({"departments": list(qs)})
 
 @login_required

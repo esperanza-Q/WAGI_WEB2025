@@ -65,16 +65,16 @@ class SignupForm(forms.ModelForm):
         self.fields["username"].label = "아이디(학번)"
         self.fields["username"].help_text = None
 
-        college_id = (self.data.get("college") or self.initial.get("college"))
+        self.fields["department"].queryset = Department.objects.none()
+        if not college_id:
+            college_id = self.data.get("college") or self.initial.get("college")
         if college_id:
             try:
                 self.fields["department"].queryset = Department.objects.filter(
                     college_id=college_id
                 ).order_by("dept_name")
             except (TypeError, ValueError):
-                self.fields["department"].queryset = Department.objects.none()
-        else:
-            self.fields["department"].queryset = Department.objects.none()
+                pass
 
     def clean_username(self):
         u = self.cleaned_data["username"].strip()
