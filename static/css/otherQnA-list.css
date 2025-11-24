@@ -5,16 +5,16 @@
 }
 
 :root {
-  --purple-dark: #69395A;
-  --purple-light: #8E6781;
-  --purple-light-2: #B395AA;
+  --purple-dark: #6b4c7d;
+  --purple-light: #8a7a95;
+  --purple-light-2: #a897b3;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
+  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -27,12 +27,13 @@ body {
   justify-content: space-between;
   padding: 0.8rem 2rem;
   height: 60px;
-  background: rgba(250, 250, 250, 0.07);
+  background: rgba(255, 255, 255, 0.15);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
+  border-bottom: 1px solid rgba(200, 180, 220, 0.2);
 }
 
 .main-nav {
@@ -83,9 +84,9 @@ body {
 }
 
 .login-btn {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(105,37,90,0.22);
   color: var(--purple-dark);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(55, 27, 75, 0.2);
   border-radius: 6px;
   padding: 6px 10px;
   cursor: pointer;
@@ -94,18 +95,25 @@ body {
   font-size: 16px;
 }
 
+.login-btn:hover {
+  background: rgba(105, 37, 90, 0.31);
+}
+
+
 /* 메인 콘텐츠 */
 main {
   flex: 1;
-  padding: 6rem 3rem 2rem 3rem;
+  padding-top: 6rem;
+  padding-bottom: 3rem;
+}
+
+.container {
   max-width: 1016px;
   margin: 0 auto;
+  padding: 0 24px;  /* 양옆 패딩 */
   width: 100%;
   box-sizing: border-box;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  margin-bottom: 80px; /* footer와 간격 */
 }
 
 a{text-decoration:none;}
