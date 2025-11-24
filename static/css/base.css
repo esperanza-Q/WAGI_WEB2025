@@ -14,7 +14,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #f6effc 0%, #f7f5ff 50%, #e7effb 100%);
+  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

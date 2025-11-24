@@ -14,7 +14,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #f6effc 0%, #f7f5ff 50%, #e7effb 100%);
+  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -411,6 +411,15 @@ main {
   width: fit-content;
 }
 
+.bottom-box{
+  display: flex;
+  justify-content: space-between;
+}
+
+.scrap-icon{
+  cursor: pointer;
+}
+
 .detail-tags {
   margin-bottom: 20px;
 }
@@ -418,7 +427,7 @@ main {
 .detail-tags span {
   display: inline-block;
   padding: 6px 12px;
-  margin-riㅋght: 8px;
+  margin-right: 8px;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 12px;
   font-size: 14px;
