@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/board-detail-common.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="../home/templates/home.html">
+            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="#">자소서·면접·포폴</a></li>
+        <li><a href="#">모집</a></li>
+        <li><a href="#">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <button class="mypage-btn">마이페이지</button>
+      <button class="login-btn">로그인</button>
+    </div>
+  </header>
+
+  <main>
+  <div class="container">
+
+    <!-- 상단 헤더 -->
+    <div class="detail-header">
+      <div class="detail-info">
+        <div class="detail-title">컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기</div>
+        <span class="detail-nickname">닉네임</span>
+
+        <div class="detail-bottom">
+        <div class="detail-sub">
+          <span class="detail-category">동아리</span>
+          <span class="detail-period">활동 기간</span>
+        </div>
+
+        <div class="detail-like-btn">
+          <img class="post-like-img" src="../../static/img/like.svg">
+          63
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 첨부 파일 있다면 표시-->
+    <div class="detail-files">
+      <img class="detail-file-img" src="../../static/img/file.svg" width="18px">
+      <span class="detail-file-content">sample.pdf, 결과보고서.hwp</span>
+    </div>
+
+
+    <!-- 이미지 + 후기 내용 -->
+    <div class="detail-body">
+
+      <!-- 왼쪽: 이미지 슬라이더 -->
+      <div class="detail-image-box">
+        <button class="image-scroll-btn left">&#8592;</button>
+        <div class="detail-image-scroll">
+          <img src="../../static/img/sample-img.png" alt="활동 이미지">
+          <img src="../../static/img/sample-img.png" alt="활동 이미지">
+          <img src="../../static/img/sample-img.png" alt="활동 이미지">
+        </div>
+        <button class="image-scroll-btn right">&#8594;</button>
+      </div>
+
+      <!-- 오른쪽: 후기 내용 -->
+      <div class="detail-text-box">
+        <div class="detail-text-title">후기 내용</div>
+        <div class="detail-text-content">
+          올해 한 학기 동안 컴퓨터정보학과 알고리즘 동아리에 참여하면서 정말 많은 경험을 할 수 있었습니다.
+          처음에는 알고리즘 문제를 푸는 게 무척 어렵게 느껴졌고,
+          매주 스터디를 통해 꾸준히 연습하다 보니 문제 접근 방식이 점점 익숙해졌습니다.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="detail-rating">
+    <div class="detail-rating-label">평점</div>
+    <span class="rating-value">4.5</span>
+    <span class="rating-divider">/</span>
+    <span class="rating-max">5</span>
+    </div>
+
+    <div class="bottom-box">
+    <div class="detail-tags">
+      <span>#태그1</span>
+      <span>#태그2</span>
+      <span>#태그3</span>
+    </div>
+    <div class="scrap-icon"><img class="scrap-img" src="../../static/img/scrap.svg">
+  </div>
+</div>
+
+    <div class="divider"></div>
+
+
+    <!-- 댓글 작성 -->
+    <form method="POST" class="detail-comment-box">
+      <textarea name="detail-comment-content" placeholder="댓글 작성하기" required></textarea>
+        <div class="comment-btn-wrap">
+          <button type="submit" class="comment-submit-btn">
+        보내기
+      </button>
+    </div>
+    </form>
+
+
+    <!-- 댓글 리스트 -->
+    <div class="comment-list">
+      <div class="comment-item">
+        <div class="comment-top">
+          <span class="comment-nickname">닉네임</span>
+          <span class="comment-date">2025.10.05</span>
+        </div>
+        <p class="comment-text">
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+        </p>
+      </div>
+    </div>
+    
+    <div class="comment-list">
+      <div class="comment-item">
+        <div class="comment-top">
+          <span class="comment-nickname">닉네임</span>
+          <span class="comment-date">2025.10.05</span>
+        </div>
+        <p class="comment-text">
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+        </p>
+      </div>
+    </div>
+
+    <div class="comment-list">
+      <div class="comment-item">
+        <div class="comment-top">
+          <span class="comment-nickname">닉네임</span>
+          <span class="comment-date">2025.10.05</span>
+        </div>
+
+        <p class="comment-text">
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
+        </p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+
+  <script src="../../static/js/experience-detail.js"></script>
+</body>
+</html>
