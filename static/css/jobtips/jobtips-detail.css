@@ -116,12 +116,12 @@ main {
   margin-bottom: 80px; /* footer와 간격 */
 }
 
-.detail-header {
+.jobtips-detail-header {
   margin-top: 40px;
   margin-bottom: 30px;
 }
 
-.detail-info {
+.jobtips-detail-info {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(200, 180, 220, 0.3);
@@ -132,7 +132,7 @@ main {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
 }
 
-.detail-title {
+.jobtips-detail-title {
   margin-top: 5px;
   font-size: 26px;
   font-weight: 700;
@@ -143,7 +143,7 @@ main {
   text-overflow: ellipsis;
 }
 
-.detail-nickname {
+.jobtips-detail-nickname {
   font-size: 18px;
   color: var(--purple-dark);
   font-weight: 500;
@@ -151,31 +151,81 @@ main {
   transition: all 0.2s ease;
 }
 
-.detail-nickname:hover{
+.jobtips-detail-nickname:hover{
   text-decoration: underline;
 }
 
-.detail-bottom{
+.jobtips-detail-bottom{
   margin-top: 18px;
   display: flex;
   justify-content: space-between;
 }
 
-.detail-sub {
+.jobtips-detail-sub {
   font-size: 16px;
   display: flex;
   gap: 1rem;
 }
 
-.detail-category{
+.jobtips-detail-category{
   color: var(--purple-dark);
 }
 
-.detail-period{
+.jobtips-detail-field{
   color: var(--purple-light);
 }
 
-.detail-like-btn {
+/* 수정, 삭제 버튼 기본: 숨김 처리 */
+.hidden {
+  display: none!important;
+}
+
+/* 수정, 삭제, 공감해요 버튼들이 들어가는 영역 */
+.jobtips-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.jobtips-edit-delete {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--purple-dark);
+}
+
+.jobtips-edit-btn {
+  color: var(--purple-dark);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.jobtips-edit-btn:hover {
+  text-decoration: underline;
+}
+.jobtips-divider-line {
+  color: var(--purple-light);
+  font-weight: 300;
+}
+
+.jobtips-delete-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--purple-dark);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.jobtips-delete-btn:hover {
+  text-decoration: underline;
+}
+
+.jobtips-detail-like-btn {
+  background: none;
+  border: none;
   top: 20px;
   right: 20px;
   display: flex;
@@ -183,22 +233,23 @@ main {
   gap: 6px;
   font-weight: 600;
   color: var(--purple-dark);
+  cursor: pointer;
 }
 
-.detail-body {
+.jobtips-detail-body {
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
   align-items: stretch
 }
 
-.detail-middle-box{
+.jobtips-detail-middle-box{
   display: flex;
   gap: 10px;
 }
 
 /* 합격 연도 + 전형 유형 & 동아리 모집 분야 */
-.detail-important{
+.jobtips-detail-important{
   display: flex;
   align-items: center;
   gap: 5px;
@@ -215,7 +266,7 @@ main {
 }
 
 /* 첨부 파일 있다면 표시 */
-.detail-files {
+.jobtips-detail-files {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -230,16 +281,16 @@ main {
   color: var(--purple-dark);
   width: fit-content;
 }
-.detail-file-img {
+.jobtips-detail-file-img {
   color: var(--purple-light);
 }
-.detail-file-content {
+.jobtips-detail-file-content {
   color: var(--purple-light);
   font-weight: 500;
   word-break: break-all;
 }
 
-.detail-image-box {
+.jobtips-detail-image-box {
   position: relative;
   width: 360px;
   min-width: 360px;
@@ -254,7 +305,7 @@ main {
   box-sizing: border-box;
 }
 
-.detail-image-scroll {
+.jobtips-detail-image-scroll {
   width: 100%;
   height: 100%;
   overflow-x: auto;
@@ -264,11 +315,11 @@ main {
   scrollbar-width: none;
 }
 
-.detail-image-scroll::-webkit-scrollbar {
+.jobtips-detail-image-scroll::-webkit-scrollbar {
   display: none;
 }
 
-.detail-image-scroll img {
+.jobtips-detail-image-scroll img {
   width: 360px;
   height: 480px;
   object-fit: cover;
@@ -278,7 +329,7 @@ main {
   scroll-snap-align: start;
 }
 
-.image-scroll-btn {
+.jobtips-image-scroll-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -295,12 +346,12 @@ main {
   transition: background 0.2s;
 }
 
-.image-scroll-btn.left { left: 8px; }
-.image-scroll-btn.right { right: 8px; }
+.jobtips-image-scroll-btn.left { left: 8px; }
+.jobtips-image-scroll-btn.right { right: 8px; }
 
-.image-scroll-btn:hover { background: rgba(255,255,255,0.95); }
+.jobtips-image-scroll-btn:hover { background: rgba(255,255,255,0.95); }
 
-.detail-text-box {
+.jobtips-detail-text-box {
   flex: 1;
   height: 520px;
   overflow-y: auto;
@@ -314,24 +365,24 @@ main {
   scrollbar-width: none;
 }
 
-.detail-text-box::-webkit-scrollbar {
+.jobtips-detail-text-box::-webkit-scrollbar {
   display: none;
 }
 
-.detail-text-title {
+.jobtips-detail-text-title {
   margin: 10px 5px 12px;
   color: var(--purple-dark);
   font-weight: 600;
   font-size: 18px;
 }
 
-.detail-text-content {
+.jobtips-detail-text-content {
   margin: 0 5px;
   line-height: 1.6;
   color: var(--purple-light);
 }
 
-.detail-tip-box{
+.jobtips-detail-tip-box{
   flex: 1;
   height: 200px;
   overflow-y: auto;
@@ -346,85 +397,39 @@ main {
   margin-bottom: 20px;
 }
 
-.detail-tip-box::-webkit-scrollbar {
+.jobtips-detail-tip-box::-webkit-scrollbar {
   display: none;
 }
 
-.detail-tip-title {
+.jobtips-detail-tip-title {
   margin: 10px 5px 12px;
   color: var(--purple-dark);
   font-weight: 600;
   font-size: 18px;
 }
 
-.detail-tip-content {
+.jobtips-detail-tip-content {
   margin: 0 5px;
   line-height: 1.6;
   color: var(--purple-light);
 }
 
-.detail-link-box{
-  flex: 1;
-  min-height: 0;
-  height: auto;
-  padding: 30px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(200, 180, 220, 0.3);
-  backdrop-filter: blur(10px);
-  box-sizing: border-box;
-  margin-bottom: 20px;
-  overflow: visible; /* 스크롤 없앰 */
-}
-
-.detail-link-title {
-  margin: 10px 5px 12px;
-  color: var(--purple-dark);
-  font-weight: 600;
-  font-size: 18px;
-}
-
-.detail-link-content {
-  margin: 0 5px;
-  line-height: 1.6;
-  color: var(--purple-light);
-  word-break: break-all;
-  white-space: pre-line;
-  padding: 0;
-  overflow: visible; /* 스크롤 없앰 */
-}
-
-.detail-rating {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  margin-bottom: 20px;
-  font-size: 18px;
-  color: var(--purple-dark);
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.45);
-  border-radius: 12px;
-  padding: 10px 18px;
-  box-shadow: 0 2px 8px rgba(107,76,125,0.08);
-  border: 1px solid rgba(155,120,200,0.18);
-  width: fit-content;
-}
-
-.bottom-box{
+.jobtips-bottom-box{
   display: flex;
   justify-content: space-between;
 }
 
-.scrap-icon{
+.jobtips-scrap-btn{
+    background: none;
+    border: none;
   cursor: pointer;
 }
 
-.detail-tags {
+.jobtips-detail-tags {
   margin-bottom: 20px;
 }
 
-.detail-tags span {
+.jobtips-tag-item {
   display: inline-block;
   padding: 6px 12px;
   margin-right: 8px;
@@ -436,14 +441,14 @@ main {
   border: 1px solid rgba(200, 180, 220, 0.3);
 }
 
-.divider {
+.jobtips-divider {
   width: calc(100%);
   height: 1px;
   background: var(--purple-light-2);
   margin-bottom: 2rem;
 }
 
-.detail-comment-box {
+.jobtips-detail-comment-box {
   background: rgba(255, 255, 255, 0.45);
   padding: 20px;
   border-radius: 16px;
@@ -456,7 +461,7 @@ main {
   gap: 10px;
 }
 
-.detail-comment-box textarea {
+.jobtips-detail-comment-content{
   width: 100%;
   height: 100px;
   border: none;
@@ -470,19 +475,19 @@ main {
   box-sizing: border-box;
 }
 
-.detail-comment-box textarea::placeholder {
+.jobtips-detail-comment-content::placeholder {
   color: var(--purple-light-2);
   opacity: 1;
   font-size: 15px;
   font-weight: 400;
 }
 
-.comment-btn-wrap {
+.jobtips-comment-btn-wrap {
   display: flex;
   justify-content: flex-end;
 }
 
-.comment-submit-btn {
+.jobtips-comment-submit-btn {
   padding: 8px 14px;
   color: var(--purple-dark);
   background: rgba(110, 57, 104, 0.2);
@@ -491,11 +496,14 @@ main {
   cursor: pointer;
 }
 
-.comment-list {
-  margin-top: 20px;
+.jobtips-comment-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.comment-item {
+.jobtips-comment-item {
   padding: 30px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.45);
@@ -503,23 +511,23 @@ main {
   backdrop-filter: blur(10px);
 }
 
-.comment-top {
+.jobtips-comment-top {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.comment-nickname {
+.jobtips-comment-nickname {
   color: var(--purple-dark);
   font-weight: 600;
 }
 
-.comment-date {
+.jobtips-comment-date {
   color: var(--purple-dark);
   font-size: 14px;
 }
 
-.comment-text {
+.jobtips-comment-text {
   color: var(--purple-light);
   font-size: 15px;
   line-height: 1.6;
