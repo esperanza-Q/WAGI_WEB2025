@@ -20,7 +20,7 @@ if (scrapBtn) {
   });
 }
 
-// 수정/삭제 버튼 (예시: 실제 구현 시 서버 연동 필요)
+// 수정/삭제 버튼
 const editBtn = document.querySelector('.jobtips-edit-btn');
 if (editBtn) {
   editBtn.addEventListener('click', function () {

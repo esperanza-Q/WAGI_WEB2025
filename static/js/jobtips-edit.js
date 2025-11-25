@@ -1,4 +1,5 @@
 // 파일 업로드 관련 - 기존 파일/이미지 + 새로 업로드된 파일 모두 관리
+// 파일 - 실제 id 값 연결 필요할 듯 합니다..
 let existingFiles = [
   { name: "sample-img.png", url: "../../static/img/sample-img.png", type: "image" },
   { name: "기존파일.pdf", url: "../../static/files/기존파일.pdf", type: "file" }
@@ -100,6 +101,7 @@ function syncInputFiles() {
 
 // 폼 제출 시 파일 최소 1개 체크
 const form = document.querySelector(".jobtips-edit-form");
+const hiddenTagsInput = document.getElementById("jobtips-edit-hidden-tags"); 
 
 form.addEventListener("submit", function (e) {
     if (existingFiles.length + selectedFiles.length === 0) {
@@ -107,8 +109,7 @@ form.addEventListener("submit", function (e) {
         alert("최소 1개 이상의 파일을 업로드해야 합니다!");
         return;
     }
-    // 태그 hidden 값 업데이트 (필요시)
-    // hiddenTags.value = JSON.stringify(tags);
+    hiddenTagsInput.value = JSON.stringify(tags);
 });
 
 // 태그 저장 관련 - 기존 태그 + 신규 태그
@@ -144,7 +145,7 @@ function renderTags() {
             renderTags();
         });
     });
-    // updateHiddenTags(); // 필요시
+    hiddenTagsInput.value = JSON.stringify(tags);
 }
 
 // 초기 렌더링

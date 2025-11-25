@@ -175,7 +175,7 @@ main {
   color: var(--purple-light);
 }
 
-/* 수정, 삭제 버튼 기본: 숨김 처리 */
+/* 수정, 삭제 버튼: 숨김 처리 */
 .hidden {
   display: none!important;
 }
@@ -234,6 +234,13 @@ main {
   font-weight: 600;
   color: var(--purple-dark);
   cursor: pointer;
+}
+
+.jobtips-detail-like-btn:hover {
+  background: rgba(155, 120, 200, 0.13);
+  color: #9c3d7e;
+  box-shadow: 0 2px 8px rgba(107,76,125,0.10);
+  transition: background 0.2s, color 0.2s;
 }
 
 .jobtips-detail-body {
@@ -423,6 +430,12 @@ main {
     background: none;
     border: none;
   cursor: pointer;
+}
+
+.jobtips-scrap-btn:hover {
+  background: rgba(155, 120, 200, 0.13);
+  box-shadow: 0 2px 8px rgba(107,76,125,0.10);
+  transition: background 0.2s;
 }
 
 .jobtips-detail-tags {

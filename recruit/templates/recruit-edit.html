@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/recruit/recruit-edit.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="../../home/templates/home.html">
+            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="../../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="#">자소서·면접·포폴</a></li>
+        <li><a href="#">모집</a></li>
+        <li><a href="#">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <button class="header-mypage-btn">마이페이지</button>
+      <button class="header-login-btn">로그인</button>
+    </div>
+  </header>
+
+<main>
+  <div class="container">
+    <h2 class="recruit-edit-title">모집글 수정하기</h2>
+    <form method="POST" enctype="multipart/form-data" class="recruit-edit-form">
+      <label class="recruit-edit-label">제목</label>
+      <input type="text" class="recruit-edit-input" value="기존 모집글 제목" required>
+      
+      <label class="recruit-edit-label">카테고리</label>
+      <div class="recruit-edit-category">
+        <label><input type="radio" value="동아리" required> 동아리</label>
+        <label><input type="radio" value="공모전"> 공모전</label>
+        <label><input type="radio" value="스터디"> 스터디</label>
+      </div>
+
+      <label class="recruit-edit-label">모집 분야</label>
+      <input type="text" class="recruit-edit-input" value="기존 모집 분야" required>
+
+      <label class="recruit-edit-label">모집 기간</label>
+      <input type="text" class="recruit-edit-input" value="2025/02/03 ~ 2025/02/05" required>
+
+      <label class="recruit-edit-label">활동 소개</label>
+      <textarea class="recruit-edit-textarea" required>기존 활동 소개 내용</textarea>
+
+      <label class="recruit-edit-label">파일 업로드</label>
+      <div class="recruit-edit-upload-area">
+        <label class="recruit-edit-upload-btn">
+          +
+          <input type="file" id="recruit-edit-upload-input" multiple>
+        </label>
+        <div class="recruit-edit-upload-preview" id="recruit-edit-upload-preview">
+          <!-- 기존 업로드 파일/이미지 미리보기 -->
+          <div class="recruit-edit-preview-item">
+            <img src="../../static/img/sample-img.png" class="recruit-edit-preview-img" alt="기존 이미지">
+            <div class="recruit-edit-preview-remove">×</div>
+          </div>
+          <div class="recruit-edit-preview-item">
+            <div class="recruit-edit-preview-file">기존파일.pdf</div>
+            <div class="recruit-edit-preview-remove">×</div>
+          </div>
+        </div>
+      </div>
+
+      <label class="recruit-edit-label">연결 링크</label>
+      <input class="recruit-edit-input" value="기존 링크" required></input>
+      
+      <label class="recruit-edit-label">태그 추가</label>
+      <div class="recruit-edit-tag-input-wrapper">
+        <input type="text" id="recruit-edit-tag-input" class="recruit-edit-tag-input">
+        <button type="button" id="recruit-edit-add-tag-btn" class="recruit-edit-tag-add-btn">추가</button>
+      </div>
+        <!-- 태그 보여주는 영역 -->
+      <div class="recruit-edit-tag-list" id="recruit-edit-tag-list">
+        <div class="recruit-edit-tag-item">#모집 <span class="recruit-edit-tag-remove">x</span></div>
+        <div class="recruit-edit-tag-item">#스터디 <span class="recruit-edit-tag-remove">x</span></div>
+      </div>
+
+      <input type="hidden" id="recruit-deleted-files">
+      <input type="hidden" id="recruit-edit-hidden-tags">
+      <!--둘 다 "사용자가 직접 입력/조작한 값(삭제 파일, 태그)"을 서버로 넘기기 위한 숨겨진 데이터 필드(동기화 위함..)
+        파일 - 기존에 업로드된 파일/이미지 중에서 사용자가 삭제한 파일의 id(혹은 이름)" 목록을 JSON 문자열로 담아 서버로 전송하는 용도
+        태그 - 사용자가 입력한 태그 목록을 JSON 문자열로 담아 서버로 전송하는 용도-->
+
+      <button type="submit" class="recruit-edit-submit-btn">
+        수정 완료
+      </button>
+    </form>
+  </div>
+</main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+
+  <script src="../../static/js/recruit-edit.js"></script>
+</body>
+</html>

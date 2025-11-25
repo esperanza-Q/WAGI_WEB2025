@@ -272,6 +272,10 @@ main {
   outline: none;
 }
 
+.jobtips-tag-input::placeholder {
+  color: var(--purple-light);
+}
+
 .jobtips-tag-add-btn {
   position: absolute;
   right: -20px;

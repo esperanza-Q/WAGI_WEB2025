@@ -117,11 +117,6 @@ main {
 }
 
 .jobtips-search-section {
-  margin-top: 40px;
-  margin-bottom: 10px;
-}
-
-.jobtips-search-bar {
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.6);
@@ -129,11 +124,11 @@ main {
   border-radius: 40px;
   padding: 5px 16px;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 60px auto 10px;
   backdrop-filter: blur(10px);
 }
 
-.jobtips-search-bar input {
+.jobtips-search-input {
   border: none;
   background: transparent;
   flex: 1;
@@ -142,11 +137,11 @@ main {
   color: var(--purple-dark);
 }
 
-.jobtips-search-bar input::placeholder {
+.jobtips-search-input::placeholder {
   color: var(--purple-light);
 }
 
-.jobtips-search-bar button {
+.jobtips-search-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -245,7 +240,7 @@ main {
 
 .jobtips-write-btn {
   padding: 0.5rem 1.1rem;
-  background: linear-gradient(90deg, #f6effc 0%, #e7effb 100%);
+  background: linear-gradient(90deg, #f7f5ff 0%, #eee7fb 100%);
   color: var(--purple-dark);
   border: 1.5px solid #e0d0f0;
   border-radius: 10px;
@@ -260,7 +255,7 @@ main {
 }
 
 .jobtips-write-btn:hover {
-  background: linear-gradient(90deg, #ede2fa 0%, #e7effb 100%);
+  background: linear-gradient(90deg, #f0efff 0%, #f1e9ff 100%);
   color: var(--purple-dark);
   border-color: #cbb6e6;
 }
