@@ -119,7 +119,7 @@ a{text-decoration:none;}
 
 .other-profile-userInfo{
   width:800px; height:auto;
-  margin-top:30px; margin-bottom:30px;
+  margin: 30px auto 30px;
   background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
   border:1px solid rgba(105,57,90,0.54);
   border-radius:30px;
@@ -164,6 +164,7 @@ a{text-decoration:none;}
 
 .otherQnA-list-wrapper{
   width:700px; height:auto;
+  margin: 0 auto;
 }
 
 .other-profile-menu{
