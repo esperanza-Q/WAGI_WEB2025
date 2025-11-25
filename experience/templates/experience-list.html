@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/experience-list.css">
+  <link rel="stylesheet" href="../../static/css/experience/experience-list.css">
 </head>
 
 <body>
@@ -29,40 +29,57 @@
 
   <main>
   <div class="container">
-   <div class="ex-search-section">
-      <form class="ex-search-bar" method="GET" action="">
-        <input type="search" placeholder="활동명으로 검색하기" class="ex-search-input">
-        <button type="submit">
-            <img src="../../static/img/search.svg" alt="검색">
+
+    <!-- 전체 검색 + 필터 form 하나로 묶음 -->
+    <form method="GET" id="filter-form" class="ex-search-form">
+
+      <!-- 검색창 -->
+      <div class="ex-search-section">
+        <input 
+          type="search" 
+          placeholder="활동명으로 검색하기"
+          class="ex-search-input"
+        />
+
+        <button type="submit" class="ex-search-btn">
+          <img src="../../static/img/search.svg" alt="검색">
         </button>
-      </form>
+      </div>
+
+      <!-- 숨겨진 값 (카테고리 / 정렬) -->
+      <input type="hidden" id="filter-category" name="category">
+      <input type="hidden" id="filter-ordering" name="order">
+
+      <!-- 필터링- 카테고리 -->
       <nav class="ex-filter-tabs">
         <ul>
-            <li><a href="experience-list.html" class="active">전체</a></li>
-            <li><a href="experience-list-club.html">동아리</a></li>
-            <li><a href="experience-list-seminar.html">학회</a></li>
-            <li><a href="experience-list-contest.html">공모전</a></li>
-            <li><a href="experience-list-intern.html">인턴</a></li>
+          <li><button type="button" class="tab-btn" data-category="">전체</button></li>
+          <li><button type="button" class="tab-btn" data-category="club">동아리</button></li>
+          <li><button type="button" class="tab-btn" data-category="seminar">학회</button></li>
+          <li><button type="button" class="tab-btn" data-category="contest">공모전</button></li>
+          <li><button type="button" class="tab-btn" data-category="intern">인턴</button></li>
         </ul>
       </nav>
-    </div>
 
-    <div class="ex-sub-filter-bar">
+      <!-- 필터링 - 정렬 -->
+      <div class="ex-sub-filter-bar">
         <div class="ex-sub-filters">
-            <ul>
-                <li><a href="?" class="active">최신순</a></li>
-                <li><a href="?ordering=rating">평점순</a></li>
-                <li><a href="?ordering=likes">공감순</a></li>
-                <li><a href="?custom=true">맞춤 필터링</a></li>
-            </ul>
+          <ul>
+            <li><button type="button" class="order-btn" data-order="latest">최신순</button></li>
+            <li><button type="button" class="order-btn" data-order="rating">평점순</button></li>
+            <li><button type="button" class="order-btn" data-order="likes">공감순</button></li>
+            <li><button type="button" class="order-btn" data-order="custom">맞춤 필터링</button></li>
+          </ul>
         </div>
-       <a class="ex-write-btn" href="./experience-post.html">글쓰기</a>
-    </div>
+
+        <a class="ex-write-btn" href="./experience-post.html">글쓰기</a>
+      </div>
+    </form>
 
     <div class="ex-divider"></div>
 
-    <!--mock 데이터-->
     <div class="ex-card-list">
+      <!--mock 데이터 넣어둠-->
       <a href="./experience-detail.html" class="ex-card-link">
         <div class="ex-card">
           <div class="ex-card-header">
@@ -95,37 +112,37 @@
         </div>
       </a>
 
-                <a href="./experience-detail.html" class="ex-card-link">
-                  <div class="ex-card">
-                    <div class="ex-card-header">
-                      <div class="ex-card-category">학회</div>
-                      <div class="ex-card-date">2024.11.11</div>
-                    </div>
-                    <div class="ex-card-title">AI 연구회 프로젝트 경험담</div>
-                    <div class="ex-card-nickname">AI탐험가</div>
-                    <div class="ex-card-period">2024.09 - 2024.11</div>
-                    <div class="ex-card-footer">
-                      <div class="ex-card-star">평점 4.8</div>
-                      <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">23</div>
-                    </div>
-                  </div>
-                </a>
+      <a href="./experience-detail.html" class="ex-card-link">
+        <div class="ex-card">
+          <div class="ex-card-header">
+            <div class="ex-card-category">학회</div>
+            <div class="ex-card-date">2024.11.11</div>
+          </div>
+          <div class="ex-card-title">AI 연구회 프로젝트 경험담</div>
+          <div class="ex-card-nickname">AI탐험가</div>
+          <div class="ex-card-period">2024.09 - 2024.11</div>
+          <div class="ex-card-footer">
+            <div class="ex-card-star">평점 4.8</div>
+            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">23</div>
+          </div>
+        </div>
+      </a>
 
-            <a href="./experience-detail.html" class="ex-card-link">
-              <div class="ex-card">
-                <div class="ex-card-header">
-                  <div class="ex-card-category">학회</div>
-                  <div class="ex-card-date">2024.11.11</div>
-                </div>
-                <div class="ex-card-title">AI 연구회 프로젝트 경험담</div>
-                <div class="ex-card-nickname">AI탐험가</div>
-                <div class="ex-card-period">2024.09 - 2024.11</div>
-                <div class="ex-card-footer">
-                  <div class="ex-card-star">평점 4.8</div>
-                  <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">23</div>
-                </div>
-              </div>
-            </a>
+      <a href="./experience-detail.html" class="ex-card-link">
+        <div class="ex-card">
+          <div class="ex-card-header">
+            <div class="ex-card-category">학회</div>
+            <div class="ex-card-date">2024.11.11</div>
+          </div>
+          <div class="ex-card-title">AI 연구회 프로젝트 경험담</div>
+          <div class="ex-card-nickname">AI탐험가</div>
+          <div class="ex-card-period">2024.09 - 2024.11</div>
+          <div class="ex-card-footer">
+            <div class="ex-card-star">평점 4.8</div>
+            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">23</div>
+          </div>
+        </div>
+      </a>
 
       <a href="./experience-detail.html" class="ex-card-link">
         <div class="ex-card">
@@ -201,13 +218,14 @@
       <button class="ex-page-btn">&gt;</button>
     </div>
   </div>
-  </main>
+</main>
 
   <footer class="footer">
     <p>© SSWU_WAGI 3기 CampusBridge</p>
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
-  
+
+  <script src="../../static/js/board-list.js"></script>
 </body>
 </html>
 
