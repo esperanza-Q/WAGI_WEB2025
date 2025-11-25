@@ -116,12 +116,12 @@ main {
   margin-bottom: 80px; /* footer와 간격 */
 }
 
-.jobtips-detail-header {
+.recruit-detail-header {
   margin-top: 40px;
   margin-bottom: 30px;
 }
 
-.jobtips-detail-info {
+.recruit-detail-info {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(200, 180, 220, 0.3);
@@ -132,7 +132,7 @@ main {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
 }
 
-.jobtips-detail-title {
+.recruit-detail-title {
   margin-top: 5px;
   font-size: 26px;
   font-weight: 700;
@@ -143,7 +143,7 @@ main {
   text-overflow: ellipsis;
 }
 
-.jobtips-detail-nickname {
+.recruit-detail-nickname {
   font-size: 18px;
   color: var(--purple-dark);
   font-weight: 500;
@@ -151,27 +151,27 @@ main {
   transition: all 0.2s ease;
 }
 
-.jobtips-detail-nickname:hover{
+.recruit-detail-nickname:hover{
   text-decoration: underline;
 }
 
-.jobtips-detail-bottom{
+.recruit-detail-bottom{
   margin-top: 18px;
   display: flex;
   justify-content: space-between;
 }
 
-.jobtips-detail-sub {
+.recruit-detail-sub {
   font-size: 16px;
   display: flex;
   gap: 1rem;
 }
 
-.jobtips-detail-category{
+.recruit-detail-category{
   color: var(--purple-dark);
 }
 
-.jobtips-detail-period{
+.recruit-detail-period{
   color: var(--purple-light);
 }
 
@@ -181,13 +181,13 @@ main {
 }
 
 /* 수정, 삭제, 공감해요 버튼들이 들어가는 영역 */
-.jobtips-detail-actions {
+.recruit-detail-actions {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.jobtips-edit-delete {
+.recruit-edit-delete {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -195,21 +195,21 @@ main {
   color: var(--purple-dark);
 }
 
-.jobtips-edit-btn {
+.recruit-edit-btn {
   color: var(--purple-dark);
   text-decoration: none;
   cursor: pointer;
 }
 
-.jobtips-edit-btn:hover {
+.recruit-edit-btn:hover {
   text-decoration: underline;
 }
-.jobtips-divider-line {
+.recruit-divider-line {
   color: var(--purple-light);
   font-weight: 300;
 }
 
-.jobtips-delete-btn {
+.recruit-delete-btn {
   background: none;
   border: none;
   padding: 0;
@@ -219,11 +219,11 @@ main {
   font-size: 14px;
 }
 
-.jobtips-delete-btn:hover {
+.recruit-delete-btn:hover {
   text-decoration: underline;
 }
 
-.jobtips-detail-like-btn {
+.recruit-detail-like-btn {
   background: none;
   border: none;
   top: 20px;
@@ -236,15 +236,37 @@ main {
   cursor: pointer;
 }
 
-.jobtips-detail-body {
+.recruit-detail-body {
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
   align-items: stretch
 }
 
+.recruit-detail-middle-box{
+  display: flex;
+  gap: 10px;
+}
+
+/* 합격 연도 + 전형 유형 & 동아리 모집 분야 */
+.recruit-detail-important{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  margin-top: -20px;
+  padding: 5px 10px;
+  background: rgba(110, 57, 104, 0.2);
+  border-radius: 20px;
+  border: 1px solid rgb(200, 181, 218);
+  box-shadow: 0 2px 8px rgba(107,76,125,0.06);
+  font-size: 13px;
+  color: var(--purple-dark);
+  width: fit-content;
+}
+
 /* 첨부 파일 있다면 표시 */
-.jobtips-detail-files {
+.recruit-detail-files {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -259,16 +281,16 @@ main {
   color: var(--purple-dark);
   width: fit-content;
 }
-.jobtips-detail-file-img {
+.recruit-detail-file-img {
   color: var(--purple-light);
 }
-.jobtips-detail-file-content {
+.recruit-detail-file-content {
   color: var(--purple-light);
   font-weight: 500;
   word-break: break-all;
 }
 
-.jobtips-detail-image-box {
+.recruit-detail-image-box {
   position: relative;
   width: 360px;
   min-width: 360px;
@@ -283,7 +305,7 @@ main {
   box-sizing: border-box;
 }
 
-.jobtips-detail-image-scroll {
+.recruit-detail-image-scroll {
   width: 100%;
   height: 100%;
   overflow-x: auto;
@@ -293,11 +315,11 @@ main {
   scrollbar-width: none;
 }
 
-.jobtips-detail-image-scroll::-webkit-scrollbar {
+.recruit-detail-image-scroll::-webkit-scrollbar {
   display: none;
 }
 
-.jobtips-detail-image-scroll img {
+.recruit-detail-image-scroll img {
   width: 360px;
   height: 480px;
   object-fit: cover;
@@ -307,7 +329,7 @@ main {
   scroll-snap-align: start;
 }
 
-.jobtips-image-scroll-btn {
+.recruit-image-scroll-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -324,12 +346,12 @@ main {
   transition: background 0.2s;
 }
 
-.jobtips-image-scroll-btn.left { left: 8px; }
-.jobtips-image-scroll-btn.right { right: 8px; }
+.recruit-image-scroll-btn.left { left: 8px; }
+.recruit-image-scroll-btn.right { right: 8px; }
 
-.jobtips-image-scroll-btn:hover { background: rgba(255,255,255,0.95); }
+.recruit-image-scroll-btn:hover { background: rgba(255,255,255,0.95); }
 
-.jobtips-detail-text-box {
+.recruit-detail-text-box {
   flex: 1;
   height: 520px;
   overflow-y: auto;
@@ -343,56 +365,69 @@ main {
   scrollbar-width: none;
 }
 
-.jobtips-detail-text-box::-webkit-scrollbar {
+.recruit-detail-text-box::-webkit-scrollbar {
   display: none;
 }
 
-.jobtips-detail-text-title {
+.recruit-detail-text-title {
   margin: 10px 5px 12px;
   color: var(--purple-dark);
   font-weight: 600;
   font-size: 18px;
 }
 
-.jobtips-detail-text-content {
+.recruit-detail-text-content {
   margin: 0 5px;
   line-height: 1.6;
   color: var(--purple-light);
 }
 
-.jobtips-detail-rating {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  margin-bottom: 20px;
-  font-size: 18px;
-  color: var(--purple-dark);
-  font-weight: 500;
+.recruit-detail-link-box{
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  padding: 30px;
+  border-radius: 20px;
   background: rgba(255, 255, 255, 0.45);
-  border-radius: 12px;
-  padding: 10px 18px;
-  box-shadow: 0 2px 8px rgba(107,76,125,0.08);
-  border: 1px solid rgba(155,120,200,0.18);
-  width: fit-content;
+  border: 1px solid rgba(200, 180, 220, 0.3);
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  overflow: visible; /* 스크롤 없앰 */
 }
 
-.jobtips-bottom-box{
+.recruit-detail-link-title {
+  color: var(--purple-dark);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.recruit-detail-link-content {
+  margin: 0 5px;
+  line-height: 1.6;
+  color: var(--purple-light);
+  word-break: break-all;
+  white-space: pre-line;
+  padding: 0;
+  overflow: visible; /* 스크롤 없앰 */
+}
+
+.recruit-bottom-box{
   display: flex;
   justify-content: space-between;
 }
 
-.jobtips-scrap-btn{
+.recruit-scrap-btn{
     background: none;
     border: none;
   cursor: pointer;
 }
 
-.jobtips-detail-tags {
+.recruit-detail-tags {
   margin-bottom: 20px;
 }
 
-.jobtips-tag-item {
+.recruit-tag-item {
   display: inline-block;
   padding: 6px 12px;
   margin-right: 8px;
@@ -404,14 +439,14 @@ main {
   border: 1px solid rgba(200, 180, 220, 0.3);
 }
 
-.jobtips-divider {
+.recruit-divider {
   width: calc(100%);
   height: 1px;
   background: var(--purple-light-2);
   margin-bottom: 2rem;
 }
 
-.jobtips-detail-comment-box {
+.recruit-detail-comment-box {
   background: rgba(255, 255, 255, 0.45);
   padding: 20px;
   border-radius: 16px;
@@ -424,7 +459,7 @@ main {
   gap: 10px;
 }
 
-.jobtips-detail-comment-content{
+.recruit-detail-comment-content{
   width: 100%;
   height: 100px;
   border: none;
@@ -438,19 +473,19 @@ main {
   box-sizing: border-box;
 }
 
-.jobtips-detail-comment-content::placeholder {
+.recruit-detail-comment-content::placeholder {
   color: var(--purple-light-2);
   opacity: 1;
   font-size: 15px;
   font-weight: 400;
 }
 
-.jobtips-comment-btn-wrap {
+.recruit-comment-btn-wrap {
   display: flex;
   justify-content: flex-end;
 }
 
-.jobtips-comment-submit-btn {
+.recruit-comment-submit-btn {
   padding: 8px 14px;
   color: var(--purple-dark);
   background: rgba(110, 57, 104, 0.2);
@@ -459,14 +494,14 @@ main {
   cursor: pointer;
 }
 
-.jobtips-comment-list {
+.recruit-comment-list {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.jobtips-comment-item {
+.recruit-comment-item {
   padding: 30px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.45);
@@ -474,23 +509,23 @@ main {
   backdrop-filter: blur(10px);
 }
 
-.jobtips-comment-top {
+.recruit-comment-top {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.jobtips-comment-nickname {
+.recruit-comment-nickname {
   color: var(--purple-dark);
   font-weight: 600;
 }
 
-.jobtips-comment-date {
+.recruit-comment-date {
   color: var(--purple-dark);
   font-size: 14px;
 }
 
-.jobtips-comment-text {
+.recruit-comment-text {
   color: var(--purple-light);
   font-size: 15px;
   line-height: 1.6;

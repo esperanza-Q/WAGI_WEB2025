@@ -1,10 +1,10 @@
+// 이미지 슬라이더 (좌우 버튼)
 document.addEventListener('DOMContentLoaded', function() {
-  // 기존 이미지 슬라이더
-  const scrollBox = document.querySelector('.ex-detail-image-scroll');
-  const leftBtn = document.querySelector('.ex-image-scroll-btn.left');
-  const rightBtn = document.querySelector('.ex-image-scroll-btn.right');
+  const scrollBox = document.querySelector('.recruit-detail-image-scroll');
+  const leftBtn = document.querySelector('.recruit-image-scroll-btn.left');
+  const rightBtn = document.querySelector('.recruit-image-scroll-btn.right');
   const img = scrollBox ? scrollBox.querySelector('img') : null;
-  const scrollAmount = img ? img.offsetWidth + 20 : 260; // 이미지+gap
+  const scrollAmount = img ? img.offsetWidth + 20 : 260;
 
   if (leftBtn && scrollBox) {
     leftBtn.addEventListener('click', () => {
@@ -19,11 +19,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // 좋아요 버튼 토글
-const likeBtn = document.querySelector('.ex-detail-like-btn');
+const likeBtn = document.querySelector('.recruit-detail-like-btn');
 if (likeBtn) {
-  likeBtn.addEventListener('click', function () {
+  likeBtn.addEventListener('click', function (e) {
+    e.preventDefault();
     this.classList.toggle('active');
-    const countSpan = this.querySelector('.ex-detail-like-count');
+    const countSpan = this.querySelector('.recruit-detail-like-count');
     if (countSpan) {
       let count = parseInt(countSpan.textContent, 10) || 0;
       count = this.classList.contains('active') ? count + 1 : count - 1;
@@ -33,22 +34,28 @@ if (likeBtn) {
 }
 
 // 스크랩 버튼 토글
-const scrapBtn = document.querySelector('.ex-scrap-icon');
+const scrapBtn = document.querySelector('.recruit-scrap-btn');
 if (scrapBtn) {
-  scrapBtn.addEventListener('click', function () {
+  scrapBtn.addEventListener('click', function (e) {
+    e.preventDefault();
     this.classList.toggle('active');
+    const img = this.querySelector('img');
+    if (img) {
+      img.src = this.classList.contains('active') ? '../../static/img/scrap-fill.svg' : '../../static/img/scrap.svg';
+    }
   });
 }
 
-// 수정/삭제 버튼 (예시: 실제 구현 시 서버 연동 필요)
-const editBtn = document.querySelector('.ex-edit-btn');
+// 수정/삭제 버튼
+const editBtn = document.querySelector('.recruit-edit-btn');
 if (editBtn) {
-  editBtn.addEventListener('click', function () {
+  editBtn.addEventListener('click', function (e) {
+    e.preventDefault();
     alert('수정 페이지로 이동합니다.');
     // location.href = '수정페이지url';
   });
 }
-const deleteBtn = document.querySelector('.ex-delete-btn');
+const deleteBtn = document.querySelector('.recruit-delete-btn');
 if (deleteBtn) {
   deleteBtn.addEventListener('click', function () {
     if (confirm('정말 삭제하시겠습니까?')) {

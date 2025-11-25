@@ -175,7 +175,7 @@ main {
   color: var(--purple-light);
 }
 
-/* 수정, 삭제 버튼 기본: 숨김 처리 */
+/* 수정, 삭제 버튼: 숨김 처리 */
 .hidden {
   display: none!important;
 }
