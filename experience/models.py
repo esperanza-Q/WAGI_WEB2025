@@ -62,3 +62,14 @@ class ReviewComment(models.Model):
 
     def __str__(self):
         return f"{self.user.display_name}: {self.content[:20]}"
+
+class ReviewScrap(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name="scraps")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('review', 'user')  # 중복 스크랩 방지
+
+    def __str__(self):
+        return f"{self.user.username} → {self.review.title}"
