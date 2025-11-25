@@ -50,7 +50,6 @@ if (scrapBtn) {
 const editBtn = document.querySelector('.recruit-edit-btn');
 if (editBtn) {
   editBtn.addEventListener('click', function (e) {
-    e.preventDefault();
     alert('수정 페이지로 이동합니다.');
     // location.href = '수정페이지url';
   });

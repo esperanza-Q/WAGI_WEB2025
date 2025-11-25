@@ -34,7 +34,7 @@
 
     <form method="POST" enctype="multipart/form-data" class="jobtips-edit-form">
       <label class="jobtips-edit-label">제목</label>
-      <input type="text" class="jobtips-edit-input" placeholder="활동 제목을 간단히 입력해주세요 (예: 카카오 FE 인턴 합격 자소서)" required>
+      <input type="text" class="jobtips-edit-input" value="기존 자소서 제목" required>
       
       <label class="jobtips-edit-label">카테고리</label>
       <div class="jobtips-edit-category">
@@ -44,13 +44,13 @@
       </div>
 
       <label class="jobtips-edit-label">지원 분야</label>
-      <input type="text" class="jobtips-edit-input" placeholder="직무 / 포지션" required>
+      <input type="text" class="jobtips-edit-input" value="기존 내용" required>
 
       <label class="jobtips-edit-label">합격 연도와 전형 유형</label>
-      <input type="text" class="jobtips-edit-input" placeholder="예: 2023 동계 인턴 / 2024 교내 공모전" required>
+      <input type="text" class="jobtips-edit-input" value="기존 내용" required>
 
       <label class="jobtips-edit-label">후기 본문</label>
-      <textarea class="jobtips-edit-textarea" required></textarea>
+      <textarea class="jobtips-edit-textarea" required>기존 내용</textarea>
 
       <label class="jobtips-edit-label">파일 업로드</label>
       <div class="jobtips-edit-upload-area">
@@ -69,16 +69,18 @@
       
       <label class="jobtips-edit-label">태그 추가</label>
       <div class="jobtips-edit-tag-input-wrapper">
-        <input type="text" id="jobtips-tag-input" class="jobtips-edit-tag-input" placeholder="태그를 입력해주세요">
+        <input type="text" id="jobtips-tag-input" class="jobtips-edit-tag-input">
         <button type="button" id="jobtips-add-tag-btn" class="jobtips-edit-tag-add-btn">추가</button>
       </div>
       <!-- 태그 보여주는 영역 -->
       <div class="jobtips-edit-tag-list" id="jobtips-tag-list"></div>
-      <!-- 서버로 보낼 hidden input -->
-      <input type="hidden" id="jobtips-hidden-tags">
 
       <input type="hidden" id="jobtips-deleted-files">
-      
+      <input type="hidden" id="jobtips-edit-hidden-tags">
+        <!--둘 다 "사용자가 직접 입력/조작한 값(삭제 파일, 태그)"을 서버로 넘기기 위한 숨겨진 데이터 필드(동기화 위함..)
+        파일 - 기존에 업로드된 파일/이미지 중에서 사용자가 삭제한 파일의 id(혹은 이름)" 목록을 JSON 문자열로 담아 서버로 전송하는 용도
+        태그 - 사용자가 입력한 태그 목록을 JSON 문자열로 담아 서버로 전송하는 용도-->
+
       <button type="submit" class="jobtips-edit-submit-btn">
         수정 완료
       </button>

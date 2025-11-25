@@ -87,6 +87,10 @@
         </div>
 
         <input type="hidden" id="ex-deleted-files">
+        <input type="hidden" id="ex-edit-hidden-tags">
+        <!--둘 다 "사용자가 직접 입력/조작한 값(삭제 파일, 태그)"을 서버로 넘기기 위한 숨겨진 데이터 필드(동기화 위함..)
+        파일 - 기존에 업로드된 파일/이미지 중에서 사용자가 삭제한 파일의 id(혹은 이름)" 목록을 JSON 문자열로 담아 서버로 전송하는 용도
+        태그 - 사용자가 입력한 태그 목록을 JSON 문자열로 담아 서버로 전송하는 용도-->
 
         <button type="submit" class="ex-edit-submit-btn">
           수정 완료
