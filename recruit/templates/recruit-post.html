@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/login.css">
+  <link rel="stylesheet" href="../../static/css/recruit/recruit-post.css">
 </head>
 
 <body>
@@ -30,54 +30,54 @@
 <main>
   <div class="container">
 
-    <h2 class="post-title">모집하기</h2>
+    <h2 class="recruit-post-title">모집하기</h2>
 
-    <form method="POST" enctype="multipart/form-data" class="write-form">
-      <label class="post-label">제목</label>
-      <input type="text" class="post-input" placeholder="활동 제목을 간단히 입력해주세요 (예: Sungshin AI Study 3기 모집)" required>
+    <form method="POST" enctype="multipart/form-data" class="recruit-post-form">
+      <label class="recruit-post-label">제목</label>
+      <input type="text" class="recruit-post-input" placeholder="활동 제목을 간단히 입력해주세요 (예: Sungshin AI Study 3기 모집)" required>
       
-      <label class="post-label">카테고리</label>
-      <div class="post-category">
-        <label><input type="radio" value="자소서" required> 동아리</label>
-        <label><input type="radio" value="면접"> 공모전</label>
-        <label><input type="radio" value="포트폴리오"> 스터디</label>
+      <label class="recruit-post-label">카테고리</label>
+      <div class="recruit-post-category">
+        <label><input type="radio" value="동아리" required> 동아리</label>
+        <label><input type="radio" value="공모전"> 공모전</label>
+        <label><input type="radio" value="스터디"> 스터디</label>
       </div>
 
-      <label class="post-label">모집 분야</label>
-      <input type="text" class="post-input" placeholder="예: 프로그래밍, 글쓰기, 프레젠테이션" required>
+      <label class="recruit-post-label">모집 분야</label>
+      <input type="text" class="recruit-post-input" placeholder="예: 프로그래밍, 글쓰기, 프레젠테이션" required>
 
-      <label class="post-label">모집 기간</label>
-      <input type="text" class="post-input" placeholder="예: 2025/02/03 ~ 2025/02/05" required>
+      <label class="recruit-post-label">모집 기간</label>
+      <input type="text" class="recruit-post-input" placeholder="예: 2025/02/03 ~ 2025/02/05" required>
 
-      <label class="post-label">활동 소개</label>
-      <textarea class="post-textarea" required></textarea>
+      <label class="recruit-post-label">활동 소개</label>
+      <textarea class="recruit-post-textarea" required></textarea>
 
-      <label class="post-label">파일 업로드</label>
-      <div class="post-upload-area">
-        <label class="post-upload-btn">
+      <label class="recruit-post-label">파일 업로드</label>
+      <div class="recruit-post-upload-area">
+        <label class="recruit-post-upload-btn">
           +
-          <input type="file" id="upload-input" multiple required>
+          <input type="file" id="recruit-upload-input" multiple required>
         </label>
 
-        <div class="post-upload-preview" id="upload-preview">
+        <div class="recruit-post-upload-preview" id="recruit-post-upload-preview">
           <!-- 업로드된 이미지 미리보기, 파일명 미리보기(다중 선택 가능) -->
         </div>
       </div>
 
-      <label class="post-label">연결 링크</label>
-      <textarea class="post-textarea" required></textarea>
+      <label class="recruit-post-label">연결 링크</label>
+      <input class="recruit-post-input" placeholder="카카오톡 오픈채팅방이나 메일 주소" required></input>
       
-      <label class="post-label">태그 추가</label>
-      <div class="tag-input-wrapper">
-        <input type="text" id="tag-input" class="tag-input" placeholder="태그를 입력해주세요">
-        <button type="button" id="add-tag-btn" class="tag-add-btn">추가</button>
+      <label class="recruit-post-label">태그 추가</label>
+      <div class="recruit-tag-input-wrapper">
+        <input type="text" id="recruit-tag-input" class="recruit-tag-input" placeholder="태그를 입력해주세요">
+        <button type="button" id="recruit-add-tag-btn" class="recruit-tag-add-btn">추가</button>
       </div>
       <!-- 태그 보여주는 영역 -->
-      <div class="tag-list" id="tag-list"></div>
+      <div class="recruit-tag-list" id="recruit-tag-list"></div>
       <!-- 서버로 보낼 hidden input -->
-      <input type="hidden" id="hidden-tags">
+      <input type="hidden" id="recruit-hidden-tags" name="tags">
 
-      <button type="submit" class="post-submit-btn">
+      <button type="submit" class="recruit-post-submit-btn">
         완료하기
       </button>
     </form>
@@ -91,6 +91,6 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="../../static/js/experience-post.js"></script>
+  <script src="../../static/js/recruit-post.js"></script>
 </body>
 </html>

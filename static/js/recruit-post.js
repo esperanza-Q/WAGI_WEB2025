@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
   let selectedFiles = [];
   const MAX_FILES = 5; // 최대 업로드 개수
 
-  const input = document.getElementById("jobtips-upload-input");
-  const preview = document.getElementById("jobtips-upload-preview");
+  const input = document.getElementById("recruit-upload-input");
+  const preview = document.getElementById("recruit-post-upload-preview");
 
   // input change 이벤트
   input.addEventListener("change", function(event) {
@@ -28,24 +28,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
       selectedFiles.forEach((file, index) => {
           const item = document.createElement("div");
-          item.classList.add("jobtips-preview-item");
+          item.classList.add("recruit-preview-item");
 
           // 이미지 파일인지 체크
           if (file.type.startsWith("image/")) {
               const img = document.createElement("img");
-              img.classList.add("jobtips-preview-img");
+              img.classList.add("recruit-preview-img");
               img.src = URL.createObjectURL(file);
               item.appendChild(img);
           } else {
               const fileBox = document.createElement("div");
-              fileBox.classList.add("jobtips-preview-file");
+              fileBox.classList.add("recruit-preview-file");
               fileBox.textContent = file.name;
               item.appendChild(fileBox);
           }
 
           // 삭제 버튼 추가
           const removeBtn = document.createElement("div");
-          removeBtn.classList.add("jobtips-preview-remove");
+          removeBtn.classList.add("recruit-preview-remove");
           removeBtn.textContent = "×";
 
           removeBtn.addEventListener("click", () => {
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // 폼 제출 시 파일 최소 1개 체크
-  const form = document.querySelector(".jobtips-post-form");
+  const form = document.querySelector(".recruit-post-form");
 
   form.addEventListener("submit", function (e) {
       if (selectedFiles.length === 0) {
@@ -82,10 +82,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // 태그 저장 관련
-  const tagInput = document.getElementById("jobtips-tag-input");
-  const addTagBtn = document.getElementById("jobtips-add-tag-btn");
-  const tagList = document.getElementById("jobtips-tag-list");
-  const hiddenTags = document.getElementById("jobtips-hidden-tags");
+  const tagInput = document.getElementById("recruit-tag-input");
+  const addTagBtn = document.getElementById("recruit-add-tag-btn");
+  const tagList = document.getElementById("recruit-tag-list");
+  const hiddenTags = document.getElementById("recruit-hidden-tags");
 
   let tags = [];
 
@@ -112,15 +112,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
       tags.forEach((tag, index) => {
           const tagItem = document.createElement("div");
-          tagItem.classList.add("jobtips-tag-item");
+          tagItem.classList.add("recruit-tag-item");
           tagItem.innerHTML = `
               ${tag}
-              <span class="jobtips-tag-remove" data-index="${index}">×</span>
+              <span class="recruit-tag-remove" data-index="${index}">×</span>
           `;
           tagList.appendChild(tagItem);
       });
 
-      document.querySelectorAll(".jobtips-tag-remove").forEach(btn => {
+      document.querySelectorAll(".recruit-tag-remove").forEach(btn => {
           btn.addEventListener("click", (e) => {
               const idx = e.target.dataset.index;
               tags.splice(idx, 1);
