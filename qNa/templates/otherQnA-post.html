@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/login.css">
+  <link rel="stylesheet" href="../../static/css/otherQnA-post.css">
 </head>
 
 <body>
@@ -28,11 +28,36 @@
   </header>
 
   <main>
+    <div class="otherQnA-post-wrapper">
+        <div class="otherQnA-post-top">
+            <div class="otherQnA-post-title">Q&A 작성하기</div>
+        </div>
+
+        <form class="otherQnA-post-bottom" method="post">
+            <div class="otherQnA-post-bottom-title">
+                <p>제목</p>
+                <input type="text">
+            </div>
+
+            <div class="otherQnA-post-bottom-detail">
+                <p>내용</p>
+                <textarea></textarea>
+            </div>
+
+            <div class="otherQnA-post-submit">      
+              <input type="submit" value="완료하기">
+            </div>  
+        </form>
+    </div>
   </main>
 
   <footer class="footer">
     <p>© SSWU_WAGI 3기 CampusBridge</p>
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
+
+  <script src="../../static/js/otherQnA-post.js"></script>
 </body>
 </html>
+
+

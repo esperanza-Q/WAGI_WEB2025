@@ -19,6 +19,7 @@ body {
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .main-header {
@@ -69,7 +70,7 @@ body {
   align-items: center;
 }
 
-.mypage-btn {
+.header-mypage-btn {
   background: transparent;
   color: var(--purple-dark);
   border: none;
@@ -79,11 +80,11 @@ body {
   font-size: 16px;
 }
 
-.mypage-btn:hover {
+.header-mypage-btn:hover {
   color: #9c3d7e;
 }
 
-.login-btn {
+.header-login-btn {
   background: rgba(105,37,90,0.22);
   color: var(--purple-dark);
   border: 1px solid rgba(55, 27, 75, 0.2);
@@ -95,7 +96,7 @@ body {
   font-size: 16px;
 }
 
-.login-btn:hover {
+.header-login-btn:hover {
   background: rgba(105, 37, 90, 0.31);
 }
 
@@ -146,92 +147,121 @@ main {
   font-weight: 500;
 }
 
-.signup-form input,.signup-box select{
-  width:100%;
-  height:49px;
-  padding:0 12px;
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 
-  box-sizing:border-box;
-  border:2px solid rgba(110,57,104,0.22);
-  
+.signup-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.signup-input {
+  width: 100%;
+  height: 49px;
+  padding: 0 12px;
+  margin-bottom: 16px;
+  border: 2px solid rgba(110,57,104,0.22);
   border-radius: 10px;
+  background-color: rgba(105,57,90,0.22);
+  font-size: 15px;
+  color: var(--purple-dark);
+  outline: none;
+  box-sizing: border-box;
+}
+.signup-input::placeholder { color: var(--purple-light); }
+.signup-input:focus { border-color: var(--purple-dark); border-width: 1px; }
 
-  background-color:rgba(105,57,90,0.22);
-    
-  box-shadow: none;
-  outline:none;
-  font-size:15px;
-  color:var(--purple-dark);
+/* 학년 + 단과대 한 줄로 */
+.signup-academic {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+/* 학년 select */
+.signup-grade-select {
+  flex: 2;
+  height: 49px;
+  padding: 0 12px;
+  border: 2px solid rgba(110,57,104,0.22);
+  border-radius: 10px;
+  background-color: rgba(105,57,90,0.22);
+  font-size: 15px;
+  color: var(--purple-dark);
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
   margin-bottom: 16px;
 }
-
-.signup-box{
-  flex:7;
-  display:flex;
-  flex-direction:column;
-}
-
-.signup-box input::placeholder{
-  color:var(--purple-light);
-}
-
-.signup-box input:focus, .signup-academic select:focus{
-  border-color:var(--purple-dark);
-  border-width:1px;
-}
-
-.signup-academic{
-  display:flex;
-  width:100%;
-  justify-content:center;
-  gap:6px;
-}
-
-.signup-academic select{
-  flex:2;
-  cursor:pointer;
-}
-
-.signup-academic select option{
+.signup-grade-select:focus { border-color: var(--purple-dark); border-width: 1px; }
+.signup-grade-select option {
+  background-color: rgba(105,57,90,0.22);
   color: var(--purple-dark);
-  font-size: 16px;
-  background-color:rgba(105,57,90,0.22);
 }
 
-.signup-academic input{
-  flex:9;
-}
-
-.signup-submit{
-  width:100%;
-  height:49px;
-  padding:0 12px;
-
-  box-sizing:border-box;
-  border:2px solid rgba(110,57,104,0.22);
-  
+/* 단과대 select */
+.signup-college-select {
+  flex: 9;
+  height: 49px;
+  padding: 0 12px;
+  border: 2px solid rgba(110,57,104,0.22);
   border-radius: 10px;
-
-  background-color:rgba(105,57,90,0.22);
-    
-  box-shadow: none;
-  outline:none;
-  font-size:15px;
-  color:var(--purple-dark);
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#ffffff;
-  font-size:16px;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  background-color: rgba(105,57,90,0.22);
+  font-size: 15px;
+  color: var(--purple-dark);
+  outline: none;
   cursor: pointer;
-  font-weight: 500;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+.signup-college-select:focus { border-color: var(--purple-dark); border-width: 1px; }
+.signup-college-select option {
+  background-color: rgba(105,57,90,0.22);
+  color: var(--purple-dark);
 }
 
-.signup-submit:hover{
-  background: rgba(76, 25, 65, 0.268);
+/* 학과 select */
+.signup-department-select {
+  width: 100%;
+  height: 49px;
+  padding: 0 12px;
+  margin-bottom: 16px;
+  border: 2px solid rgba(110,57,104,0.22);
+  border-radius: 10px;
+  background-color: rgba(105,57,90,0.22);
+  font-size: 15px;
+  color: var(--purple-dark);
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.signup-department-select:focus { border-color: var(--purple-dark); border-width: 1px; }
+.signup-department-select option {
+  background-color: rgba(105,57,90,0.22);
+  color: var(--purple-dark);
+}
+
+/* 가입 버튼 */
+.signup-submit {
+  width: 100%;
+  height: 49px;
+  padding: 0 12px;
+  border: 2px solid rgba(110,57,104,0.22);
+  border-radius: 10px;
+  background-color: rgba(105,57,90,0.22);
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+.signup-submit:hover {
+  background: rgba(76,25,65,0.268);
 }
 
 .footer {
