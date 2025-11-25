@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Review, ReviewLike, ActivityCategory
+from .models import Review, ReviewLike, ActivityCategory, ReviewScrap
 from .forms import ReviewForm, ReviewImageMultipleForm
 from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
@@ -66,12 +66,15 @@ def review_detail(request, review_id):
     user_like = None
     if request.user.is_authenticated:
         user_like = ReviewLike.objects.filter(review=review, user=request.user).first()
-    
+    scrapped_by_user = False
+    if request.user.is_authenticated:
+        scrapped_by_user = review.scraps.filter(user=request.user).exists()
     context = {
         "review": review,
         "images": images,
         "comments": comments,
         "like_count": like_count,
+        "scrapped_by_user": scrapped_by_user,
         "user_like": user_like,
     }
     return render(request, "b_review_detail.html", context)
@@ -170,3 +173,18 @@ def review_delete(request, review_id):
 
     review.delete()
     return redirect("review_list")
+
+@login_required
+def toggle_scrap(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+
+    scrap, created = ReviewScrap.objects.get_or_create(
+        review=review,
+        user=request.user,
+    )
+
+    if not created:
+        # 이미 스크랩 되어있으면 → 삭제(언스크랩)
+        scrap.delete()
+
+    return redirect("review_detail", review_id=review.id)
