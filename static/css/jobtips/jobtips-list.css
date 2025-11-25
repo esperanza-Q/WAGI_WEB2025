@@ -19,6 +19,7 @@ body {
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .main-header {
@@ -115,13 +116,12 @@ main {
   margin-bottom: 80px; /* footer와 간격 */
 }
 
-/* 공통 검색바 */
-.search-section {
+.jobtips-search-section {
   margin-top: 40px;
   margin-bottom: 10px;
 }
 
-.search-bar {
+.jobtips-search-bar {
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.6);
@@ -133,7 +133,7 @@ main {
   backdrop-filter: blur(10px);
 }
 
-.search-bar input {
+.jobtips-search-bar input {
   border: none;
   background: transparent;
   flex: 1;
@@ -142,18 +142,17 @@ main {
   color: var(--purple-dark);
 }
 
-.search-bar input::placeholder {
+.jobtips-search-bar input::placeholder {
   color: var(--purple-light);
 }
 
-.search-bar button {
+.jobtips-search-bar button {
   background: none;
   border: none;
   cursor: pointer;
 }
 
-/* 공통 필터 탭 */
-.filter-tabs ul {
+.jobtips-filter-tabs ul {
   display: flex;
   gap: 4rem;
   list-style: none;
@@ -162,8 +161,8 @@ main {
   margin-bottom: 2rem;
 }
 
-.filter-tabs button,
-.filter-tabs a {
+.jobtips-filter-tabs button,
+.jobtips-filter-tabs a {
   background: none;
   border: 1px solid transparent;
   border-radius: 20px;
@@ -176,28 +175,27 @@ main {
   text-decoration: none;
 }
 
-.filter-tabs button:hover,
-.filter-tabs a:hover {
+.jobtips-filter-tabs button:hover,
+.jobtips-filter-tabs a:hover {
   background: rgba(123, 82, 115, 0.2);
   border: 0.1px solid rgba(105, 57, 90, 0.4);
   transform: translateY(-1px);
 }
 
-.filter-tabs button.active,
-.filter-tabs a.active {
+.jobtips-filter-tabs button.active,
+.jobtips-filter-tabs a.active {
   background: rgba(123, 82, 115, 0.512);
   border: 0.1px solid var(--purple-dark);
 }
 
-/* 공통 서브 필터 */
-.sub-filter-bar {
+.jobtips-sub-filter-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
 }
 
-.sub-filters ul {
+.jobtips-sub-filters ul {
   display: flex;
   gap: 12px;
   list-style: none;
@@ -205,8 +203,8 @@ main {
   margin-bottom: -10px;
 }
 
-.sub-filters button,
-.sub-filters a {
+.jobtips-sub-filters button,
+.jobtips-sub-filters a {
   background: none;
   border: none;
   font-size: 14px;
@@ -218,36 +216,34 @@ main {
   text-decoration: none;
 }
 
-.sub-filters button:hover,
-.sub-filters a:hover {
+.jobtips-sub-filters button:hover,
+.jobtips-sub-filters a:hover {
   background: rgba(142, 103, 129, 0.15);
   color: var(--purple-dark);
   transform: translateY(-1px);
 }
 
-.sub-filters button:active,
-.sub-filters a:active {
+.jobtips-sub-filters button:active,
+.jobtips-sub-filters a:active {
   transform: translateY(0);
   background: rgba(142, 103, 129, 0.25);
 }
 
-.sub-filters button.active,
-.sub-filters a.active {
+.jobtips-sub-filters button.active,
+.jobtips-sub-filters a.active {
   font-weight: 600;
   color: var(--purple-dark);
   background: rgba(142, 103, 129, 0.2);
 }
 
-/* 공통 구분선 */
-.divider {
+.jobtips-divider {
   width: calc(100%);
   height: 1px;
   background: var(--purple-dark);
   margin-bottom: 2rem;
 }
 
-/* 공통 작성 버튼 */
-.write-btn {
+.jobtips-write-btn {
   padding: 0.5rem 1.1rem;
   background: linear-gradient(90deg, #f6effc 0%, #e7effb 100%);
   color: var(--purple-dark);
@@ -263,25 +259,13 @@ main {
   letter-spacing: 0.2px;
 }
 
-.write-btn:hover {
+.jobtips-write-btn:hover {
   background: linear-gradient(90deg, #ede2fa 0%, #e7effb 100%);
   color: var(--purple-dark);
   border-color: #cbb6e6;
 }
 
-/* 공통 카드 링크 */
-.post-card-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.post-card-link:hover {
-  text-decoration: none;
-}
-
-/* 공통 카드 리스트 */
-.post-list {
+.jobtips-list {
   display: flex;
   margin: 0 auto;
   flex-direction: column;
@@ -290,7 +274,17 @@ main {
   max-width: 800px;
 }
 
-.post-card {
+.jobtips-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.jobtips-card-link:hover {
+  text-decoration: none;
+}
+
+.jobtips-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(200, 180, 220, 0.3);
@@ -301,27 +295,21 @@ main {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
 }
 
-.post-card:hover {
+.jobtips-card:hover {
   background: rgba(255, 255, 255, 0.85);
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border-color: rgba(150, 120, 180, 0.4);
 }
 
-.post-header {
+.jobtips-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
 }
 
-/*동아리, 모집중*/
-.post-header-box{
-  display: flex;
-  gap: 10px;
-}
-
-.post-category {
+.jobtips-card-category {
   background: rgba(82, 36, 95, 0.122);
   color: var(--purple-dark);
   padding: 0.3rem 0.8rem;
@@ -332,14 +320,14 @@ main {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.post-date {
+.jobtips-card-date {
   color: var(--purple-dark);
   border-radius: 15px;
   font-size: 15px;
   font-weight: 400;
 }
 
-.post-title {
+.jobtips-card-title {
   color: var(--purple-dark);
   font-size: 22px;
   font-weight: 600;
@@ -348,7 +336,7 @@ main {
   text-overflow: ellipsis;
 }
 
-.post-nickname {
+.jobtips-card-nickname {
   color: var(--purple-dark);
   font-size: 18px;
   font-weight: 400;
@@ -356,13 +344,13 @@ main {
   margin-top: 5px;
 }
 
-.post-period {
+.jobtips-card-period {
   color: var(--purple-light);
   font-size: 15px;
   font-weight: 400;
 }
 
-.post-footer {
+.jobtips-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -371,18 +359,23 @@ main {
   font-weight: 400;
 }
 
-.post-like {
+.jobtips-card-field {
+  color: var(--purple-light);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.jobtips-card-like {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 400;
 }
 
-.post-like-img{
+.jobtips-card-like-img{
   margin-right: 5px;
 }
 
-/* 공통 페이지네이션 */
-.pagination {
+.jobtips-pagination {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
@@ -390,7 +383,7 @@ main {
   margin-bottom: 7rem;
 }
 
-.page-btn {
+.jobtips-page-btn {
   padding: 0.5rem 0.3rem;
   background: rgba(255, 255, 255, 0.7);
   color: var(--purple-dark);
@@ -405,7 +398,7 @@ main {
   box-shadow: 0 2px 8px rgba(107, 76, 125, 0.1);
 }
 
-.page-btn.active {
+.jobtips-page-btn.active {
   background: linear-gradient(135deg, rgba(107, 76, 125, 0.3), rgba(138, 122, 149, 0.25));
   border-color: var(--purple-dark);
   color: var(--purple-dark);
@@ -413,14 +406,13 @@ main {
   box-shadow: 0 4px 12px rgba(107, 76, 125, 0.2);
 }
 
-.page-btn:hover {
+.jobtips-page-btn:hover {
   background: rgba(255, 255, 255, 0.85);
   border-color: rgba(168, 151, 179, 0.5);
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(107, 76, 125, 0.15);
 }
 
-/* 공통 푸터 */
 .footer {
   text-align: center;
   padding: 50px 10px 20px 10px;

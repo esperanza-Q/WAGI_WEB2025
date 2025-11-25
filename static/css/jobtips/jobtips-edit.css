@@ -116,7 +116,8 @@ main {
   margin-bottom: 80px; /* footer와 간격 */
 }
 
-.post-title {
+/* 페이지 제목 */
+.jobtips-edit-title {
   font-size: 26px;
   font-weight: 600;
   color: var(--purple-dark);
@@ -124,13 +125,8 @@ main {
   margin-bottom: 30px;
 }
 
-.post-title-input {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 18px;
-}
-
-.post-label {
+/* 라벨 */
+.jobtips-edit-label {
   display: block;
   margin-bottom: 8px;
   font-size: 16px;
@@ -138,7 +134,8 @@ main {
   color: var(--purple-dark);
 }
 
-.post-input {
+/* 인풋 */
+.jobtips-edit-input {
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
@@ -151,22 +148,23 @@ main {
   font-size: 15px;
 }
 
-.write-input::placeholder {
+.jobtips-edit-input::placeholder {
   color: var(--purple-light);
 }
 
-.post-category {
+/* 카테고리 */
+.jobtips-edit-category {
   display: flex;
   gap: 16px;
   margin-bottom: 20px;
   color: var(--purple-dark);
 }
 
-.post-category input {
+.jobtips-edit-category input {
   margin-right: 4px;
 }
 
-.post-textarea {
+.jobtips-edit-textarea {
   width: 100%;
   height: 180px;
   padding: 16px;
@@ -181,20 +179,15 @@ main {
   margin-bottom: 20px;
 }
 
-.post-body-textarea {
-  min-height: 180px;
-  font-size: 15px;
-  margin-bottom: 18px;
-}
-
-.post-upload-area {
+/* 파일 업로드 */
+.jobtips-edit-upload-area {
   display: flex;
   align-items: flex-start;
   gap: 20px;
   margin-bottom: 20px;
 }
 
-.post-upload-btn {
+.jobtips-edit-upload-btn {
   width: 48px;
   height: 48px;
   background: rgba(255, 255, 255, 0.5);
@@ -210,7 +203,7 @@ main {
   position: relative;
 }
 
-.post-upload-btn input {
+.jobtips-edit-upload-btn input {
   position: absolute;
   top: 0;
   left: 0;
@@ -220,19 +213,18 @@ main {
   cursor: pointer;
 }
 
-.post-upload-preview {
+.jobtips-edit-upload-preview {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-/* 이미지 미리보기 */
-.preview-item {
+.jobtips-edit-preview-item {
   position: relative;
   display: inline-block;
 }
 
-.preview-img {
+.jobtips-edit-preview-img {
   width: 60px;
   height: 60px;
   object-fit: cover;
@@ -240,7 +232,7 @@ main {
   background: #ddd;
 }
 
-.preview-file {
+.jobtips-edit-preview-file {
   padding: 6px 10px;
   background: rgba(255,255,255,0.7);
   border-radius: 8px;
@@ -249,8 +241,7 @@ main {
   border: 1px solid rgba(150,120,180,0.3);
 }
 
-/* 삭제 버튼 */
-.preview-remove {
+.jobtips-edit-preview-remove {
   position: absolute;
   top: -6px;
   right: -6px;
@@ -268,13 +259,14 @@ main {
   font-weight: 600;
 }
 
-.tag-input-wrapper {
+/* 태그 입력 */
+.jobtips-edit-tag-input-wrapper {
   position: relative;
   width: 100%;
   margin-bottom: 5px;
 }
 
-.tag-input {
+.jobtips-edit-tag-input {
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
@@ -286,59 +278,59 @@ main {
   outline: none;
 }
 
-.tag-add-btn {
+.jobtips-edit-tag-add-btn {
   position: absolute;
   right: -20px;
   top: 50%;
   transform: translateY(-50%);
-
   height: 30px;
   padding: 0 12px;
   border-radius: 8px;
-
   background: rgba(110, 57, 104, 0.18);
   border: 1px solid rgba(110, 57, 104, 0.3);
   color: var(--purple-dark);
   font-size: 14px;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   box-sizing: border-box;
 }
 
-.tag-add-btn:hover{
+.jobtips-edit-tag-add-btn:hover{
   background: rgba(165, 134, 180, 0.45)
 }
 
 /* 태그 리스트 */
-.tag-list {
+.jobtips-edit-tag-list {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.tag-item {
+.jobtips-edit-tag-item {
   background: rgba(255,255,255,0.6);
   padding: 6px 12px;
   border-radius: 12px;
   border: 1px solid rgba(150,120,180,0.3);
   color: var(--purple-dark);
   font-size: 14px;
-
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.tag-remove {
+.jobtips-edit-tag-remove {
   cursor: pointer;
   font-weight: 600;
 }
 
-.post-submit-btn {
+.jobtips-edit-tag-input::placeholder {
+  color: var(--purple-light);
+}
+
+/* 제출 버튼 */
+.jobtips-edit-submit-btn {
   width: 300px;
   display: flex;
   justify-content: center;
@@ -355,17 +347,18 @@ main {
   transition: 0.2s;
 }
 
-.post-submit-btn:hover {
+.jobtips-edit-submit-btn:hover {
   background: rgba(120, 80, 140, 0.45);
 }
 
+/* 푸터 */
 .footer {
   text-align: center;
   padding: 50px 10px 20px 10px;
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.129);
+  background: rgba(255,255,255,0.129);
 }
 
 .footer .member {
@@ -373,3 +366,6 @@ main {
   font-size: 14px;
   opacity: 0.8;
 }
+
+
+

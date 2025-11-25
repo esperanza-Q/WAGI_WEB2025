@@ -19,6 +19,7 @@ body {
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .main-header {
@@ -60,7 +61,7 @@ body {
 }
 
 .main-nav-links a:hover {
-    color: #9c3d7e;
+  color: #9c3d7e;
 }
 
 .main-header-r {
@@ -69,7 +70,7 @@ body {
   align-items: center;
 }
 
-.mypage-btn {
+.header-mypage-btn {
   background: transparent;
   color: var(--purple-dark);
   border: none;
@@ -79,11 +80,11 @@ body {
   font-size: 16px;
 }
 
-.mypage-btn:hover {
+.header-mypage-btn:hover {
   color: #9c3d7e;
 }
 
-.login-btn {
+.header-login-btn {
   background: rgba(105,37,90,0.22);
   color: var(--purple-dark);
   border: 1px solid rgba(55, 27, 75, 0.2);
@@ -95,7 +96,7 @@ body {
   font-size: 16px;
 }
 
-.login-btn:hover {
+.header-login-btn:hover {
   background: rgba(105, 37, 90, 0.31);
 }
 
@@ -137,7 +138,7 @@ main {
   margin-top: 20px;
 }
 
-.vertification-title{
+.verification-title{
   color:var(--purple-dark);
   font-size:25px;
   font-weight: 500;
@@ -162,7 +163,7 @@ main {
   width:100%;
 }
 
-.verification-info input{
+.verification-name{
   width:100%;
   height:49px;
   padding:0 12px;
@@ -180,11 +181,11 @@ main {
   font-size:15px
 }
 
-.verification-info input::placeholder{
+.verification-name::placeholder{
   color:var(--purple-light);
 }
 
-.verification-info input:focus{
+.verification-name:focus{
   border-color:var(--purple-dark);
   border-width:1px;
 }
@@ -274,18 +275,14 @@ main {
   margin-top:10px;
 }
 
-.verification-submit{
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
 .verification-submit:hover{
   background: rgba(76, 25, 65, 0.268);
 }
 
 .verification-submit{
+  display:flex;
+  justify-content:center;
+  align-items:center;
   width:100%;
   height:49px;
   padding:0 12px;
