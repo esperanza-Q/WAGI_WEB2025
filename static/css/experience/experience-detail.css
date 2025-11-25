@@ -236,6 +236,13 @@ main {
   cursor: pointer;
 }
 
+.ex-detail-like-btn:hover {
+  background: rgba(155, 120, 200, 0.13);
+  color: #9c3d7e;
+  box-shadow: 0 2px 8px rgba(107,76,125,0.10);
+  transition: background 0.2s, color 0.2s;
+}
+
 .ex-detail-body {
   display: flex;
   gap: 20px;
@@ -386,6 +393,12 @@ main {
     background: none;
     border: none;
   cursor: pointer;
+}
+
+.ex-scrap-btn:hover {
+  background: rgba(155, 120, 200, 0.13);
+  box-shadow: 0 2px 8px rgba(107,76,125,0.10);
+  transition: background 0.2s;
 }
 
 .ex-detail-tags {
