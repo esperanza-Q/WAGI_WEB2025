@@ -1,6 +1,41 @@
+from django.shortcuts import render
+from experience.models import Review
+from django.db.models import Q
+import re
+
+# --- 검색 테스트용 뷰 (search/expr/) ---
+def search_expr_test(request):
+    query = request.GET.get('q', '')
+    category = request.GET.get('category', '전체')
+    reviews = Review.objects.all()
+    # 카테고리 필터
+    if category and category != '전체':
+        reviews = reviews.filter(category=category)
+    # 검색어 필터
+    if query and query.strip():
+        words = [w.strip() for w in re.split(r'[ ,]+', query) if w.strip()]
+        q_obj = Q()
+        for word in words:
+            q_obj &= (Q(title__icontains=word) | Q(content__icontains=word))
+        reviews = reviews.filter(q_obj).distinct()
+        def count_score(review):
+            score = 0
+            for w in words:
+                score += review.title.count(w)
+                score += review.content.count(w)
+            return score
+        reviews = sorted(reviews, key=count_score, reverse=True)
+    context = {
+        'reviews': reviews,
+        'q_query': query,
+        'category': category,
+        'categories': ['전체', '동아리', '학회', '공모전', '인턴'],
+    }
+    return render(request, "b_search_expr.html", context)
 from django.http import JsonResponse
 from django.db.models import Q
 from django.utils.timezone import localtime
+from django.shortcuts import render  # 👈 이 줄 추가
 
 from experience.models import Review
 from .utils import filter_users_by_params
@@ -8,41 +43,30 @@ from .utils import filter_users_by_params
 
 def search_reviews(request):
     """
-    단과대/학과/학번/검색어/카테고리/정렬 조건으로
-    Review(활동 후기) 검색하는 API
+    JSON API: /search/reviews/
     """
-
-    # 1) 우리 학교 맞춤 필터: 단과대/학과/학번 기준으로 User 필터
     users = filter_users_by_params(request.GET)
 
-    # 2) 추가 검색 조건 꺼내기
-    q = request.GET.get("q")                    # 검색어 (제목+내용)
-    category = request.GET.get("category")      # club/academic/contest/intern
-    sort = request.GET.get("sort", "latest")    # latest / agree
+    q = request.GET.get("q")
+    category = request.GET.get("category")
+    sort = request.GET.get("sort", "latest")
 
-    # 3) 조건에 맞는 유저들이 쓴 후기만 가져오기
     reviews = Review.objects.filter(user__in=users)
 
-    # 4) 카테고리 필터 (동아리/학회/공모전/인턴)
     if category:
         reviews = reviews.filter(category=category)
 
-    # 5) 검색어 필터 (제목 + 내용)
     if q:
         reviews = reviews.filter(
             Q(title__icontains=q) |
             Q(content__icontains=q)
         )
 
-    # 6) 정렬 옵션
     if sort == "agree":
-        # 공감순 정렬 (like_count는 property라 파이썬에서 정렬)
         reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
     else:
-        # 기본: 최신순
         reviews = reviews.order_by("-created_at")
 
-    # 7) JSON 응답 데이터 만들기
     results = []
     for review in reviews:
         user = review.user
@@ -52,18 +76,18 @@ def search_reviews(request):
         created = localtime(review.created_at).strftime("%Y-%m-%d")
 
         results.append({
-            "board": "review",                # 어떤 게시판인지 표시
+            "board": "review",
             "id": review.id,
             "title": review.title,
-            "content_preview": review.content[:100],  # 앞 100자만
+            "content_preview": review.content[:100],
             "rating": review.rating,
-            "category": review.get_category_display(),  # "동아리" 같은 한글
+            "category": review.get_category_display(),
             "created_at": created,
             "like_count": review.like_count,
             "author": {
                 "id": user.id,
-                "username": user.username,          # 학번
-                "display_name": user.display_name,  # 이름/닉네임
+                "username": user.username,
+                "display_name": user.display_name,
                 "grade": user.grade,
                 "is_verified": user.is_verified,
                 "department": dept.dept_name if dept else None,
@@ -76,5 +100,50 @@ def search_reviews(request):
     return JsonResponse(
         {"results": results, "count": len(results)},
         status=200,
-        json_dumps_params={"ensure_ascii": False},  # 한글 깨짐 방지
+        json_dumps_params={"ensure_ascii": False},
     )
+
+
+# 👇 새로 추가된 HTML 테스트용 뷰
+def search_reviews_page(request):
+    """
+    HTML 테스트용: /search/reviews/test/
+    """
+    users = filter_users_by_params(request.GET)
+
+    q = request.GET.get("q")
+    category = request.GET.get("category")
+    sort = request.GET.get("sort", "latest")
+
+    reviews = Review.objects.filter(user__in=users)
+
+    # 검색어가 입력되지 않으면 해당 user들이 쓴 모든 글을 보여줌
+    if q and q.strip():
+        import re
+        words = [w.strip() for w in re.split(r'[ ,]+', q) if w.strip()]
+        q_obj = Q()
+        for word in words:
+            if word.startswith('#'):
+                # 태그 검색 (예: tags__name 필드가 있다면)
+                q_obj &= Q(tags__name__icontains=word[1:])
+            else:
+                # 제목/내용 검색
+                q_obj &= (Q(title__icontains=word) | Q(content__icontains=word))
+        reviews = reviews.filter(q_obj)
+
+    if category:
+        reviews = reviews.filter(category=category)
+
+    if isinstance(reviews, list):
+        # 검색어 없을 때 빈 리스트
+        pass
+    elif sort == "agree":
+        reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
+    else:
+        reviews = reviews.order_by("-created_at")
+
+    context = {
+        "reviews": reviews,
+        "params": request.GET,
+    }
+    return render(request, "search_test.html", context)
