@@ -154,7 +154,7 @@ main {
   height:auto;
 }
 
-.otherQnA-post-bottom-title input{
+.otherQnA-post-title-input{
     width:100%; height:45px;
     padding:0 14px; margin-top:5px; margin-bottom: 12px;
     box-sizing:border-box;
@@ -170,7 +170,7 @@ main {
     color:var(--purple-dark);
 }
 
-.otherQnA-post-bottom-title input:focus, .otherQnA-post-bottom-detail textarea:focus{
+.otherQnA-post-title-input:focus, .otherQnA-post-detail-input:focus{
   border-color:var(--purple-dark);
   border-width:2px;
 }
@@ -188,7 +188,7 @@ main {
   height:auto;
 }
 
-.otherQnA-post-bottom-detail textarea{
+.otherQnA-post-detail-input{
     width:100%; height:auto;
     min-height:320px; max-height:450px;
     padding:12px 14px; margin-top:5px; margin-bottom:12px;
@@ -214,21 +214,21 @@ main {
 }
 
 /**스크롤바 webkit 방식**/
-.otherQnA-post-bottom-detail textarea::-webkit-scrollbar{
+.otherQnA-post-detail-input::-webkit-scrollbar{
   width:8px;
 }
 
-.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-track{
+.otherQnA-post-detail-input::-webkit-scrollbar-track{
   background:rgba(255,255,255,0.15);
   border-radius: 10px;
 }
 
-.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-thumb{
+.otherQnA-post-detail-input::-webkit-scrollbar-thumb{
   background:rgba(105, 57, 90, 0.35);
   border-radius:10px;
 }
 
-.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-thumb:hover{
+.otherQnA-post-detail-input::-webkit-scrollbar-thumb:hover{
   background:rgba(105, 57, 90, 0.6);
 }
 
@@ -238,7 +238,7 @@ main {
   align-items:center;
 }
 
-.otherQnA-post-submit input{
+.otherQnA-post-submitBtn{
   width:320px;
   height:52px;
   padding:0 12px;
@@ -262,7 +262,7 @@ main {
   letter-spacing:0.5px;
 }
 
-.otherQnA-post-submit input:hover{
+.otherQnA-post-submitBtn:hover{
   background: rgba(76, 25, 65, 0.268);
 }
 
