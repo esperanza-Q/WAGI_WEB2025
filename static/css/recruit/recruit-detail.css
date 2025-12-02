@@ -118,7 +118,7 @@ main {
 
 .recruit-detail-header {
   margin-top: 40px;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .recruit-detail-info {
@@ -265,6 +265,7 @@ main {
 .recruit-detail-middle-box{
   display: flex;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 /* 합격 연도 + 전형 유형 & 동아리 모집 분야 */
