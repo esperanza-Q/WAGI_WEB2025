@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/myroadmap/myroadmaphome.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="../../home/templates/home.html">
+            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="../../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="#">자소서·면접·포폴</a></li>
+        <li><a href="#">모집</a></li>
+        <li><a href="#">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <button class="header-mypage-btn">마이페이지</button>
+      <button class="header-login-btn">로그인</button>
+    </div>
+  </header>
+
+<main>
+  <div class="container">
+    <div class="roadmap-title">나의 로드맵</div>
+
+    <div class="roadmap-container">
+
+      <!-- 타임라인 (고정) -->
+      <div class="timeline">
+        <div class="dot"></div>
+      </div>
+
+      <!-- 카드들이 들어갈 영역 -->
+      <div class="cards" id="cards"></div>
+
+    </div>
+    <a class="roadmap-post-btn" href="./myroadmap-post.html">+</a>
+  </div>
+</main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+
+  <script>
+  // ⭐⭐⭐ 연동 전: mock 데이터 직접 넣기 ⭐⭐⭐
+  const cardsData = [
+    { year: 2025, title: "제목1", category: "카테고리", date: "2025.05.03" },
+    { year: 2025, title: "제목2", category: "카테고리", date: "2025.04.10" },
+    { year: 2025, title: "제목3", category: "카테고리", date: "2025.03.18" },
+    { year: 2024, title: "제목1", category: "카테고리", date: "2024.11.11" },
+    { year: 2024, title: "제목2", category: "카테고리", date: "2024.09.20" }
+  ];
+</script>
+
+
+  <script src="../../static/js/myroadmap.js"></script>
+</body>
+</html>
