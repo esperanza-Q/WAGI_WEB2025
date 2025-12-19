@@ -7,35 +7,59 @@ import re
 def search_expr_test(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
-    reviews = Review.objects.all()
+    sort = request.GET.get('sort', 'latest')
+    category_map = {
+        '동아리': 'club',
+        '학회': 'academic',
+        '공모전': 'contest',
+        '인턴': 'intern',
+    }
+    code = category_map.get(category, None) if category != '전체' else None
+
     # 카테고리 필터
-    if category and category != '전체':
-        reviews = reviews.filter(category=category)
+    if code:
+        reviews = Review.objects.filter(category=code)
+    else:
+        reviews = Review.objects.all()
+
     # 검색어 필터
     if query and query.strip():
         words = [w.strip() for w in re.split(r'[ ,]+', query) if w.strip()]
         q_obj = Q()
         for word in words:
-            q_obj &= (Q(title__icontains=word) | Q(content__icontains=word))
+            if word.startswith('#'):
+                q_obj |= Q(tags__name__icontains=word[1:])
+            else:
+                q_obj |= (Q(title__icontains=word) | Q(content__icontains=word))
         reviews = reviews.filter(q_obj).distinct()
         def count_score(review):
             score = 0
             for w in words:
-                score += review.title.count(w)
-                score += review.content.count(w)
+                if w.startswith('#'):
+                    score += sum([1 for tag in getattr(review, 'tags', []).all() if w[1:] in tag.name])
+                else:
+                    score += review.title.count(w)
+                    score += review.content.count(w)
             return score
         reviews = sorted(reviews, key=count_score, reverse=True)
+    else:
+        if sort == 'agree':
+            reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
+        else:
+            reviews = reviews.order_by('-created_at')
+
     context = {
         'reviews': reviews,
         'q_query': query,
         'category': category,
         'categories': ['전체', '동아리', '학회', '공모전', '인턴'],
+        'sort': sort,
     }
     return render(request, "b_search_expr.html", context)
 from django.http import JsonResponse
 from django.db.models import Q
 from django.utils.timezone import localtime
-from django.shortcuts import render  # 👈 이 줄 추가
+from django.shortcuts import render  
 
 from experience.models import Review
 from .utils import filter_users_by_params
@@ -124,11 +148,9 @@ def search_reviews_page(request):
         q_obj = Q()
         for word in words:
             if word.startswith('#'):
-                # 태그 검색 (예: tags__name 필드가 있다면)
-                q_obj &= Q(tags__name__icontains=word[1:])
+                q_obj |= Q(tags__name__icontains=word[1:])
             else:
-                # 제목/내용 검색
-                q_obj &= (Q(title__icontains=word) | Q(content__icontains=word))
+                q_obj |= (Q(title__icontains=word) | Q(content__icontains=word))
         reviews = reviews.filter(q_obj)
 
     if category:
