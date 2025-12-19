@@ -41,6 +41,20 @@
     <p>좋아요를 누르려면 로그인하세요.</p>
 {% endif %}
 
+<!-- 스크랩 버튼 -->
+{% if user.is_authenticated %}
+    <form action="{% url 'toggle_scrap' review.id %}" method="post">
+        {% csrf_token %}
+        {% if scrapped_by_user %}
+            <button type="submit">스크랩 취소</button>
+        {% else %}
+            <button type="submit">스크랩</button>
+        {% endif %}
+    </form>
+{% else %}
+    <p>스크랩하려면 로그인하세요.</p>
+{% endif %}
+
 <!-- 댓글 목록 -->
 <h3>댓글</h3>
 {% for c in comments %}
