@@ -171,7 +171,7 @@ main {
 }
 
 /* 카드 리스트 */
-.cards {
+.roadmap-cards {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -190,23 +190,26 @@ main {
 }
 
 .card:hover {
-  background: rgba(105,57,90,0.22);
+  background: rgba(139, 89, 123, 0.22);
 }
 
 /* 카드 제목 */
-.card-header {
+.roadmap-card-title {
   font-size: 16px;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 아코디언 내용 */
-.card .content {
+.card .roadmap-content {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.35s ease;
 }
 
-.meta {
+.roadmap-meta {
   width: 100%;
   display: flex;
   align-items: center;
@@ -215,14 +218,19 @@ main {
 }
 
 /* 상세보기 오른쪽 끝 고정 */
-.detail-link {
+.roadmap-detail {
   margin-left: auto;
   font-size: 13px;
   color: #6e5b75;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.tag {
+.roadmap-detail:hover{
+  text-decoration: underline;
+}
+
+.roadmap-category {
   display: inline-block;
   background: rgba(120, 60, 130, 0.32);
   padding: 5px 12px;
@@ -232,7 +240,7 @@ main {
   margin-right: 10px;
 }
 
-.date {
+.roadmap-date {
   font-size: 14px;
   color: #6e5b75;
 }
@@ -249,9 +257,13 @@ main {
   color: white;
   font-size: 35px;
   font-weight : 200;
-  border: none;
+  border: 1px solid rgba(146, 130, 161, 0.3);
   text-decoration: none;
   cursor: pointer;
+}
+
+.roadmap-post-btn:hover{
+  background: rgba(105, 37, 90, 0.31);
 }
 
 .footer {

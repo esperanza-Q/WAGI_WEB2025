@@ -9,12 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return b.year - a.year;
   });
 
-  const container = document.getElementById("cards");
+  const container = document.getElementById("roadmap-cards");
   container.innerHTML = "";
 
   let prevYear = null;
 
-  cardsData.forEach(card => {
+  // index 추가
+  cardsData.forEach((card, index) => {
 
     // 연도 바뀔 때만 라벨 생성
     if (card.year !== prevYear) {
@@ -25,16 +26,21 @@ document.addEventListener("DOMContentLoaded", () => {
       prevYear = card.year;
     }
 
-    // 카드 생성
+    // 카드 생성 (상세보기에 data-id 포함)
     const cardEl = document.createElement("div");
     cardEl.className = "card accordion";
+    // data-id 속성 추가 (card.id 없으면 index 사용)
+    cardEl.dataset.id = card.id ?? index;
     cardEl.innerHTML = `
-      <div class="card-header">${card.title}</div>
-      <div class="content">
-        <div class="meta">
-          <div class="tag">${card.category}</div>
-          <div class="date">${card.date}</div>
-          <div class="detail-link">상세보기 ></div>
+      <div class="roadmap-card-title">${card.title}</div>
+      <div class="roadmap-content">
+        <div class="roadmap-meta">
+          <div class="roadmap-category">${card.category}</div>
+          <div class="roadmap-date">${card.date}</div>
+          <a href="./myroadmap-detail.html?id=${encodeURIComponent(card.id ?? index)}"
+          class="roadmap-detail"
+          data-id="${card.id ?? index}">
+          상세보기 &gt;</a>
         </div>
       </div>
     `;
@@ -42,11 +48,12 @@ document.addEventListener("DOMContentLoaded", () => {
     container.appendChild(cardEl);
   });
 
-  // 아코디언 활성화
-  document.querySelectorAll(".card").forEach(card => {
-    const header = card.querySelector(".card-header");
-    const content = card.querySelector(".content");
+  // 아코디언 및 상세보기 네비게이션 처리
+  container.querySelectorAll(".card").forEach(card => {
+    const header = card.querySelector(".roadmap-card-title");
+    const content = card.querySelector(".roadmap-content");
 
+    // 기존 아코디언 로직
     header.addEventListener("click", () => {
       card.classList.toggle("active");
 
