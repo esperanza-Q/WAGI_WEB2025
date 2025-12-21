@@ -6,16 +6,15 @@
 
 :root {
   --purple-dark: #6b4c7d;
-  --purple-light: #8a7a95;
-  --purple-light-2: #a897b3;
+  --purple-light: #755889;
+  --purple-light-2: #9e8caa;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
-  min-height: 100vh;
+  background: linear-gradient(135deg, #ffffff 0%, #fdfaff 50%, #fdfcff 100%);
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
@@ -136,7 +135,7 @@ main {
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
-  border: 1px solid rgba(200, 180, 220, 0.3);
+  border: 1px solid rgba(84, 56, 112, 0.3);
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.6);
   color: var(--purple-dark);
@@ -165,7 +164,7 @@ main {
   height: 180px;
   padding: 16px;
   border-radius: 16px;
-  border: 1px solid rgba(200, 180, 220, 0.3);
+  border: 1px solid rgba(84, 56, 112, 0.3);
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.6);
   outline: none;
@@ -190,7 +189,7 @@ main {
   font-size: 28px;
   font-weight: 600;
   color: var(--purple-dark);
-  border: 1px solid rgba(150, 120, 180, 0.25);
+  border: 1px solid rgba(84, 56, 112, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -266,7 +265,7 @@ main {
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
-  border: 1px solid rgba(200, 180, 220, 0.3);
+  border: 1px solid rgba(84, 56, 112, 0.3);
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
   font-size: 15px;
@@ -357,7 +356,9 @@ main {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.129);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(200, 180, 220, 0.2);
 }
 
 .footer .member {

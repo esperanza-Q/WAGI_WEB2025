@@ -6,15 +6,15 @@
 
 :root {
   --purple-dark: #6b4c7d;
-  --purple-light: #8a7a95;
-  --purple-light-2: #a897b3;
+  --purple-light: #755889;
+  --purple-light-2: #9e8caa;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fdfaff 50%, #fdfcff 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -122,7 +122,9 @@ main {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.129);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(200, 180, 220, 0.2);
 }
 
 .footer .member {
