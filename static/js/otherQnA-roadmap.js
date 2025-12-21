@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return b.year - a.year;
   });
 
-  const container = document.getElementById("roadmap-cards");
+  const container = document.getElementById("qna-roadmap-cards");
   const template = document.getElementById("roadmap-card-template");
 
   container.innerHTML = "";
@@ -36,9 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     cardEl.querySelector(".roadmap-card-title").textContent = card.title;
     cardEl.querySelector(".roadmap-category").textContent = card.category;
     cardEl.querySelector(".roadmap-date").textContent = card.date;
-
-    const detailLink = cardEl.querySelector(".roadmap-detail");
-    detailLink.href = `./myroadmap-detail.html?id=${encodeURIComponent(cardId)}`;
 
     // 아코디언
     const header = cardEl.querySelector(".roadmap-card-title");

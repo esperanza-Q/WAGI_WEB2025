@@ -51,8 +51,26 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
+   <!-- 카드 템플릿 -->
+  <template id="roadmap-card-template">
+    <div class="card accordion" data-id="">
+      <div class="roadmap-card-title"></div>
+
+      <div class="roadmap-content">
+        <div class="roadmap-meta">
+          <span class="roadmap-category"></span>
+          <span class="roadmap-date"></span>
+
+          <a class="roadmap-detail" href="#">
+            상세보기 &gt;
+          </a>
+        </div>
+      </div>
+    </div>
+  </template>
+
   <script>
-  // 연동 전: mock 데이터 직접 넣기
+  // 연동 전: mock 데이터
   const cardsData = [
     { year: 2025, title: "제목1", category: "카테고리", date: "2025.05.03" },
     { year: 2025, title: "제목2", category: "카테고리", date: "2025.04.10" },

@@ -128,7 +128,7 @@ a{text-decoration:none;}
   display:flex;
   flex-direction:column;
   padding:25px;
-  gap:15px;
+  gap:10px;
 }
 
 .other-profile-userImg{
@@ -147,7 +147,6 @@ a{text-decoration:none;}
   font-size:25px;
   font-weight: 500;
   align-items:center;
-  margin-bottom:6px;
 }
 
 .other-profile-academic{
@@ -168,7 +167,7 @@ a{text-decoration:none;}
 }
 
 .otherQnA-list-wrapper{
-  width:700px; height:auto;
+  width:800px; height:auto;
   margin: 0 auto 50px;
 }
 
@@ -181,7 +180,18 @@ a{text-decoration:none;}
   gap:10px;
 }
 
-.other-profile-roadmap, .other-profile-qna{
+.other-profile-qna{
+  width:auto; height:auto;
+  padding:6px 15px;
+  background:rgba(105, 57, 90, 0.385);
+  border: 1px solid rgba(55, 27, 75, 0.537);
+  border-radius:30px;
+  color:rgba(81, 38, 76, 0.9);
+  font-size:15px;
+  cursor:pointer;
+}
+
+.other-profile-roadmap{
   width:auto; height:auto;
   padding:6px 15px;
   background:rgba(105, 57, 90, 0.22);
@@ -207,7 +217,7 @@ a{text-decoration:none;}
   color: var(--purple-dark);
   border: 1px solid rgba(55, 27, 75, 0.2);
   border-radius: 10px;
-  font-size:17px;
+  font-size:15px;
   padding:6px 15px;
   cursor:pointer;
 }
