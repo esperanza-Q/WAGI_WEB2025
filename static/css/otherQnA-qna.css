@@ -241,6 +241,22 @@ a{text-decoration:none;}
   color:var(--purple-dark);
 }
 
+.otherQnA-list-title{
+  width:800px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.otherQnA-list-userId{
+  display:inline-block;
+  width:150px;
+  text-align:right;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 .otherQnA-list-card span{
   margin-right:6px;
 }
