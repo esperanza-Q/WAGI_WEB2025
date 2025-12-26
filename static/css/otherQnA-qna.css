@@ -6,19 +6,20 @@
 
 :root {
   --purple-dark: #6b4c7d;
-  --purple-light: #8a7a95;
-  --purple-light-2: #a897b3;
+  --purple-light: #755889;
+  --purple-light-2: #9e8caa;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fdfaff 50%, #fdfcff 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .main-header {
@@ -119,18 +120,20 @@ a{text-decoration:none;}
 
 .other-profile-userInfo{
   width:800px; height:auto;
-  margin: 30px auto 30px;
-  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
-  border:1px solid rgba(105,57,90,0.54);
-  border-radius:30px;
+  margin: 40px auto 35px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(146, 130, 161, 0.3);
+  border-radius: 20px;
   display:flex;
   flex-direction:column;
-  padding:20px;
+  padding:25px;
+  gap:10px;
 }
 
 .other-profile-userImg{
   width:150px; height:150px;
-  margin-bottom:15px;
+  margin-bottom:10px;
   border-radius:50%;
   background-color:rgba(179, 149, 170, 0.27);
   border:1px solid var(--purple-light-2);
@@ -144,16 +147,17 @@ a{text-decoration:none;}
   font-size:25px;
   font-weight: 500;
   align-items:center;
-  margin-bottom:3px;
 }
 
 .other-profile-academic{
   width:max-content; height:max-content;
-  padding:0 5px; margin-bottom:15px;
+  padding:4px 10px; margin-bottom:10px;
   color:rgba(110, 57, 104, 0.9);
-  background-color:rgba(105, 57, 90, 0.22);
-  border:1px solid var(--purple-light);
-  border-radius:30px;
+  border:1px solid rgba(105,57,90,0.54);
+  
+  border-radius: 20px;
+
+  background-color: rgba(213, 194, 207, 0.22);
   font-size:13px;
 }
 
@@ -163,8 +167,8 @@ a{text-decoration:none;}
 }
 
 .otherQnA-list-wrapper{
-  width:700px; height:auto;
-  margin: 0 auto;
+  width:800px; height:auto;
+  margin: 0 auto 50px;
 }
 
 .other-profile-menu{
@@ -173,16 +177,27 @@ a{text-decoration:none;}
   align-items:center;
   justify-content:center;
   margin-bottom:25px;
+  gap:10px;
 }
 
-.other-profile-roadmap, .other-profile-qna{
+.other-profile-qna{
   width:auto; height:auto;
-  padding:3px 15px;
+  padding:6px 15px;
+  background:rgba(105, 57, 90, 0.385);
+  border: 1px solid rgba(55, 27, 75, 0.537);
+  border-radius:30px;
+  color:rgba(81, 38, 76, 0.9);
+  font-size:15px;
+  cursor:pointer;
+}
+
+.other-profile-roadmap{
+  width:auto; height:auto;
+  padding:6px 15px;
   background:rgba(105, 57, 90, 0.22);
-  border:1px solid var(--purple-light);
+  border: 1px solid rgba(55, 27, 75, 0.2);
   border-radius:30px;
   color:rgba(110, 57, 104, 0.9);
-  margin-right:10px;
   font-size:15px;
   cursor:pointer;
 }
@@ -198,11 +213,12 @@ a{text-decoration:none;}
 
 .otherQnA-list-writeBtn{
   width:auto; height:auto;
-  background-color:var(--purple-light-2);
-  border:none; border-radius:10px;
-  color:var(--purple-dark);
-  font-size:17px;
-  padding:3px 15px;
+  background: rgba(105,37,90,0.22);
+  color: var(--purple-dark);
+  border: 1px solid rgba(55, 27, 75, 0.2);
+  border-radius: 10px;
+  font-size:15px;
+  padding:6px 15px;
   cursor:pointer;
 }
 
@@ -215,8 +231,8 @@ a{text-decoration:none;}
 }
 
 .otherQnA-list-card{
-  width:100%; height:50px;
-  padding:3px 15px;
+  width:100%; height:60px;
+  padding:10px 18px;
   box-sizing:border-box;
   display:flex;
   align-items:center;
@@ -225,8 +241,24 @@ a{text-decoration:none;}
   color:var(--purple-dark);
 }
 
+.otherQnA-list-title{
+  width:800px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.otherQnA-list-userId{
+  display:inline-block;
+  width:150px;
+  text-align:right;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 .otherQnA-list-card span{
-  margin-right:5px;
+  margin-right:6px;
 }
 
 .otherQnA-list-card span:nth-child(4){
@@ -239,7 +271,9 @@ a{text-decoration:none;}
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.138);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(200, 180, 220, 0.2);
 }
 
 .footer .member {

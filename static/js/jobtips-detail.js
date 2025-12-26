@@ -1,5 +1,5 @@
 // 좋아요 버튼 토글
-const likeBtn = document.querySelector('.jobtips-detail-like-btn');
+/*const likeBtn = document.querySelector('.jobtips-detail-like-btn');
 if (likeBtn) {
   likeBtn.addEventListener('click', function () {
     this.classList.toggle('active');
@@ -36,7 +36,7 @@ if (deleteBtn) {
       // 실제 삭제 로직 필요
     }
   });
-}
+}*/
 
 // 이미지 슬라이더 (좌우 버튼)
 document.addEventListener('DOMContentLoaded', function() {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const leftBtn = document.querySelector('.jobtips-image-scroll-btn.left');
   const rightBtn = document.querySelector('.jobtips-image-scroll-btn.right');
   const img = scrollBox ? scrollBox.querySelector('img') : null;
-  const scrollAmount = img ? img.offsetWidth + 20 : 260; // 이미지+gap
+  const scrollAmount = img ? img.offsetWidth + 20 : 260;
 
   if (leftBtn && scrollBox) {
     leftBtn.addEventListener('click', () => {

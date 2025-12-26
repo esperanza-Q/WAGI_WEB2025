@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // 좋아요 버튼 토글
-const likeBtn = document.querySelector('.recruit-detail-like-btn');
+/*const likeBtn = document.querySelector('.recruit-detail-like-btn');
 if (likeBtn) {
   likeBtn.addEventListener('click', function (e) {
     e.preventDefault();
@@ -62,4 +62,4 @@ if (deleteBtn) {
       // 실제 삭제 로직 필요
     }
   });
-}
+}*/

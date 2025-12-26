@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/myroadmap/myroadmap-post.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="../../home/templates/home.html">
+            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="#">자소서·면접·포폴</a></li>
+        <li><a href="#">모집</a></li>
+        <li><a href="#">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <button class="header-mypage-btn">마이페이지</button>
+      <button class="header-login-btn">로그인</button>
+    </div>
+  </header>
+
+<main>
+  <div class="container">
+
+    <div class="roadmap-post-title">나의 로드맵 남기기</div>
+
+    <form method="POST" enctype="multipart/form-data" class="roadmap-post-form">
+      <label class="roadmap-post-label">제목</label>
+      <input type="text" class="roadmap-post-input" placeholder="활동 제목을 간단히 입력해주세요 (예: WAGI 3기 WEB 수정브릿지)" required>
+      
+      <label class="roadmap-post-label">카테고리</label>
+      <div class="roadmap-post-category">
+        <label><input type="radio" value="동아리" required> 동아리</label>
+        <label><input type="radio" value="학회"> 학회</label>
+        <label><input type="radio" value="공모전"> 공모전</label>
+        <label><input type="radio" value="인턴"> 인턴</label>
+        <label><input type="radio" value="기타"> 기타</label>
+      </div>
+
+      <label class="roadmap-post-label">활동 기간</label>
+      <input type="text" class="roadmap-post-input" placeholder="예: 2024.03 - 2024.11" required>
+
+      <label class="roadmap-post-label">활동 기록</label>
+      <textarea class="roadmap-post-textarea" required></textarea>
+
+      <label class="roadmap-post-label">파일 업로드</label>
+      <div class="roadmap-post-upload-area">
+        <label class="roadmap-post-upload-btn">
+          +
+          <input type="file" id="roadmap-upload-input" multiple required>
+        </label>
+
+        <div class="roadmap-post-upload-preview" id="roadmap-upload-preview">
+          <!-- 업로드된 이미지 미리보기, 파일명 미리보기(다중 선택 가능) -->
+        </div>
+      </div>
+
+      <button type="submit" class="roadmap-post-submit-btn">
+        완료하기
+      </button>
+    </form>
+
+  </div>
+</main>
+
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+
+  <script src="../../static/js/myroadmap-post.js"></script>
+</body>
+</html>

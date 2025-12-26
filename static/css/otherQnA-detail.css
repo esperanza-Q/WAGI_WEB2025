@@ -6,19 +6,20 @@
 
 :root {
   --purple-dark: #6b4c7d;
-  --purple-light: #8a7a95;
-  --purple-light-2: #a897b3;
+  --purple-light: #755889;
+  --purple-light-2: #9e8caa;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fdfaff 50%, #fdfcff 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .main-header {
@@ -115,41 +116,39 @@ main {
   margin-bottom: 80px; /* footer와 간격 */
 }
 
-
 .otherQnA-detail-wrapper{
   width:800px;
   height:auto;
   display:flex;
   flex-direction:column;
-  gap:25px;
-  margin: 30px auto 0;
+  gap:30px;
+  margin: 40px auto 0;
 }
 
 .otherQnA-detail-top{
-  width:100%; height:auto;
-  background: linear-gradient(130deg, #dfd0d8 0%, #bf92b8f6 90%);
-  border:1px solid rgba(105,57,90,0.54);
-  border-radius:30px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(146, 130, 161, 0.3);
+  border-radius:20px;
+  transition: all 0.3s ease;
   display:flex;
   flex-direction:column;
-  padding:15px 0;
-  gap:10px;
+  padding: 2rem 1.7rem;
+  gap:12px;
 }
 
 .otherQnA-detail-title{
   display:flex;
   flex:none;
-  padding:0 30px;
   color:var(--purple-dark);
   font-size:25px;
-  font-weight: 500;
+  font-weight: 700;
   align-items:center;
 }
 
 .otherQnA-detail-info{
   display:flex;
   flex:none;
-  padding:0 30px;
   align-items:center;
   gap:8px;
 }
@@ -159,18 +158,18 @@ main {
 }
 
 .otherQnA-detail-date{
-  color:var(--purple-light);
+  color:var(--purple-light-2);
 }
 
 .otherQnA-detail-question{
   width:100%;
   min-height:200px; max-height:300px;
   overflow-y:auto;
-  padding:4px 15px;
+  padding:15px 20px;
   box-sizing:border-box;
   border:1px solid rgba(105,57,90,0.54);
   
-  border-radius: 30px;
+  border-radius: 20px;
 
   background-color:rgba(245,217,242,0.22);
     
@@ -188,7 +187,7 @@ main {
   width:100%; height:auto;
   display:flex;
   flex-direction:column;
-  gap:4px;
+  gap:10px;
 }
 
 .otherQnA-detail-bottom > div{
@@ -199,20 +198,20 @@ main {
   width:100%;
   min-height:200px; max-height:300px;
   overflow-y:auto;
-  padding:4px 15px;
+  padding:15px 20px;
 
   box-sizing:border-box;
   border:1px solid rgba(105,57,90,0.54);
   
-  border-radius: 30px;
+  border-radius: 20px;
 
-  background-color:rgba(105,57,90,0.15);
+  background-color: rgba(213, 194, 207, 0.22);
     
   box-shadow: none;
   outline:none;
   font-size:15px;
   color:var(--purple-dark);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 
   /**스크롤바 firefox 방식**/
   scrollbar-color:rgba(105, 57, 90, 0.35) rgba(255, 255, 255, 0.15);
@@ -244,7 +243,9 @@ main {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.138);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(200, 180, 220, 0.2);
 }
 
 .footer .member {

@@ -6,19 +6,20 @@
 
 :root {
   --purple-dark: #6b4c7d;
-  --purple-light: #8a7a95;
-  --purple-light-2: #a897b3;
+  --purple-light: #755889;
+  --purple-light-2: #9e8caa;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fdfaff 50%, #fdfcff 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .main-header {
@@ -117,22 +118,23 @@ main {
 
 .otherQnA-post-wrapper{
     width:800px; height:auto;
-    margin: 0 auto;
+    margin: 30px auto;
     display:flex;
     flex-direction:column;
+    gap:20px;
 }
 
 .otherQnA-post-top{
   display:flex;
   flex-direction:column;
   width:100%;
-  margin-top:20px;
+  margin-top:25px;
 }
 
 .otherQnA-post-title{
     color:var(--purple-dark);
-    font-size:25px;
-    font-weight: 500;
+    font-size:26px;
+    font-weight: 600;
 }
 
 .otherQnA-post-bottom{
@@ -142,8 +144,7 @@ main {
   align-items:center;
 
   width:100%;
-  height:auto;
-  margin-top:15px;
+  gap:20px;
 }
 
 .otherQnA-post-bottom-title{
@@ -153,15 +154,15 @@ main {
   height:auto;
 }
 
-.otherQnA-post-bottom-title input{
-    width:100%; height:40px;
-    padding:0 12px; margin-top:7px; margin-bottom: 16px;
+.otherQnA-post-title-input{
+    width:100%; height:45px;
+    padding:0 14px; margin-top:5px; margin-bottom: 12px;
     box-sizing:border-box;
-    border:2px solid rgba(110,57,104,0.22);
-  
+    border:1px solid rgba(105,57,90,0.54);
+    
     border-radius: 10px;
 
-    background-color:rgba(105,57,90,0.22);
+    background-color: rgba(213, 194, 207, 0.22);
         
     box-shadow: none;
     outline:none;
@@ -169,14 +170,9 @@ main {
     color:var(--purple-dark);
 }
 
-.otherQnA-post-bottom-title input:focus, .otherQnA-post-bottom-detail textarea:focus{
-  border-color:var(--purple-dark);
-  border-width:1px;
-}
-
 .otherQnA-post-bottom p{
     color:var(--purple-dark);
-    margin-bottom:0;
+    margin-bottom:3px;
 }
 
 .otherQnA-post-bottom-detail{
@@ -187,16 +183,16 @@ main {
   height:auto;
 }
 
-.otherQnA-post-bottom-detail textarea{
+.otherQnA-post-detail-input{
     width:100%; height:auto;
-    min-height:300px; max-height:400px;
-    padding:8px 12px; margin-top:7px;
+    min-height:320px; max-height:450px;
+    padding:12px 14px; margin-top:5px; margin-bottom:12px;
     box-sizing:border-box;
-    border:2px solid rgba(110,57,104,0.22);
-  
+    border:1px solid rgba(105,57,90,0.54);
+    
     border-radius: 10px;
 
-    background-color:rgba(105,57,90,0.22);
+    background-color: rgba(213, 194, 207, 0.22);
         
     box-shadow: none;
     outline:none;
@@ -213,21 +209,21 @@ main {
 }
 
 /**스크롤바 webkit 방식**/
-.otherQnA-post-bottom-detail textarea::-webkit-scrollbar{
+.otherQnA-post-detail-input::-webkit-scrollbar{
   width:8px;
 }
 
-.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-track{
+.otherQnA-post-detail-input::-webkit-scrollbar-track{
   background:rgba(255,255,255,0.15);
   border-radius: 10px;
 }
 
-.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-thumb{
+.otherQnA-post-detail-input::-webkit-scrollbar-thumb{
   background:rgba(105, 57, 90, 0.35);
   border-radius:10px;
 }
 
-.otherQnA-post-bottom-detail textarea::-webkit-scrollbar-thumb:hover{
+.otherQnA-post-detail-input::-webkit-scrollbar-thumb:hover{
   background:rgba(105, 57, 90, 0.6);
 }
 
@@ -237,9 +233,9 @@ main {
   align-items:center;
 }
 
-.otherQnA-post-submit input{
-  width:300px;
-  height:49px;
+.otherQnA-post-submitBtn{
+  width:320px;
+  height:52px;
   padding:0 12px;
 
   box-sizing:border-box;
@@ -253,14 +249,15 @@ main {
   outline:none;
   
   color:#ffffff;
-  font-size:16px;
-  margin-top: 20px;
-  margin-bottom: 5px;
+  font-size:17px;
+  margin-top: 25px;
+  margin-bottom: 8px;
   cursor: pointer;
-  font-weight: 200;
+  font-weight: 300;
+  letter-spacing:0.5px;
 }
 
-.otherQnA-post-submit input:hover{
+.otherQnA-post-submitBtn:hover{
   background: rgba(76, 25, 65, 0.268);
 }
 
@@ -270,7 +267,9 @@ main {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.129);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(200, 180, 220, 0.2);
 }
 
 .footer .member {
