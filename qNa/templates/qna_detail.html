@@ -1,0 +1,94 @@
+<header class="top-nav">
+    <span class="nav-center">
+        <button class="nav-btn">활동 후기</button>
+        <button class="nav-btn">자소서·면접·포폴</button>
+        <button class="nav-btn">모집</button>
+        <button class="nav-btn">나의 로드맵</button>
+    </span>
+
+    <span class="nav-right">
+        <button class="nav-btn">마이페이지</button>
+        <button class="nav-btn">로그인</button>
+    </span>
+</header>
+
+<h2>{{ qna.title }}</h2>
+<p>{{ qna.display_name }} | {{ qna.created_at|date:"Y-m-d H:i" }}</p>
+
+<hr>
+
+<p>{{ qna.content }}</p>
+
+<br>
+
+<!-- 돌아가기 + 답변하기 버튼 같은 줄 -->
+<div style="
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+">
+    <!-- 돌아가기 -->
+    <a href="{% url 'qna:my_list' %}">
+        ← 돌아가기
+    </a>
+
+    {% if request.user.is_authenticated and request.user != qna.sender and not answers %}
+        <!-- 답변 달기 버튼 -->
+        <div style="flex: 1; text-align: center;">
+            <button id="openModalBtn" style="padding: 6px 14px; cursor: pointer;">
+                답변달기
+            </button>
+        </div>
+    {% endif %}
+
+
+    <!-- 오른쪽 여백 맞추기 -->
+    <div style="width: 80px;"></div>
+</div>
+
+<hr>
+
+<!--  답변이 있을 때만 보여줌 -->
+{% if answers %}
+    <h3>ㄴ 답변</h3>
+
+    {% for a in answers %}
+        <div style="margin-bottom: 15px;">
+            <p>{{ a.content }}</p>
+        </div>
+    {% endfor %}
+
+{% endif %}
+
+<!-- 답변 작성 모달 -->
+<div id="answerModal" style="display:none;">
+    <div>
+        <!-- 닫기 버튼 -->
+        <div style="display:flex; justify-content:flex-end;">
+            <button id="closeModalBtn"
+                    style="border:none; background:none; font-size:20px; cursor:pointer;">
+                ×
+            </button>
+        </div>
+
+        <h3>답변 달기</h3>
+
+        <form method="POST" action="{% url 'qna:answer' qna.id %}">
+            {% csrf_token %}
+            <textarea name="content" rows="5" style="width:100%;" required></textarea>
+            <br><br>
+            <button type="submit">확인</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById("openModalBtn").onclick = function() {
+    document.getElementById("answerModal").style.display = "block";
+}
+
+document.getElementById("closeModalBtn").onclick = function() {
+    document.getElementById("answerModal").style.display = "none";
+}
+</script>

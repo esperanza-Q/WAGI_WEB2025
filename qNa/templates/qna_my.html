@@ -1,0 +1,63 @@
+<header class="top-nav">
+    <span class="nav-center">
+        <button class="nav-btn">활동 후기</button>
+        <button class="nav-btn">자소서·면접·포폴</button>
+        <button class="nav-btn">모집</button>
+        <button class="nav-btn">나의 로드맵</button>
+    </span>
+
+    <span class="nav-right">
+        <button class="nav-btn">마이페이지</button>
+        <button class="nav-btn">로그인</button>
+    </span>
+</header>
+
+<h2>나의 QnA</h2>
+
+<!-- 버튼 영역 -->
+<div style="display: flex; gap: 10px; margin-bottom: 15px;">
+    <button id="btn-received" style="padding: 6px 12px;">내가 받은</button>
+    <button id="btn-send" style="padding: 6px 12px;">내가 보낸</button>
+</div>
+
+<!-- 내가 받은 QnA 리스트 (초기: 표시) -->
+<div id="list-received">
+    <ul>
+        {% for q in received_list %}
+            <li>
+                <a href="{% url 'qna:detail' q.id %}">{{ q.title }}</a>
+                | {{ q.writer.username }}
+            </li>
+        {% empty %}
+            <li>받은 QnA가 없습니다.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- 내가 보낸 QnA 리스트 (초기: 숨김) -->
+<div id="list-send" style="display:none;">
+    <ul>
+        {% for q in sent_list %}
+            <li>
+                <a href="{% url 'qna:detail' q.id %}">{{ q.title }}</a>
+                | {{ q.receiver.username }}
+            </li>
+        {% empty %}
+            <li>보낸 QnA가 없습니다.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+<script>
+// 버튼 이벤트
+document.getElementById("btn-send").onclick = function() {
+    document.getElementById("list-send").style.display = "block";
+    document.getElementById("list-received").style.display = "none";
+};
+
+document.getElementById("btn-received").onclick = function() {
+    document.getElementById("list-send").style.display = "none";
+    document.getElementById("list-received").style.display = "block";
+};
+</script>
