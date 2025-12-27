@@ -1,0 +1,31 @@
+<header class="top-nav">
+    <span class="nav-center">
+        <button class="nav-btn">활동 후기</button>
+        <button class="nav-btn">자소서·면접·포폴</button>
+        <button class="nav-btn">모집</button>
+        <button class="nav-btn">나의 로드맵</button>
+    </span>
+
+    <span class="nav-right">
+        <button class="nav-btn">마이페이지</button>
+        <button class="nav-btn">로그인</button>
+    </span>
+</header>
+
+<h1>Q&A 작성하기</h1>
+
+<form action="{% url 'qna:submit' %}" method="POST">
+    {% csrf_token %}
+
+    <input type="hidden" name="receiver_id" value="{{ receiver.id }}">
+    
+    <!-- 제목 -->
+    <label for="title" style="font-weight: bold;">제목</label><br>
+    <input type="text" id="title" name="title" style="width: 100%; padding: 8px;" required><br><br>
+
+    <!-- 내용 -->
+    <label for="content" style="font-weight: bold;">내용</label><br>
+    <textarea id="content" name="content" rows="10" style="width: 100%; padding: 8px;" required></textarea><br><br>
+
+    <button type="submit" style="padding: 8px 16px;">완료하기</button>
+</form>
