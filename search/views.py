@@ -3,6 +3,7 @@ from experience.models import Review
 from django.db.models import Q
 import re
 
+
 # --- 검색 테스트용 뷰 (search/expr/) ---
 def search_expr_test(request):
     query = request.GET.get('q', '')
@@ -48,6 +49,44 @@ def search_expr_test(request):
         else:
             reviews = reviews.order_by('-created_at')
 
+    context = {
+        'reviews': reviews,
+        'q_query': query,
+        'category': category,
+        'categories': ['전체', '동아리', '학회', '공모전', '인턴'],
+        'sort': sort,
+    }
+    return render(request, "b_search_expr.html", context)
+
+# --- 검색 테스트용 HTML 뷰 복구 (search/reviews/test/) ---
+def search_reviews_page(request):
+    query = request.GET.get('q', '')
+    category = request.GET.get('category', '전체')
+    sort = request.GET.get('sort', 'latest')
+    category_map = {
+        '동아리': 'club',
+        '학회': 'academic',
+        '공모전': 'contest',
+        '인턴': 'intern',
+    }
+    code = category_map.get(category, None) if category != '전체' else None
+    if code:
+        reviews = Review.objects.filter(category=code)
+    else:
+        reviews = Review.objects.all()
+    if query and query.strip():
+        words = [w.strip() for w in re.split(r'[ ,]+', query) if w.strip()]
+        q_obj = Q()
+        for word in words:
+            if word.startswith('#'):
+                q_obj |= Q(tags__name__icontains=word[1:])
+            else:
+                q_obj |= (Q(title__icontains=word) | Q(content__icontains=word))
+        reviews = reviews.filter(q_obj).distinct()
+    if sort == 'agree':
+        reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
+    else:
+        reviews = reviews.order_by('-created_at')
     context = {
         'reviews': reviews,
         'q_query': query,
@@ -128,44 +167,81 @@ def search_reviews(request):
     )
 
 
-# 👇 새로 추가된 HTML 테스트용 뷰
-def search_reviews_page(request):
-    """
-    HTML 테스트용: /search/reviews/test/
-    """
-    users = filter_users_by_params(request.GET)
 
-    q = request.GET.get("q")
-    category = request.GET.get("category")
-    sort = request.GET.get("sort", "latest")
+# --- 취업후기 게시판 검색/리스트 뷰 ---
 
-    reviews = Review.objects.filter(user__in=users)
-
-    # 검색어가 입력되지 않으면 해당 user들이 쓴 모든 글을 보여줌
+# --- 취업후기 게시판 검색/리스트 뷰 (search 앱 내부에서만 동작) ---
+from career.models import CareerReview
+def career_review_list(request):
+    q = request.GET.get('q', '')
+    category = request.GET.get('category', '전체')
+    sort = request.GET.get('sort', 'latest')
+    categories = ['전체', '동아리', '학회', '공모전', '인턴', '기타']
+    code_map = {
+        '동아리': 'club',
+        '학회': 'academic',
+        '공모전': 'contest',
+        '인턴': 'intern',
+        '기타': 'other',
+    }
+    code = code_map.get(category, None) if category != '전체' else None
+    reviews = CareerReview.objects.all()
+    if code:
+        reviews = reviews.filter(category=code)
     if q and q.strip():
-        import re
         words = [w.strip() for w in re.split(r'[ ,]+', q) if w.strip()]
         q_obj = Q()
         for word in words:
-            if word.startswith('#'):
-                q_obj |= Q(tags__name__icontains=word[1:])
-            else:
-                q_obj |= (Q(title__icontains=word) | Q(content__icontains=word))
+            q_obj |= Q(title__icontains=word) | Q(content__icontains=word)
         reviews = reviews.filter(q_obj)
-
-    if category:
-        reviews = reviews.filter(category=category)
-
-    if isinstance(reviews, list):
-        # 검색어 없을 때 빈 리스트
-        pass
-    elif sort == "agree":
-        reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
+    if sort == "agree":
+        reviews = reviews.order_by("-like_count")
     else:
         reviews = reviews.order_by("-created_at")
-
     context = {
-        "reviews": reviews,
-        "params": request.GET,
+        "posts": reviews,
+        "q_query": q,
+        "category": category,
+        "categories": categories,
+        "sort": sort,
     }
-    return render(request, "search_test.html", context)
+    return render(request, "b_search_career.html", context)
+
+# --- 모집 게시판 검색/리스트 뷰 ---
+
+# --- 모집 게시판 검색/리스트 뷰 (search 앱 내부에서만 동작) ---
+from recruit.models import RecruitPost
+def recruit_post_list(request):
+    q = request.GET.get('q', '')
+    category = request.GET.get('category', '전체')
+    sort = request.GET.get('sort', 'latest')
+    categories = ['전체', '동아리', '학회', '공모전', '인턴', '기타']
+    code_map = {
+        '동아리': 'club',
+        '학회': 'academic',
+        '공모전': 'contest',
+        '인턴': 'intern',
+        '기타': 'other',
+    }
+    code = code_map.get(category, None) if category != '전체' else None
+    posts = RecruitPost.objects.all()
+    if code:
+        posts = posts.filter(category=code)
+    if q and q.strip():
+        words = [w.strip() for w in re.split(r'[ ,]+', q) if w.strip()]
+        q_obj = Q()
+        for word in words:
+            q_obj |= Q(title__icontains=word) | Q(content__icontains=word)
+        posts = posts.filter(q_obj)
+    if sort == "agree":
+        posts = posts.order_by("-like_count")
+    else:
+        posts = posts.order_by("-created_at")
+    context = {
+        "posts": posts,
+        "q_query": q,
+        "category": category,
+        "categories": categories,
+        "sort": sort,
+    }
+    return render(request, "b_search_recruit.html", context)
