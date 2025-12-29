@@ -17,7 +17,7 @@ def signup_view(request):
             college_id=college_id,  # ← forms.py의 __init__(..., college_id=...) 받도록 되어 있어야 함
             initial={"college": college_id} if college_id else None
         )
-        return render(request, "b_signup.html", {"form": form})
+        return render(request, "Signup.html", {"form": form})
 
     # POST (최종 제출)
     form = SignupForm(request.POST, request.FILES, college_id=college_id)
@@ -27,7 +27,7 @@ def signup_view(request):
         return redirect("accounts:login")
 
     messages.error(request, "회원가입에 실패했습니다. 다시 시도해주세요.")
-    return render(request, "b_signup.html", {"form": form})
+    return render(request, "Signup.html", {"form": form})
 
 #로그인 뷰
 def login_view(request):
@@ -47,10 +47,10 @@ def login_view(request):
         else:
             messages.error(request, "로그인에 실패했습니다. 다시 시도해주세요.")
 
-        return render(request, "b_login.html", {"form": form})
+        return render(request, "Login.html", {"form": form})
     else:
         form = LoginForm()
-        return render(request, "b_login.html", {"form": form})
+        return render(request, "Login.html", {"form": form})
 
 #로그아웃 뷰
 def logout_view(request):
@@ -101,4 +101,4 @@ def verification_view(request):
     "user_obj": request.user,
     "verification_obj": verification_obj,
     }
-    return render(request, "b_verification.html", context)
+    return render(request, "verification.html", context)
