@@ -9,6 +9,9 @@ def search_expr_test(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
     sort = request.GET.get('sort', 'latest')
+    college = request.GET.get('college', '')
+    department = request.GET.get('department', '')
+    grade = request.GET.get('grade', '')
     category_map = {
         '동아리': 'club',
         '학회': 'academic',
@@ -22,6 +25,14 @@ def search_expr_test(request):
         reviews = Review.objects.filter(category=code)
     else:
         reviews = Review.objects.all()
+
+    # 맞춤필터링: 단과대, 학과, 학번
+    if college:
+        reviews = reviews.filter(user__department__college__college_name=college)
+    if department:
+        reviews = reviews.filter(user__department__dept_name=department)
+    if grade:
+        reviews = reviews.filter(user__username__startswith=grade)
 
     # 검색어 필터
     if query and query.strip():
@@ -55,6 +66,9 @@ def search_expr_test(request):
         'category': category,
         'categories': ['전체', '동아리', '학회', '공모전', '인턴'],
         'sort': sort,
+        'selected_college': college,
+        'selected_department': department,
+        'selected_grade': grade,
     }
     return render(request, "b_search_expr.html", context)
 
@@ -171,77 +185,13 @@ def search_reviews(request):
 # --- 취업후기 게시판 검색/리스트 뷰 ---
 
 # --- 취업후기 게시판 검색/리스트 뷰 (search 앱 내부에서만 동작) ---
-from career.models import CareerReview
-def career_review_list(request):
-    q = request.GET.get('q', '')
-    category = request.GET.get('category', '전체')
-    sort = request.GET.get('sort', 'latest')
-    categories = ['전체', '동아리', '학회', '공모전', '인턴', '기타']
-    code_map = {
-        '동아리': 'club',
-        '학회': 'academic',
-        '공모전': 'contest',
-        '인턴': 'intern',
-        '기타': 'other',
-    }
-    code = code_map.get(category, None) if category != '전체' else None
-    reviews = CareerReview.objects.all()
-    if code:
-        reviews = reviews.filter(category=code)
-    if q and q.strip():
-        words = [w.strip() for w in re.split(r'[ ,]+', q) if w.strip()]
-        q_obj = Q()
-        for word in words:
-            q_obj |= Q(title__icontains=word) | Q(content__icontains=word)
-        reviews = reviews.filter(q_obj)
-    if sort == "agree":
-        reviews = reviews.order_by("-like_count")
-    else:
-        reviews = reviews.order_by("-created_at")
-    context = {
-        "posts": reviews,
-        "q_query": q,
-        "category": category,
-        "categories": categories,
-        "sort": sort,
-    }
-    return render(request, "b_search_career.html", context)
+# from career.models import CareerReview
+# def career_review_list(request):
+#     ... (주석처리: CareerReview 모델 없음)
 
 # --- 모집 게시판 검색/리스트 뷰 ---
 
 # --- 모집 게시판 검색/리스트 뷰 (search 앱 내부에서만 동작) ---
-from recruit.models import RecruitPost
-def recruit_post_list(request):
-    q = request.GET.get('q', '')
-    category = request.GET.get('category', '전체')
-    sort = request.GET.get('sort', 'latest')
-    categories = ['전체', '동아리', '학회', '공모전', '인턴', '기타']
-    code_map = {
-        '동아리': 'club',
-        '학회': 'academic',
-        '공모전': 'contest',
-        '인턴': 'intern',
-        '기타': 'other',
-    }
-    code = code_map.get(category, None) if category != '전체' else None
-    posts = RecruitPost.objects.all()
-    if code:
-        posts = posts.filter(category=code)
-    if q and q.strip():
-        words = [w.strip() for w in re.split(r'[ ,]+', q) if w.strip()]
-        q_obj = Q()
-        for word in words:
-            q_obj |= Q(title__icontains=word) | Q(content__icontains=word)
-        posts = posts.filter(q_obj)
-    if sort == "agree":
-        posts = posts.order_by("-like_count")
-    else:
-        posts = posts.order_by("-created_at")
-    context = {
-        "posts": posts,
-        "q_query": q,
-        "category": category,
-        "categories": categories,
-        "sort": sort,
-    }
-    return render(request, "b_search_recruit.html", context)
+# from recruit.models import RecruitPost
+# def recruit_post_list(request):
+#     ... (주석처리: RecruitPost 모델 없음)

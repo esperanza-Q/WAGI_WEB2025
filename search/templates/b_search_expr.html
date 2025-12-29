@@ -26,6 +26,11 @@
             <option value="latest" {% if sort == 'latest' %}selected{% endif %}>최신순</option>
             <option value="agree" {% if sort == 'agree' %}selected{% endif %}>공감순</option>
         </select>
+        <!-- 맞춤필터링: 단과대, 학과, 학번 -->
+        <span style="margin-left:10px; font-weight:bold;">맞춤필터링</span>
+        <input type="text" name="college" placeholder="단과대" value="{{ selected_college|default:'' }}" style="width:90px;">
+        <input type="text" name="department" placeholder="학과" value="{{ selected_department|default:'' }}" style="width:90px;">
+        <input type="text" name="grade" placeholder="학번(연도)" value="{{ selected_grade|default:'' }}" style="width:80px;">
         <button type="submit">검색</button>
     </form>
     <hr>
