@@ -23,7 +23,7 @@
     </nav>
     <div class="main-header-r">
       <button class="mypage-btn">마이페이지</button>
-      <button class="login-btn">로그인</button>
+      <button class="login-btn" href="{% url 'accounts:login' %}">로그인</button>
     </div>
   </header>
 
@@ -39,12 +39,13 @@
 
       <div class="login-bottom">
         <form method="post">
-          <input type="text" placeholder="학번">
-          <input type="password" placeholder="비밀번호">
+          {% csrf_token %}
+          <input type="text" name="username" placeholder="학번">
+          <input type="password" name="password" placeholder="비밀번호">
           <button type="submit">로그인</button>
         </form>
 
-        <a class="signup-btn" href="./signup.html">회원가입</a>
+        <a class="signup-btn" href="{% url 'accounts:signup' %}">회원가입</a>
       </div>
 
     </div>

@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 
 <body>
@@ -23,7 +24,7 @@
     </nav>
     <div class="main-header-r">
       <button class="mypage-btn">마이페이지</button>
-      <button class="login-btn">로그인</button>
+      <button class="login-btn" href="{% url 'accounts:login' %}">로그인</button>
     </div>
   </header>
 
