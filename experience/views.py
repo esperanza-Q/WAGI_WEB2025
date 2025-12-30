@@ -9,6 +9,9 @@ def review_list(request):
     category = request.GET.get('category', '')
     search = request.GET.get('search', '')
     query = request.GET.get('q')
+    college = request.GET.get('college', '')  # 단과대
+    department = request.GET.get('department', '')  # 학과
+    grade = request.GET.get('grade', '')  # 학년(학번)
 
     reviews = Review.objects.all().annotate(
         like_count_db=Count('reviewlike', filter=Q(reviewlike__is_agree=True))
@@ -23,17 +26,28 @@ def review_list(request):
             Q(title__icontains=search) |
             Q(content__icontains=search)
         )
-    
     if query:
         reviews = reviews.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query)
         )
+
+    # 맞춤 필터링: 단과대, 학과, 학년(grade)
+    if college:
+        reviews = reviews.filter(user__department__college__college_name=college)
+    if department:
+        reviews = reviews.filter(user__department__dept_name=department)
+    if grade:
+        reviews = reviews.filter(user__grade=grade)
+
     context = {
         'reviews': reviews,
         'selected_category': category,
         'search_query': search,
         'categories': ActivityCategory.choices,
+        'selected_college': college,
+        'selected_department': department,
+        'selected_grade': grade,
     }
 
     return render(request, "b_review_list.html", context)

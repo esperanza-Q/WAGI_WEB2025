@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'landing',
     'mypage',
     'qNa',
-    'recruit'
+    'recruit',
+    'search',
 ]
 
 MIDDLEWARE = [
