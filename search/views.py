@@ -60,6 +60,12 @@ def search_expr_test(request):
         else:
             reviews = reviews.order_by('-created_at')
 
+    # 드롭다운용 목록 준비
+    from accounts.models import College, Department, User
+    college_list = list(College.objects.values_list('college_name', flat=True))
+    department_list = list(Department.objects.values_list('dept_name', flat=True))
+    grade_list = sorted(set([u[:4] for u in User.objects.values_list('username', flat=True) if len(u) >= 4]))
+
     context = {
         'reviews': reviews,
         'q_query': query,
@@ -69,6 +75,9 @@ def search_expr_test(request):
         'selected_college': college,
         'selected_department': department,
         'selected_grade': grade,
+        'college_list': college_list,
+        'department_list': department_list,
+        'grade_list': grade_list,
     }
     return render(request, "b_search_expr.html", context)
 

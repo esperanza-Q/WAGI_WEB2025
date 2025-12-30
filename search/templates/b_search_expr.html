@@ -26,11 +26,26 @@
             <option value="latest" {% if sort == 'latest' %}selected{% endif %}>최신순</option>
             <option value="agree" {% if sort == 'agree' %}selected{% endif %}>공감순</option>
         </select>
-        <!-- 맞춤필터링: 단과대, 학과, 학번 -->
+        <!-- 맞춤필터링: 단과대, 학과, 학번 드롭다운 -->
         <span style="margin-left:10px; font-weight:bold;">맞춤필터링</span>
-        <input type="text" name="college" placeholder="단과대" value="{{ selected_college|default:'' }}" style="width:90px;">
-        <input type="text" name="department" placeholder="학과" value="{{ selected_department|default:'' }}" style="width:90px;">
-        <input type="text" name="grade" placeholder="학번(연도)" value="{{ selected_grade|default:'' }}" style="width:80px;">
+        <select name="college" style="width:100px;">
+            <option value="">단과대</option>
+            {% for c in college_list %}
+                <option value="{{ c }}" {% if selected_college == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+        <select name="department" style="width:110px;">
+            <option value="">학과</option>
+            {% for d in department_list %}
+                <option value="{{ d }}" {% if selected_department == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+        </select>
+        <select name="grade" style="width:90px;">
+            <option value="">학번(연도)</option>
+            {% for g in grade_list %}
+                <option value="{{ g }}" {% if selected_grade == g %}selected{% endif %}>{{ g }}</option>
+            {% endfor %}
+        </select>
         <button type="submit">검색</button>
     </form>
     <hr>
