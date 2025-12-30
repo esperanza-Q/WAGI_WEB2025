@@ -1,0 +1,256 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+* {
+  font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+:root {
+  --purple-dark: #6b4c7d;
+  --purple-light: #755889;
+  --purple-light-2: #9e8caa;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  background: linear-gradient(135deg, #ffffff 0%, #fdfaff 50%, #fdfcff 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.15);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(200, 180, 220, 0.2);
+}
+
+.main-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.main-nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav-links a {
+  color: var(--purple-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.main-nav-links a:hover {
+    color: #9c3d7e;
+}
+
+.main-header-r {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.header-mypage-btn {
+  background: transparent;
+  color: var(--purple-dark);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.header-mypage-btn:hover {
+  color: #9c3d7e;
+}
+
+.header-login-btn {
+  background: rgba(105,37,90,0.22);
+  color: var(--purple-dark);
+  border: 1px solid rgba(55, 27, 75, 0.2);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.header-login-btn:hover {
+  background: rgba(105, 37, 90, 0.31);
+}
+
+/* 메인 콘텐츠 */
+main {
+  flex: 1;
+  padding-top: 6rem;
+  padding-bottom: 2rem;
+}
+
+.container {
+  max-width: 1016px;
+  margin: 0 auto;
+  padding: 0 24px;  /* 양옆 패딩 */
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 80px; /* footer와 간격 */
+}
+
+.otherQnA-detail-wrapper{
+  width:800px;
+  height:auto;
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+  margin: 40px auto 0;
+}
+
+.otherQnA-detail-top{
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(146, 130, 161, 0.3);
+  border-radius:20px;
+  transition: all 0.3s ease;
+  display:flex;
+  flex-direction:column;
+  padding: 2rem 1.7rem;
+  gap:12px;
+}
+
+.otherQnA-detail-title{
+  display:flex;
+  flex:none;
+  color:var(--purple-dark);
+  font-size:25px;
+  font-weight: 700;
+  align-items:center;
+}
+
+.otherQnA-detail-info{
+  display:flex;
+  flex:none;
+  align-items:center;
+  gap:8px;
+}
+
+.otherQnA-detail-userId{
+  color:var(--purple-dark);
+}
+
+.otherQnA-detail-date{
+  color:var(--purple-light-2);
+}
+
+.otherQnA-detail-question{
+  width:100%;
+  min-height:200px; max-height:300px;
+  overflow-y:auto;
+  padding:15px 20px;
+  box-sizing:border-box;
+  border:1px solid rgba(105,57,90,0.54);
+  
+  border-radius: 20px;
+
+  background-color:rgba(245,217,242,0.22);
+    
+  box-shadow: none;
+  outline:none;
+  font-size:15px;
+  color:var(--purple-dark);
+
+  /**스크롤바 firefox 방식**/
+  scrollbar-color:rgba(105, 57, 90, 0.35) rgba(255, 255, 255, 0.15);
+  scrollbar-width:thin;
+}
+
+.otherQnA-detail-bottom{
+  width:100%; height:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.otherQnA-detail-bottom > div{
+  color:var(--purple-dark);
+}
+
+.otherQnA-detail-answer{
+  width:100%;
+  min-height:200px; max-height:300px;
+  overflow-y:auto;
+  padding:15px 20px;
+
+  box-sizing:border-box;
+  border:1px solid rgba(105,57,90,0.54);
+  
+  border-radius: 20px;
+
+  background-color: rgba(213, 194, 207, 0.22);
+    
+  box-shadow: none;
+  outline:none;
+  font-size:15px;
+  color:var(--purple-dark);
+  margin-bottom: 20px;
+
+  /**스크롤바 firefox 방식**/
+  scrollbar-color:rgba(105, 57, 90, 0.35) rgba(255, 255, 255, 0.15);
+  scrollbar-width:thin;
+}
+
+/**스크롤바 webkit 방식**/
+.otherQnA-detail-answer::-webkit-scrollbar, .otherQnA-detail-question::-webkit-scrollbar{
+  width:8px;
+}
+
+.otherQnA-detail-answer::-webkit-scrollbar-track, .otherQnA-detail-question::-webkit-scrollbar-track{
+  background:rgba(255,255,255,0.15);
+  border-radius: 10px;
+}
+
+.otherQnA-detail-answer::-webkit-scrollbar-thumb, .otherQnA-detail-question::-webkit-scrollbar-thumb{
+  background:rgba(105, 57, 90, 0.35);
+  border-radius:10px;
+}
+
+.otherQnA-detail-answer::-webkit-scrollbar-thumb:hover, .otherQnA-detail-question::-webkit-scrollbar-thumb:hover{
+  background:rgba(105, 57, 90, 0.6);
+}
+
+.footer {
+  text-align: center;
+  padding: 50px 10px 20px 10px;
+  color: var(--purple-dark);
+  font-size: 15px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(200, 180, 220, 0.2);
+}
+
+.footer .member {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+

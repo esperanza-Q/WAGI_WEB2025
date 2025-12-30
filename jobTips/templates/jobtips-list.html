@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/board-list-common.css">
+  <link rel="stylesheet" href="../../static/css/jobtips/jobtips-list.css">
 </head>
 
 <body>
@@ -22,181 +22,198 @@
       </ul>
     </nav>
     <div class="main-header-r">
-      <button class="mypage-btn">마이페이지</button>
-      <button class="login-btn">로그인</button>
+      <button class="header-mypage-btn">마이페이지</button>
+      <button class="header-login-btn">로그인</button>
     </div>
   </header>
 
   <main>
   <div class="container">
-   <div class="search-section">
-      <form class="search-bar" method="GET" action="">
-        <input type="search" placeholder="활동명으로 검색하기" class="search-input">
-        <button type="submit">
-            <img src="../../static/img/search.svg" alt="검색">
+    
+    <!-- 전체 검색 + 필터 form 하나로 묶음 -->
+    <form method="GET" id="filter-form" class="jobtips-search-form">
+
+      <!-- 검색창 -->
+      <div class="jobtips-search-section">
+        <input 
+          type="search" 
+          placeholder="활동명으로 검색하기"
+          class="jobtips-search-input"
+        />
+
+        <button type="submit" class="jobtips-search-btn">
+          <img src="../../static/img/search.svg" alt="검색">
         </button>
-      </form>
-      <nav class="filter-tabs">
+      </div>
+
+      <!-- 숨겨진 값 (카테고리 / 정렬) -->
+      <input type="hidden" id="filter-category">
+      <input type="hidden" id="filter-ordering">
+
+      <!-- 필터링- 카테고리 -->
+      <nav class="jobtips-filter-tabs">
         <ul>
-            <li><a href="?" class="active">전체</a></li>
-            <li><a href="?category=동아리">자소서</a></li>
-            <li><a href="?category=학회">면접</a></li>
-            <li><a href="?category=공모전">포트폴리오</a></li>
+          <li><button type="button" class="tab-btn" data-category="">전체</button></li>
+          <li><button type="button" class="tab-btn" data-category="resume">자소서</button></li>
+          <li><button type="button" class="tab-btn" data-category="interview">면접</button></li>
+          <li><button type="button" class="tab-btn" data-category="portfolio">포트폴리오</button></li>
         </ul>
       </nav>
-    </div>
 
-    <div class="sub-filter-bar">
-        <div class="sub-filters">
-            <ul>
-                <li><a href="?" class="active">최신순</a></li>
-                <li><a href="?ordering=likes">공감순</a></li>
-                <li><a href="?custom=true">맞춤 필터링</a></li>
-            </ul>
+      <!-- 필터링 - 정렬 -->
+      <div class="jobtips-sub-filter-bar">
+        <div class="jobtips-sub-filters">
+          <ul>
+            <li><button type="button" class="order-btn" data-order="latest">최신순</button></li>
+            <li><button type="button" class="order-btn" data-order="likes">공감순</button></li>
+            <li><button type="button" class="order-btn" data-order="custom">맞춤 필터링</button></li>
+          </ul>
         </div>
-       <a class="write-btn" href="jobtips-post.html">글쓰기</a>
-    </div>
+        <a class="jobtips-write-btn" href="jobtips-post.html">글쓰기</a>
+      </div>
+    </form>
 
-    <div class="divider"></div>
+    <div class="jobtips-divider"></div>
 
-    <!--mock 데이터-->
-    <div class="post-list">
-      <a href="./jobtips-detail.html" class="post-card-link">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-category">자소서</div>
-            <div class="post-date">2024.11.12</div>
+ 
+    <div class="jobtips-list">
+      <!--mock 데이터 넣어둠-->
+      <a href="./jobtips-detail.html" class="jobtips-card-link">
+        <div class="jobtips-card">
+          <div class="jobtips-card-header">
+            <div class="jobtips-card-category">자소서</div>
+            <div class="jobtips-card-date">2024.11.12</div>
           </div>
-          <div class="post-title">카카오 FE 인턴 합격 자소서</div>
-          <div class="post-nickname">코딩러버</div>
-          <div class="post-period">합격 연도 + 전형 유형</div>
-          <div class="post-footer">
-            <div class="post-field">지원 분야</div>
-            <div class="post-like"><img class="post-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./jobtips-detail.html" class="post-card-link">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-category">자소서</div>
-            <div class="post-date">2024.11.12</div>
-          </div>
-          <div class="post-title">카카오 FE 인턴 합격 자소서</div>
-          <div class="post-nickname">코딩러버</div>
-          <div class="post-period">합격 연도 + 전형 유형</div>
-          <div class="post-footer">
-            <div class="post-field">지원 분야</div>
-            <div class="post-like"><img class="post-like-img" src="../../static/img/like.svg">15</div>
+          <div class="jobtips-card-title">카카오 FE 인턴 합격 자소서</div>
+          <div class="jobtips-card-nickname">코딩러버</div>
+          <div class="jobtips-card-period">합격 연도 + 전형 유형</div>
+          <div class="jobtips-card-footer">
+            <div class="jobtips-card-field">지원 분야</div>
+            <div class="jobtips-card-like"><img class="jobtips-card-like-img" src="../../static/img/like.svg">15</div>
           </div>
         </div>
       </a>
 
-      <a href="./jobtips-detail.html" class="post-card-link">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-category">자소서</div>
-            <div class="post-date">2024.11.12</div>
+      <a href="./jobtips-detail.html" class="jobtips-card-link">
+        <div class="jobtips-card">
+          <div class="jobtips-card-header">
+            <div class="jobtips-card-category">자소서</div>
+            <div class="jobtips-card-date">2024.11.12</div>
           </div>
-          <div class="post-title">카카오 FE 인턴 합격 자소서</div>
-          <div class="post-nickname">코딩러버</div>
-          <div class="post-period">합격 연도 + 전형 유형</div>
-          <div class="post-footer">
-            <div class="post-field">지원 분야</div>
-            <div class="post-like"><img class="post-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./jobtips-detail.html" class="post-card-link">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-category">자소서</div>
-            <div class="post-date">2024.11.12</div>
-          </div>
-          <div class="post-title">카카오 FE 인턴 합격 자소서</div>
-          <div class="post-nickname">코딩러버</div>
-          <div class="post-period">합격 연도 + 전형 유형</div>
-          <div class="post-footer">
-            <div class="post-field">지원 분야</div>
-            <div class="post-like"><img class="post-like-img" src="../../static/img/like.svg">15</div>
+          <div class="jobtips-card-title">카카오 FE 인턴 합격 자소서</div>
+          <div class="jobtips-card-nickname">코딩러버</div>
+          <div class="jobtips-card-period">합격 연도 + 전형 유형</div>
+          <div class="jobtips-card-footer">
+            <div class="jobtips-card-field">지원 분야</div>
+            <div class="jobtips-card-like"><img class="jobtips-card-like-img" src="../../static/img/like.svg">15</div>
           </div>
         </div>
       </a>
 
-      <a href="./jobtips-detail.html" class="post-card-link">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-category">자소서</div>
-            <div class="post-date">2024.11.12</div>
+      <a href="./jobtips-detail.html" class="jobtips-card-link">
+        <div class="jobtips-card">
+          <div class="jobtips-card-header">
+            <div class="jobtips-card-category">자소서</div>
+            <div class="jobtips-card-date">2024.11.12</div>
           </div>
-          <div class="post-title">카카오 FE 인턴 합격 자소서</div>
-          <div class="post-nickname">코딩러버</div>
-          <div class="post-period">합격 연도 + 전형 유형</div>
-          <div class="post-footer">
-            <div class="post-field">지원 분야</div>
-            <div class="post-like"><img class="post-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./jobtips-detail.html" class="post-card-link">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-category">자소서</div>
-            <div class="post-date">2024.11.12</div>
-          </div>
-          <div class="post-title">카카오 FE 인턴 합격 자소서</div>
-          <div class="post-nickname">코딩러버</div>
-          <div class="post-period">합격 연도 + 전형 유형</div>
-          <div class="post-footer">
-            <div class="post-field">지원 분야</div>
-            <div class="post-like"><img class="post-like-img" src="../../static/img/like.svg">15</div>
+          <div class="jobtips-card-title">카카오 FE 인턴 합격 자소서</div>
+          <div class="jobtips-card-nickname">코딩러버</div>
+          <div class="jobtips-card-period">합격 연도 + 전형 유형</div>
+          <div class="jobtips-card-footer">
+            <div class="jobtips-card-field">지원 분야</div>
+            <div class="jobtips-card-like"><img class="jobtips-card-like-img" src="../../static/img/like.svg">15</div>
           </div>
         </div>
       </a>
 
-      <a href="./jobtips-detail.html" class="post-card-link">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-category">자소서</div>
-            <div class="post-date">2024.11.12</div>
+      <a href="./jobtips-detail.html" class="jobtips-card-link">
+        <div class="jobtips-card">
+          <div class="jobtips-card-header">
+            <div class="jobtips-card-category">자소서</div>
+            <div class="jobtips-card-date">2024.11.12</div>
           </div>
-          <div class="post-title">카카오 FE 인턴 합격 자소서</div>
-          <div class="post-nickname">코딩러버</div>
-          <div class="post-period">합격 연도 + 전형 유형</div>
-          <div class="post-footer">
-            <div class="post-field">지원 분야</div>
-            <div class="post-like"><img class="post-like-img" src="../../static/img/like.svg">15</div>
+          <div class="jobtips-card-title">카카오 FE 인턴 합격 자소서</div>
+          <div class="jobtips-card-nickname">코딩러버</div>
+          <div class="jobtips-card-period">합격 연도 + 전형 유형</div>
+          <div class="jobtips-card-footer">
+            <div class="jobtips-card-field">지원 분야</div>
+            <div class="jobtips-card-like"><img class="jobtips-card-like-img" src="../../static/img/like.svg">15</div>
           </div>
         </div>
       </a>
 
-      <a href="./jobtips-detail.html" class="post-card-link">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-category">자소서</div>
-            <div class="post-date">2024.11.12</div>
+      <a href="./jobtips-detail.html" class="jobtips-card-link">
+        <div class="jobtips-card">
+          <div class="jobtips-card-header">
+            <div class="jobtips-card-category">자소서</div>
+            <div class="jobtips-card-date">2024.11.12</div>
           </div>
-          <div class="post-title">카카오 FE 인턴 합격 자소서</div>
-          <div class="post-nickname">코딩러버</div>
-          <div class="post-period">합격 연도 + 전형 유형</div>
-          <div class="post-footer">
-            <div class="post-field">지원 분야</div>
-            <div class="post-like"><img class="post-like-img" src="../../static/img/like.svg">15</div>
+          <div class="jobtips-card-title">카카오 FE 인턴 합격 자소서</div>
+          <div class="jobtips-card-nickname">코딩러버</div>
+          <div class="jobtips-card-period">합격 연도 + 전형 유형</div>
+          <div class="jobtips-card-footer">
+            <div class="jobtips-card-field">지원 분야</div>
+            <div class="jobtips-card-like"><img class="jobtips-card-like-img" src="../../static/img/like.svg">15</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="./jobtips-detail.html" class="jobtips-card-link">
+        <div class="jobtips-card">
+          <div class="jobtips-card-header">
+            <div class="jobtips-card-category">자소서</div>
+            <div class="jobtips-card-date">2024.11.12</div>
+          </div>
+          <div class="jobtips-card-title">카카오 FE 인턴 합격 자소서</div>
+          <div class="jobtips-card-nickname">코딩러버</div>
+          <div class="jobtips-card-period">합격 연도 + 전형 유형</div>
+          <div class="jobtips-card-footer">
+            <div class="jobtips-card-field">지원 분야</div>
+            <div class="jobtips-card-like"><img class="jobtips-card-like-img" src="../../static/img/like.svg">15</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="./jobtips-detail.html" class="jobtips-card-link">
+        <div class="jobtips-card">
+          <div class="jobtips-card-header">
+            <div class="jobtips-card-category">자소서</div>
+            <div class="jobtips-card-date">2024.11.12</div>
+          </div>
+          <div class="jobtips-card-title">카카오 FE 인턴 합격 자소서</div>
+          <div class="jobtips-card-nickname">코딩러버</div>
+          <div class="jobtips-card-period">합격 연도 + 전형 유형</div>
+          <div class="jobtips-card-footer">
+            <div class="jobtips-card-field">지원 분야</div>
+            <div class="jobtips-card-like"><img class="jobtips-card-like-img" src="../../static/img/like.svg">15</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="./jobtips-detail.html" class="jobtips-card-link">
+        <div class="jobtips-card">
+          <div class="jobtips-card-header">
+            <div class="jobtips-card-category">자소서</div>
+            <div class="jobtips-card-date">2024.11.12</div>
+          </div>
+          <div class="jobtips-card-title">카카오 FE 인턴 합격 자소서</div>
+          <div class="jobtips-card-nickname">코딩러버</div>
+          <div class="jobtips-card-period">합격 연도 + 전형 유형</div>
+          <div class="jobtips-card-footer">
+            <div class="jobtips-card-field">지원 분야</div>
+            <div class="jobtips-card-like"><img class="jobtips-card-like-img" src="../../static/img/like.svg">15</div>
           </div>
         </div>
       </a>
     </div>
 
     <!-- 페이지네이션 -->
-    <div class="pagination">
-      <button class="page-btn">&lt;</button>
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn">&gt;</button>
+    <div class="jobtips-pagination">
+      <button class="jobtips-page-btn">&lt;</button>
+      <button class="jobtips-page-btn active">1</button>
+      <button class="jobtips-page-btn">2</button>
+      <button class="jobtips-page-btn">3</button>
+      <button class="jobtips-page-btn">&gt;</button>
     </div>
   </div>
   </main>
@@ -205,7 +222,8 @@
     <p>© SSWU_WAGI 3기 CampusBridge</p>
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
-  
+
+  <script src="../../static/js/board-list.js"></script>
 </body>
 </html>
 

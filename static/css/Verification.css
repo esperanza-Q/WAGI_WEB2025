@@ -6,19 +6,20 @@
 
 :root {
   --purple-dark: #6b4c7d;
-  --purple-light: #8a7a95;
-  --purple-light-2: #a897b3;
+  --purple-light: #755889;
+  --purple-light-2: #9e8caa;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #fceff8 0%, #f7f5ff 50%, #eee7fb 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fdfaff 50%, #fdfcff 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .main-header {
@@ -60,7 +61,7 @@ body {
 }
 
 .main-nav-links a:hover {
-    color: #9c3d7e;
+  color: #9c3d7e;
 }
 
 .main-header-r {
@@ -69,7 +70,7 @@ body {
   align-items: center;
 }
 
-.mypage-btn {
+.header-mypage-btn {
   background: transparent;
   color: var(--purple-dark);
   border: none;
@@ -79,11 +80,11 @@ body {
   font-size: 16px;
 }
 
-.mypage-btn:hover {
+.header-mypage-btn:hover {
   color: #9c3d7e;
 }
 
-.login-btn {
+.header-login-btn {
   background: rgba(105,37,90,0.22);
   color: var(--purple-dark);
   border: 1px solid rgba(55, 27, 75, 0.2);
@@ -95,7 +96,7 @@ body {
   font-size: 16px;
 }
 
-.login-btn:hover {
+.header-login-btn:hover {
   background: rgba(105, 37, 90, 0.31);
 }
 
@@ -117,7 +118,7 @@ main {
 
 .verification-wrapper {
   width: 488px;
-  background-color: rgba(255,228,247,0.18);
+  background-color: rgba(251, 242, 248, 0.18);
 
   border-radius: 30px;
   box-shadow: inset 0 0 0 2px rgba(110,57,104,0.22),
@@ -137,7 +138,7 @@ main {
   margin-top: 20px;
 }
 
-.vertification-title{
+.verification-title{
   color:var(--purple-dark);
   font-size:25px;
   font-weight: 500;
@@ -162,7 +163,7 @@ main {
   width:100%;
 }
 
-.verification-info input{
+.verification-name{
   width:100%;
   height:49px;
   padding:0 12px;
@@ -180,11 +181,11 @@ main {
   font-size:15px
 }
 
-.verification-info input::placeholder{
+.verification-name::placeholder{
   color:var(--purple-light);
 }
 
-.verification-info input:focus{
+.verification-name:focus{
   border-color:var(--purple-dark);
   border-width:1px;
 }
@@ -274,18 +275,14 @@ main {
   margin-top:10px;
 }
 
-.verification-submit{
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
 .verification-submit:hover{
   background: rgba(76, 25, 65, 0.268);
 }
 
 .verification-submit{
+  display:flex;
+  justify-content:center;
+  align-items:center;
   width:100%;
   height:49px;
   padding:0 12px;
@@ -311,7 +308,9 @@ main {
   color: var(--purple-dark);
   font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.129);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(200, 180, 220, 0.2);
 }
 
 .footer .member {
