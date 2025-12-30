@@ -1,0 +1,82 @@
+{% extends "b_base.html" %}
+{% block content %}
+<h1>회원가입</h1>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  {# ==== 에러 블록 (한 번만!) ==== #}
+  {% if form.non_field_errors %}
+    <div class="errorlist nonfield">{{ form.non_field_errors }}</div>
+  {% endif %}
+  {% if form.errors %}
+    <ul class="errorlist">
+      {% for bf in form %}
+        {% if bf.errors %}
+          <li><strong>{{ bf.label }}:</strong> {{ bf.errors|join:", " }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div>
+    {{ form.username.label_tag }} {{ form.username }} {{ form.username.errors }}
+  </div>
+
+  <div>
+    {{ form.college.label_tag }} {{ form.college }} {{ form.college.errors }}
+    <input type="hidden" name="college" id="college_hidden" value="{{ form.college.value }}">
+  </div>
+
+  <div>
+    {{ form.department.label_tag }} {{ form.department }} {{ form.department.errors }}
+  </div>
+
+  <div>{{ form.display_name.label_tag }} {{ form.display_name }} {{ form.display_name.errors }}</div>
+  <div>{{ form.email.label_tag }} {{ form.email }} {{ form.email.errors }}</div>
+  <div>{{ form.grade.label_tag }} {{ form.grade }} {{ form.grade.errors }}</div>
+  <div>{{ form.password1.label_tag }} {{ form.password1 }} {{ form.password1.errors }}</div>
+  <div>{{ form.password2.label_tag }} {{ form.password2 }} {{ form.password2.errors }}</div>
+
+  <button type="submit">회원가입</button>
+</form>
+
+<p><a href="{% url 'accounts:login' %}">로그인</a></p>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const $college = document.getElementById('id_college');      // 장고가 자동 부여
+  const $dept    = document.getElementById('id_department');   // 장고가 자동 부여
+  const $hidden  = document.getElementById('college_hidden');  // POST에 싣기 위한 hidden
+
+  if (!$college || !$dept || !$hidden) return;
+
+  // 제출 시 hidden에 현재 college 값을 싣는다 (POST 본문 유지)
+  $college.form && $college.form.addEventListener('submit', function () {
+    $hidden.value = $college.value || '';
+  });
+
+  // 단과대 변경 시 AJAX로 학과 목록만 갱신 (페이지 새로고침 없음)
+  $college.addEventListener('change', async function () {
+    const collegeId = this.value;
+    $dept.innerHTML = '<option value="">---------</option>';
+    $hidden.value = collegeId || '';
+
+    if (!collegeId) return;
+
+    try {
+      const resp = await fetch(`/accounts/api/departments/?college_id=${encodeURIComponent(collegeId)}`);
+      const data = await resp.json();
+      (data.departments || []).forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.id;
+        opt.textContent = d.dept_name;
+        $dept.appendChild(opt);
+      });
+    } catch (e) {
+      console.error('학과 목록 불러오기 실패:', e);
+    }
+  });
+});
+</script>
+{% endblock %}

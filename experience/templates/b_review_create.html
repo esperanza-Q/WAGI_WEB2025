@@ -1,0 +1,13 @@
+<h1>활동 후기 남기기</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <!-- 이미지 여러개 업로드 -->
+    {{ image_form.as_p }}
+
+    <button type="submit">작성하기</button>
+</form>
+
+<a href="{% url 'review_list' %}">목록으로</a>
