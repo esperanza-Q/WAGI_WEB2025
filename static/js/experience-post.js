@@ -2,8 +2,8 @@
 let selectedFiles = [];
 const MAX_FILES = 5; // 최대 업로드 개수
 
-const input = document.getElementById("upload-input");
-const preview = document.getElementById("upload-preview");
+const input = document.getElementById("ex-upload-input");
+const preview = document.getElementById("ex-upload-preview");
 
 // input change 이벤트
 input.addEventListener("change", function(event) {
@@ -27,24 +27,24 @@ function renderPreview() {
 
     selectedFiles.forEach((file, index) => {
         const item = document.createElement("div");
-        item.classList.add("preview-item");
+        item.classList.add("ex-preview-item");
 
         // 이미지 파일인지 체크
         if (file.type.startsWith("image/")) {
             const img = document.createElement("img");
-            img.classList.add("preview-img");
+            img.classList.add("ex-preview-img");
             img.src = URL.createObjectURL(file);
             item.appendChild(img);
         } else {
             const fileBox = document.createElement("div");
-            fileBox.classList.add("preview-file");
+            fileBox.classList.add("ex-preview-file");
             fileBox.textContent = file.name;
             item.appendChild(fileBox);
         }
 
         // 삭제 버튼 추가
         const removeBtn = document.createElement("div");
-        removeBtn.classList.add("preview-remove");
+        removeBtn.classList.add("ex-preview-remove");
         removeBtn.textContent = "×";
 
         removeBtn.addEventListener("click", () => {
@@ -67,7 +67,7 @@ function syncInputFiles() {
 }
 
 // 폼 제출 시 파일 최소 1개 체크
-const form = document.querySelector(".write-form");
+const form = document.querySelector(".ex-post-form");
 
 form.addEventListener("submit", function (e) {
     if (selectedFiles.length === 0) {
@@ -82,10 +82,10 @@ form.addEventListener("submit", function (e) {
 
 
 // 태그 저장 관련
-const tagInput = document.getElementById("tag-input");
-const addTagBtn = document.getElementById("add-tag-btn");
-const tagList = document.getElementById("tag-list");
-const hiddenTags = document.getElementById("hidden-tags");
+const tagInput = document.getElementById("ex-tag-input");
+const addTagBtn = document.getElementById("ex-add-tag-btn");
+const tagList = document.getElementById("ex-tag-list");
+const hiddenTags = document.getElementById("ex-hidden-tags");
 
 let tags = [];
 
@@ -105,15 +105,15 @@ function renderTags() {
 
     tags.forEach((tag, index) => {
         const tagItem = document.createElement("div");
-        tagItem.classList.add("tag-item");
+        tagItem.classList.add("ex-tag-item");
         tagItem.innerHTML = `
             ${tag}
-            <span class="tag-remove" data-index="${index}">×</span>
+            <span class="ex-tag-remove" data-index="${index}">×</span>
         `;
         tagList.appendChild(tagItem);
     });
 
-    document.querySelectorAll(".tag-remove").forEach(btn => {
+    document.querySelectorAll(".ex-tag-remove").forEach(btn => {
         btn.addEventListener("click", (e) => {
             const idx = e.target.dataset.index;
             tags.splice(idx, 1);

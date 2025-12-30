@@ -1,0 +1,283 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+* {
+  font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+:root {
+  --purple-dark: #6b4c7d;
+  --purple-light: #755889;
+  --purple-light-2: #9e8caa;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  background: linear-gradient(135deg, #ffffff 0%, #fdfaff 50%, #fdfcff 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.15);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(200, 180, 220, 0.2);
+}
+
+.main-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.main-nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav-links a {
+  color: var(--purple-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.main-nav-links a:hover {
+    color: #9c3d7e;
+}
+
+.main-header-r {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.header-mypage-btn {
+  background: transparent;
+  color: var(--purple-dark);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.header-mypage-btn:hover {
+  color: #9c3d7e;
+}
+
+.header-login-btn {
+  background: rgba(105,37,90,0.22);
+  color: var(--purple-dark);
+  border: 1px solid rgba(55, 27, 75, 0.2);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.header-login-btn:hover {
+  background: rgba(105, 37, 90, 0.31);
+}
+
+/* 메인 콘텐츠 */
+main {
+  flex: 1;
+  padding-top: 6rem;
+  padding-bottom: 2rem;
+}
+
+.container {
+  max-width: 1016px;
+  margin: 0 auto;
+  padding: 0 24px;  /* 양옆 패딩 */
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 80px; /* footer와 간격 */
+}
+
+a{text-decoration:none;}
+
+.other-profile-userInfo{
+  width:800px; height:auto;
+  margin: 40px auto 35px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(146, 130, 161, 0.3);
+  border-radius: 20px;
+  display:flex;
+  flex-direction:column;
+  padding:25px;
+  gap:10px;
+}
+
+.other-profile-userImg{
+  width:150px; height:150px;
+  margin-bottom:10px;
+  border-radius:50%;
+  background-color:rgba(179, 149, 170, 0.27);
+  border:1px solid var(--purple-light-2);
+
+  /**유저 프로필 사진**/
+  background-image:url('#');
+}
+
+.other-profile-userId{
+  color:var(--purple-dark);
+  font-size:25px;
+  font-weight: 500;
+  align-items:center;
+}
+
+.other-profile-academic{
+  width:max-content; height:max-content;
+  padding:4px 10px; margin-bottom:10px;
+  color:rgba(110, 57, 104, 0.9);
+  border:1px solid rgba(105,57,90,0.54);
+  
+  border-radius: 20px;
+
+  background-color: rgba(213, 194, 207, 0.22);
+  font-size:13px;
+}
+
+.other-profile-userEmail{
+  color:var(--purple-dark);
+  font-size:18px;
+}
+
+.otherQnA-list-wrapper{
+  width:800px; height:auto;
+  margin: 0 auto 50px;
+}
+
+.other-profile-menu{
+  width:100%; height:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:25px;
+  gap:10px;
+}
+
+.other-profile-qna{
+  width:auto; height:auto;
+  padding:6px 15px;
+  background:rgba(105, 57, 90, 0.385);
+  border: 1px solid rgba(55, 27, 75, 0.537);
+  border-radius:30px;
+  color:rgba(81, 38, 76, 0.9);
+  font-size:15px;
+  cursor:pointer;
+}
+
+.other-profile-roadmap{
+  width:auto; height:auto;
+  padding:6px 15px;
+  background:rgba(105, 57, 90, 0.22);
+  border: 1px solid rgba(55, 27, 75, 0.2);
+  border-radius:30px;
+  color:rgba(110, 57, 104, 0.9);
+  font-size:15px;
+  cursor:pointer;
+}
+
+.other-profile-roadmap:hover, .other-profile-qna:hover,
+.otherQnA-list-writeBtn:hover, .otherQnA-list-card:hover{
+  background: rgba(76, 25, 65, 0.268);
+}
+
+.other-profile-menu a:nth-child(3){
+  margin-left:auto;
+}
+
+.otherQnA-list-writeBtn{
+  width:auto; height:auto;
+  background: rgba(105,37,90,0.22);
+  color: var(--purple-dark);
+  border: 1px solid rgba(55, 27, 75, 0.2);
+  border-radius: 10px;
+  font-size:15px;
+  padding:6px 15px;
+  cursor:pointer;
+}
+
+.otherQnA-list{
+  display:flex;
+  justify-content:center;
+  flex-direction:column;
+  gap:20px;
+  width:100%; height:auto;
+}
+
+.otherQnA-list-card{
+  width:100%; height:60px;
+  padding:10px 18px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  background-color:rgba(105, 57, 90, 0.15);
+  border:none; border-radius:10px;
+  color:var(--purple-dark);
+}
+
+.otherQnA-list-title{
+  width:800px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.otherQnA-list-userId{
+  display:inline-block;
+  width:150px;
+  text-align:right;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.otherQnA-list-card span{
+  margin-right:6px;
+}
+
+.otherQnA-list-card span:nth-child(4){
+  margin-left:auto;
+}
+
+.footer {
+  text-align: center;
+  padding: 50px 10px 20px 10px;
+  color: var(--purple-dark);
+  font-size: 15px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(200, 180, 220, 0.2);
+}
+
+.footer .member {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.8;
+}
