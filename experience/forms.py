@@ -17,6 +17,11 @@ class ReviewForm(forms.ModelForm):
         ('여름방학', '여름방학'),
         ('겨울방학', '겨울방학'),
     ]
+    tags = forms.CharField(
+        required=False,
+        label="태그",
+        help_text="쉼표(,)로 구분해서 입력하세요"
+    )
     grade = forms.ChoiceField(choices=GRADE_CHOICES, label='학년')
     year = forms.ChoiceField(choices=YEAR_CHOICES, label='연도')
     term = forms.ChoiceField(choices=TERM_CHOICES, label='학기')
@@ -46,7 +51,7 @@ class ReviewImageMultipleForm(forms.Form):
     )
 class ReviewFileMultipleForm(forms.Form):
     files = forms.FileField(
+        label="첨부파일",
         widget=MultiFileInput(attrs={'multiple': True}),
         required=False,
-        label="첨부파일"
     )

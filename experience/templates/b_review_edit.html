@@ -4,16 +4,28 @@
     {% csrf_token %}
     {{ form.as_p }}
     {{ image_form.as_p }}
-
+    <p>{{ file_form.files.label }}</p>
+    {{ file_form.files }}
     <button type="submit">수정 완료</button>
 </form>
 
 <hr>
-<h3>현재 업로드된 이미지</h3>
+<h3>첨부파일</h3>
+{% if files %}
+        {% for f in files %}
+            <a href="{{ f.file.url }}" target="_blank">
+                    {{ f.file.name|cut:"review_files/" }}
+            </a>
+            <a href="{% url 'delete_file' f.id %}">삭제</a>
+        {% endfor %}
+{% else %}
+    <p>첨부파일 없음</p>
+{% endif %}
 
+<h3>이미지</h3>
 {% for img in review.images.all %}
         <img src="{{ img.image.url }}" width="150">
         <a href="{% url 'delete_image' img.id %}">삭제</a>
 {% empty %}
-    <p>첨부된 이미지가 없습니다.</p>
+    <p>첨부된 이미지가 없음</p>
 {% endfor %}
