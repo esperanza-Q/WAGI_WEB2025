@@ -73,3 +73,15 @@ class ReviewScrap(models.Model):
 
     def __str__(self):
         return f"{self.user.username} → {self.review.title}"
+
+class ReviewFile(models.Model):
+    review = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+        related_name="files"
+    )
+    file = models.FileField(upload_to="review_files/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name

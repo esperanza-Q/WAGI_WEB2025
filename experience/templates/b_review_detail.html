@@ -5,6 +5,19 @@
 <p>좋아요: {{ like_count }}</p>
 
 <hr>
+<!-- 첨부파일 -->
+{% if review.files.all %}
+<h4>첨부파일</h4>
+<ul>
+    {% for f in review.files.all %}
+        <li>
+            <a href="{{ f.file.url }}" download>
+                {{ f.file.name }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 <!-- 이미지 출력 -->
 {% if images %}
