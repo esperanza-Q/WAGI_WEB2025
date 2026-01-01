@@ -44,3 +44,9 @@ class ReviewImageMultipleForm(forms.Form):
         widget=MultiFileInput(attrs={'multiple': True}),
         required=False
     )
+class ReviewFileMultipleForm(forms.Form):
+    files = forms.FileField(
+        widget=MultiFileInput(attrs={'multiple': True}),
+        required=False,
+        label="첨부파일"
+    )

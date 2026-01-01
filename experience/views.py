@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Review, ReviewLike, ActivityCategory, ReviewScrap
-from .forms import ReviewForm, ReviewImageMultipleForm
+from .models import Review, ReviewLike, ActivityCategory, ReviewScrap, ReviewFile
+from .forms import ReviewForm, ReviewImageMultipleForm, ReviewFileMultipleForm
 from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
 from .models import ReviewComment, ReviewImage
@@ -63,13 +63,18 @@ def review_create(request):
             images = request.FILES.getlist('images')
             for img in images:
                 ReviewImage.objects.create(review=review, image=img)
+            files = request.FILES.getlist("files")
+            for f in files:
+                ReviewFile.objects.create(review=review, file=f)
             return redirect("review_list")
     else:
         form = ReviewForm()
         image_form = ReviewImageMultipleForm()
+        file_form = ReviewFileMultipleForm()
     return render(request, "b_review_create.html", {
         "form": form,
-        "image_form": image_form
+        "image_form": image_form,
+        "file_form": file_form
     })
 
 def review_detail(request, review_id):
