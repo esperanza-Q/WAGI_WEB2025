@@ -11,35 +11,41 @@ def recruit_list(request):
 # 2. 모집글 상세 페이지 (b_detail.html)
 def recruit_detail(request, recruit_id):
     recruit = get_object_or_404(Recruit, pk=recruit_id)
-    return render(request, 'b_detail.html', {'recruit': recruit})
+    images = recruit.images.all()
+    return render(request, 'b_detail.html', {
+        'recruit': recruit,
+        'images': images,
+    })
 
 
 # 3. 모집글 작성 페이지 (b_post.html)
 def recruit_post(request):
     if request.method == 'POST':
         title = request.POST.get('title')
-        category = request.POST.get('category')
-        field = request.POST.get('field')
-        period = request.POST.get('period')
-        description = request.POST.get('description')
-        link = request.POST.get('link')
-        tags = request.POST.get('tags')  # JSON 문자열 (예: '["tag1", "tag2"]')
+        category = request.POST.get('category')  # 카테고리 ID 값
+        field = request.POST.get('field')        # 분야 (필드명 명확히 확인)
+        period = request.POST.get('period')      # 모집 기간
+        description = request.POST.get('description')  # 본문
+        link = request.POST.get('link')          # 연락 수단 (예: 오픈카톡 링크 등)
+        tags = request.POST.get('tags')          # JSON 문자열 (예: '["tag1", "tag2"]')
 
         recruit = Recruit.objects.create(
             title=title,
-            category=category,
+            category_id=category,
             field=field,
-            period=period,
-            description=description,
-            link=link,
-            tags=json.loads(tags) if tags else []
+            deadline=period,
+            body=description,
+            contact=link,
+            tags=json.loads(tags) if tags else [],
+            user=request.user,
+            college=request.user.college,
         )
 
         # 첨부 이미지 저장
         for file in request.FILES.getlist('images'):
             RecruitImage.objects.create(recruit=recruit, image=file)
 
-        return redirect('recruit_list')
+        return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
     return render(request, 'b_post.html')
 
@@ -50,11 +56,11 @@ def recruit_edit(request, recruit_id):
 
     if request.method == 'POST':
         recruit.title = request.POST.get('title')
-        recruit.category = request.POST.get('category')
+        recruit.category_id = request.POST.get('category')
         recruit.field = request.POST.get('field')
-        recruit.period = request.POST.get('period')
-        recruit.description = request.POST.get('description')
-        recruit.link = request.POST.get('link')
+        recruit.deadline = request.POST.get('period')
+        recruit.body = request.POST.get('description')
+        recruit.contact = request.POST.get('link')
         tags = request.POST.get('tags')
         recruit.tags = json.loads(tags) if tags else []
         recruit.save()
@@ -68,6 +74,6 @@ def recruit_edit(request, recruit_id):
         for file in request.FILES.getlist('images'):
             RecruitImage.objects.create(recruit=recruit, image=file)
 
-        return redirect('recruit_detail', recruit_id=recruit.id)
+        return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
     return render(request, 'b_edit.html', {'recruit': recruit})

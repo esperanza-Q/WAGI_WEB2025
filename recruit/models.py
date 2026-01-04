@@ -1,93 +1,99 @@
 from django.db import models
-from django.conf import settings   # ⭐ User 연결은 settings.AUTH_USER_MODEL 로!
+from django.conf import settings
+from accounts.models import College
 
-# =====================
-#  카테고리
-# =====================
+# ✅ 카테고리
 class Category(models.Model):
-    category_name = models.CharField(max_length=100)
+    category_id = models.AutoField(primary_key=True)
+    category_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.category_name
 
-
-# =====================
-#  태그
-# =====================
+# ✅ 태그
 class Tag(models.Model):
+    tag_id = models.AutoField(primary_key=True)
     tag_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.tag_name
 
-
-# =====================
-#  모집글
-# =====================
+# ✅ 모집글
 class Recruit(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,     # ⭐ 커스텀 유저 대응
-        on_delete=models.CASCADE,
-        related_name='recruits'
-    )
-
+    recruit_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
     body = models.TextField()
     contact = models.CharField(max_length=100)
     deadline = models.DateTimeField()
     is_recruiting = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    # 외래키
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='recruits'
+    )
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
         null=True,
         related_name='recruits'
     )
-
-    college_id = models.IntegerField(null=True, blank=True)   # 단과대 ID 저장
-
-    tags = models.ManyToManyField(
-        'Tag',
-        through='RecruitTag',
+    college = models.ForeignKey(
+        College,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='recruits'
     )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
 
-
-# =====================
-#  모집글 이미지
-# =====================
+# ✅ 모집글 이미지
 class RecruitImage(models.Model):
+    image_id = models.AutoField(primary_key=True)
+    image_url = models.ImageField(upload_to='recruit_images/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # 외래키
     recruit = models.ForeignKey(
         Recruit,
         on_delete=models.CASCADE,
         related_name='images'
     )
-    image_url = models.ImageField(upload_to='recruit/images/')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    college_id = models.IntegerField(null=True, blank=True)
+    college = models.ForeignKey(
+        College,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='recruit_images'
+    )
 
     def __str__(self):
-        return f"{self.recruit.title} 이미지"
+        return f"Image for {self.recruit.title}"
 
-
-# =====================
-#  모집글-태그 연결 테이블
-# =====================
+# ✅ 모집글-태그 중간 테이블
 class RecruitTag(models.Model):
-    recruit = models.ForeignKey(Recruit, on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
-
-    college_id = models.IntegerField(null=True, blank=True)
+    tag = models.ForeignKey(
+        Tag,
+        on_delete=models.CASCADE,
+        related_name='recruit_tags'
+    )
+    recruit = models.ForeignKey(
+        Recruit,
+        on_delete=models.CASCADE,
+        related_name='recruit_tags'
+    )
+    college = models.ForeignKey(
+        College,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='recruit_tags'
+    )
 
     class Meta:
-        unique_together = ('recruit', 'tag')   # 동일 태그 중복 X
+        unique_together = ('tag', 'recruit')  # 중복 방지
 
     def __str__(self):
         return f"{self.recruit.title} - {self.tag.tag_name}"
