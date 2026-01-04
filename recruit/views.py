@@ -4,8 +4,34 @@ import json
 
 # 1. 모집글 목록 페이지 (b_list.html)
 def recruit_list(request):
-    recruits = Recruit.objects.all().order_by('-created_at')
-    return render(request, 'b_list.html', {'recruits': recruits})
+    # 🔹 쿼리 파라미터 가져오기
+    category = request.GET.get('category')  # ex. '동아리', '공모전', '스터디'
+    status = request.GET.get('status')      # 'open' or 'closed'
+    order = request.GET.get('order', 'latest')  # 'latest'가 기본
+
+    # 🔹 전체 모집글 가져오기
+    recruits = Recruit.objects.all()
+
+    # 🔹 필터: 카테고리
+    if category in ['동아리', '공모전', '스터디']:
+        recruits = recruits.filter(category__name=category)
+
+    # 🔹 필터: 모집 상태 (is_recruiting)
+    if status == 'open':
+        recruits = recruits.filter(is_recruiting=True)
+    elif status == 'closed':
+        recruits = recruits.filter(is_recruiting=False)
+
+    # 🔹 정렬: 최신순
+    if order == 'latest':
+        recruits = recruits.order_by('-created_at')
+
+    return render(request, 'b_list.html', {
+        'recruits': recruits,
+        'selected_category': category,
+        'selected_status': status,
+        'selected_order': order,
+    })
 
 
 # 2. 모집글 상세 페이지 (b_detail.html)
@@ -22,12 +48,12 @@ def recruit_detail(request, recruit_id):
 def recruit_post(request):
     if request.method == 'POST':
         title = request.POST.get('title')
-        category = request.POST.get('category')  # 카테고리 ID 값
-        field = request.POST.get('field')        # 분야 (필드명 명확히 확인)
-        period = request.POST.get('period')      # 모집 기간
-        description = request.POST.get('description')  # 본문
-        link = request.POST.get('link')          # 연락 수단 (예: 오픈카톡 링크 등)
-        tags = request.POST.get('tags')          # JSON 문자열 (예: '["tag1", "tag2"]')
+        category = request.POST.get('category')  # 카테고리 ID
+        field = request.POST.get('field')        # 모집 분야
+        period = request.POST.get('period')      # 모집 기간 (마감일)
+        description = request.POST.get('description')
+        link = request.POST.get('link')
+        tags = request.POST.get('tags')
 
         recruit = Recruit.objects.create(
             title=title,
@@ -41,7 +67,6 @@ def recruit_post(request):
             college=request.user.college,
         )
 
-        # 첨부 이미지 저장
         for file in request.FILES.getlist('images'):
             RecruitImage.objects.create(recruit=recruit, image=file)
 
@@ -65,7 +90,7 @@ def recruit_edit(request, recruit_id):
         recruit.tags = json.loads(tags) if tags else []
         recruit.save()
 
-        # 삭제된 이미지 처리
+        # 삭제된 이미지
         deleted_files = json.loads(request.POST.get('deleted_files', '[]'))
         if deleted_files:
             RecruitImage.objects.filter(id__in=deleted_files, recruit=recruit).delete()
