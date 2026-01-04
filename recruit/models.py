@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from accounts.models import College
+from datetime import date
 
 # ✅ 카테고리
 class Category(models.Model):
@@ -136,3 +137,8 @@ class RecruitLike(models.Model):
 
     def __str__(self):
         return f'{self.user} ❤️ {self.recruit.title}'
+
+def save(self, *args, **kwargs):
+    if self.deadline and self.deadline < date.today():
+        self.is_recruiting = False
+    super().save(*args, **kwargs)
