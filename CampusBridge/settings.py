@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -142,3 +143,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = "accounts.User" #커스텀 유저 모델 사용
+
+# 업로드된 파일을 브라우저에서 볼 때 사용하는 주소 (예: /media/image.jpg)
+MEDIA_URL = '/media/'
+
+# 실제 컴퓨터(서버) 내에 파일이 저장되는 물리적인 위치
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

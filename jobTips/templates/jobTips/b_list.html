@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="{% static 'css/jobtips/jobtips-list.css' %}">
+</head>
+
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+      <a href="/">
+        <img class="main-logo" src="{% static 'img/main-logo.svg' %}">
+      </a>
+    </div>
+
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="#">활동 후기</a></li>
+        <li><a href="{% url 'jobTips:list' %}">자소서·면접·포폴</a></li>
+        <li><a href="#">모집</a></li>
+        <li><a href="#">나의 로드맵</a></li>
+      </ul>
+    </nav>
+
+    <div class="main-header-r">
+      <button class="header-mypage-btn">마이페이지</button>
+      <button class="header-login-btn">로그인</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- GET 폼: 검색(q), 카테고리(category), 정렬(sort) -->
+      <form method="GET" id="filter-form" class="jobtips-search-form">
+        <div class="jobtips-search-section">
+          <input
+            type="search"
+            name="q"
+            placeholder="활동명으로 검색하기"
+            class="jobtips-search-input"
+            value="{{ q|default:'' }}"
+          />
+          <button type="submit" class="jobtips-search-btn">
+            <img src="{% static 'img/search.svg' %}" alt="검색">
+          </button>
+        </div>
+
+        <!-- 탭: a 링크로 GET 파라미터 유지 -->
+        <nav class="jobtips-filter-tabs">
+          <ul>
+            <li>
+              <a class="tab-btn {% if not category %}active{% endif %}"
+                 href="{% url 'jobTips:list' %}?q={{ q|urlencode }}&sort={{ sort|default:'latest' }}">
+                전체
+              </a>
+            </li>
+            <li>
+              <a class="tab-btn {% if category == 'resume' %}active{% endif %}"
+                 href="{% url 'jobTips:list' %}?category=resume&q={{ q|urlencode }}&sort={{ sort|default:'latest' }}">
+                자소서
+              </a>
+            </li>
+            <li>
+              <a class="tab-btn {% if category == 'interview' %}active{% endif %}"
+                 href="{% url 'jobTips:list' %}?category=interview&q={{ q|urlencode }}&sort={{ sort|default:'latest' }}">
+                면접
+              </a>
+            </li>
+            <li>
+              <a class="tab-btn {% if category == 'portfolio' %}active{% endif %}"
+                 href="{% url 'jobTips:list' %}?category=portfolio&q={{ q|urlencode }}&sort={{ sort|default:'latest' }}">
+                포트폴리오
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- 정렬 -->
+        <div class="jobtips-sub-filter-bar">
+          <div class="jobtips-sub-filters">
+            <ul>
+              <li>
+                <a class="{% if sort == 'latest' or not sort %}active{% endif %}"
+                   href="{% url 'jobTips:list' %}?category={{ category|default:'' }}&q={{ q|urlencode }}&sort=latest">
+                  최신순
+                </a>
+              </li>
+              <li>
+                <a class="{% if sort == 'likes' %}active{% endif %}"
+                   href="{% url 'jobTips:list' %}?category={{ category|default:'' }}&q={{ q|urlencode }}&sort=likes">
+                  공감순
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 글쓰기(아직 미구현이면 #) -->
+          <a class="jobtips-write-btn" href="#">글쓰기</a>
+        </div>
+      </form>
+
+      <div class="jobtips-divider"></div>
+
+      <div class="jobtips-list">
+        {% for post in posts %}
+          <a href="{% url 'jobTips:detail' post.pk %}" class="jobtips-card-link">
+            <div class="jobtips-card">
+              <div class="jobtips-card-header">
+                <div class="jobtips-card-category">{{ post.get_category_display }}</div>
+                <div class="jobtips-card-date">{{ post.created_at|date:"Y.m.d" }}</div>
+              </div>
+
+              <div class="jobtips-card-title">{{ post.title }}</div>
+              <div class="jobtips-card-nickname">{{ post.author }}</div>
+              <div class="jobtips-card-period">{{ post.pass_info }}</div>
+
+              <div class="jobtips-card-footer">
+                <div class="jobtips-card-field">{{ post.position }}</div>
+                <div class="jobtips-card-like">
+                  <img class="jobtips-card-like-img" src="{% static 'img/like.svg' %}">
+                  {{ post.like_count }}
+                </div>
+              </div>
+            </div>
+          </a>
+        {% empty %}
+          <p style="text-align: center; grid-column: 1/-1; padding: 50px;">
+            등록된 게시글이 없습니다.
+          </p>
+        {% endfor %}
+      </div>
+
+      <!-- 페이지네이션은 아직 미구현이면 UI만 -->
+      <div class="jobtips-pagination">
+        <button class="jobtips-page-btn">&lt;</button>
+        <button class="jobtips-page-btn active">1</button>
+        <button class="jobtips-page-btn">&gt;</button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+
+  <script src="{% static 'js/board-list.js' %}"></script>
+</body>
+</html>
