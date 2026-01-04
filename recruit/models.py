@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from accounts.models import College
 
 # ✅ 카테고리
@@ -10,6 +11,7 @@ class Category(models.Model):
     def __str__(self):
         return self.category_name
 
+
 # ✅ 태그
 class Tag(models.Model):
     tag_id = models.AutoField(primary_key=True)
@@ -17,6 +19,7 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.tag_name
+
 
 # ✅ 모집글
 class Recruit(models.Model):
@@ -48,8 +51,22 @@ class Recruit(models.Model):
         related_name='recruits'
     )
 
+    # ✅ 태그 (ERD 기준: Recruit ↔ Tag, 중간 테이블 사용)
+    tags = models.ManyToManyField(
+        Tag,
+        through='RecruitTag',
+        related_name='recruits'
+    )
+
+    # ✅ deadline 지나면 자동 모집 종료
+    def save(self, *args, **kwargs):
+        if self.deadline < timezone.localdate():
+            self.is_recruiting = False
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
+
 
 # ✅ 모집글 이미지
 class RecruitImage(models.Model):
@@ -73,7 +90,8 @@ class RecruitImage(models.Model):
     def __str__(self):
         return f"Image for {self.recruit.title}"
 
-# ✅ 모집글-태그 중간 테이블
+
+# ✅ 모집글-태그 중간 테이블 (ERD 동일)
 class RecruitTag(models.Model):
     tag = models.ForeignKey(
         Tag,
@@ -93,11 +111,13 @@ class RecruitTag(models.Model):
     )
 
     class Meta:
-        unique_together = ('tag', 'recruit')  # 중복 방지
+        unique_together = ('tag', 'recruit')
 
     def __str__(self):
         return f"{self.recruit.title} - {self.tag.tag_name}"
-    
+
+
+# ✅ 좋아요
 class RecruitLike(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -105,14 +125,14 @@ class RecruitLike(models.Model):
         related_name='liked_recruits'
     )
     recruit = models.ForeignKey(
-        'Recruit',
+        Recruit,
         on_delete=models.CASCADE,
         related_name='likes'
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'recruit')  # 중복 좋아요 방지
+        unique_together = ('user', 'recruit')
 
     def __str__(self):
         return f'{self.user} ❤️ {self.recruit.title}'

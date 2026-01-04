@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count
-from .models import Recruit, RecruitImage
+from .models import Recruit, RecruitImage, RecruitTag, Tag
 import json
 
 
@@ -17,7 +17,7 @@ def recruit_list(request):
 
     # 🔹 카테고리 필터
     if category in ['동아리', '공모전', '스터디']:
-        recruits = recruits.filter(category__name=category)
+        recruits = recruits.filter(category__category_name=category)
 
     # 🔹 모집 상태 필터
     if status == 'open':
@@ -25,15 +25,12 @@ def recruit_list(request):
     elif status == 'closed':
         recruits = recruits.filter(is_recruiting=False)
     else:
-        # 기본 상태: 모집중만
         recruits = recruits.filter(is_recruiting=True)
 
     # 🔹 정렬
     if order == 'latest':
-        # 최신순
         recruits = recruits.order_by('-created_at')
     else:
-        # 기본 정렬: 좋아요 많은 순 → 최신순
         recruits = recruits.order_by('-like_count', '-created_at')
 
     return render(request, 'b_list.html', {
@@ -63,26 +60,38 @@ def recruit_post(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         category = request.POST.get('category')
-        field = request.POST.get('field')
-        period = request.POST.get('period')
+        period = request.POST.get('period')  # DateField
         description = request.POST.get('description')
         link = request.POST.get('link')
-        tags = request.POST.get('tags')
+        tags = request.POST.get('tags')  # JSON 문자열
 
         recruit = Recruit.objects.create(
             title=title,
             category_id=category,
-            field=field,
             deadline=period,
             body=description,
             contact=link,
-            tags=json.loads(tags) if tags else [],
             user=request.user,
             college=request.user.college,
         )
 
+        # ✅ 태그 저장 (ERD 방식)
+        if tags:
+            tag_ids = json.loads(tags)
+            for tag_id in tag_ids:
+                RecruitTag.objects.create(
+                    recruit=recruit,
+                    tag_id=tag_id,
+                    college=request.user.college
+                )
+
+        # ✅ 이미지 저장
         for file in request.FILES.getlist('images'):
-            RecruitImage.objects.create(recruit=recruit, image=file)
+            RecruitImage.objects.create(
+                recruit=recruit,
+                image_url=file,
+                college=request.user.college
+            )
 
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
@@ -96,14 +105,22 @@ def recruit_edit(request, recruit_id):
     if request.method == 'POST':
         recruit.title = request.POST.get('title')
         recruit.category_id = request.POST.get('category')
-        recruit.field = request.POST.get('field')
         recruit.deadline = request.POST.get('period')
         recruit.body = request.POST.get('description')
         recruit.contact = request.POST.get('link')
-
-        tags = request.POST.get('tags')
-        recruit.tags = json.loads(tags) if tags else []
         recruit.save()
+
+        # ✅ 태그 수정 (전부 삭제 후 재생성)
+        RecruitTag.objects.filter(recruit=recruit).delete()
+        tags = request.POST.get('tags')
+        if tags:
+            tag_ids = json.loads(tags)
+            for tag_id in tag_ids:
+                RecruitTag.objects.create(
+                    recruit=recruit,
+                    tag_id=tag_id,
+                    college=request.user.college
+                )
 
         # 삭제된 이미지
         deleted_files = json.loads(request.POST.get('deleted_files', '[]'))
@@ -115,7 +132,11 @@ def recruit_edit(request, recruit_id):
 
         # 새 이미지 추가
         for file in request.FILES.getlist('images'):
-            RecruitImage.objects.create(recruit=recruit, image=file)
+            RecruitImage.objects.create(
+                recruit=recruit,
+                image_url=file,
+                college=request.user.college
+            )
 
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
