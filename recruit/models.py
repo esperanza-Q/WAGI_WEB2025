@@ -24,7 +24,7 @@ class Recruit(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
     contact = models.CharField(max_length=100)
-    deadline = models.DateTimeField()
+    deadline = models.DateField()
     is_recruiting = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -97,3 +97,22 @@ class RecruitTag(models.Model):
 
     def __str__(self):
         return f"{self.recruit.title} - {self.tag.tag_name}"
+    
+class RecruitLike(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='liked_recruits'
+    )
+    recruit = models.ForeignKey(
+        'Recruit',
+        on_delete=models.CASCADE,
+        related_name='likes'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'recruit')  # 중복 좋아요 방지
+
+    def __str__(self):
+        return f'{self.user} ❤️ {self.recruit.title}'

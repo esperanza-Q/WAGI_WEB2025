@@ -1,30 +1,40 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Count
 from .models import Recruit, RecruitImage
 import json
 
+
 # 1. 모집글 목록 페이지 (b_list.html)
 def recruit_list(request):
-    # 🔹 쿼리 파라미터 가져오기
-    category = request.GET.get('category')  # ex. '동아리', '공모전', '스터디'
-    status = request.GET.get('status')      # 'open' or 'closed'
-    order = request.GET.get('order', 'latest')  # 'latest'가 기본
+    category = request.GET.get('category')        # 동아리 / 공모전 / 스터디
+    status = request.GET.get('status')            # open / closed
+    order = request.GET.get('order')              # latest / None
 
-    # 🔹 전체 모집글 가져오기
-    recruits = Recruit.objects.all()
+    # 🔹 기본 queryset + 좋아요 수 annotate
+    recruits = Recruit.objects.annotate(
+        like_count=Count('likes')
+    )
 
-    # 🔹 필터: 카테고리
+    # 🔹 카테고리 필터
     if category in ['동아리', '공모전', '스터디']:
         recruits = recruits.filter(category__name=category)
 
-    # 🔹 필터: 모집 상태 (is_recruiting)
+    # 🔹 모집 상태 필터
     if status == 'open':
         recruits = recruits.filter(is_recruiting=True)
     elif status == 'closed':
         recruits = recruits.filter(is_recruiting=False)
+    else:
+        # 기본 상태: 모집중만
+        recruits = recruits.filter(is_recruiting=True)
 
-    # 🔹 정렬: 최신순
+    # 🔹 정렬
     if order == 'latest':
+        # 최신순
         recruits = recruits.order_by('-created_at')
+    else:
+        # 기본 정렬: 좋아요 많은 순 → 최신순
+        recruits = recruits.order_by('-like_count', '-created_at')
 
     return render(request, 'b_list.html', {
         'recruits': recruits,
@@ -36,8 +46,12 @@ def recruit_list(request):
 
 # 2. 모집글 상세 페이지 (b_detail.html)
 def recruit_detail(request, recruit_id):
-    recruit = get_object_or_404(Recruit, pk=recruit_id)
+    recruit = get_object_or_404(
+        Recruit.objects.annotate(like_count=Count('likes')),
+        pk=recruit_id
+    )
     images = recruit.images.all()
+
     return render(request, 'b_detail.html', {
         'recruit': recruit,
         'images': images,
@@ -48,9 +62,9 @@ def recruit_detail(request, recruit_id):
 def recruit_post(request):
     if request.method == 'POST':
         title = request.POST.get('title')
-        category = request.POST.get('category')  # 카테고리 ID
-        field = request.POST.get('field')        # 모집 분야
-        period = request.POST.get('period')      # 모집 기간 (마감일)
+        category = request.POST.get('category')
+        field = request.POST.get('field')
+        period = request.POST.get('period')
         description = request.POST.get('description')
         link = request.POST.get('link')
         tags = request.POST.get('tags')
@@ -86,6 +100,7 @@ def recruit_edit(request, recruit_id):
         recruit.deadline = request.POST.get('period')
         recruit.body = request.POST.get('description')
         recruit.contact = request.POST.get('link')
+
         tags = request.POST.get('tags')
         recruit.tags = json.loads(tags) if tags else []
         recruit.save()
@@ -93,7 +108,10 @@ def recruit_edit(request, recruit_id):
         # 삭제된 이미지
         deleted_files = json.loads(request.POST.get('deleted_files', '[]'))
         if deleted_files:
-            RecruitImage.objects.filter(id__in=deleted_files, recruit=recruit).delete()
+            RecruitImage.objects.filter(
+                id__in=deleted_files,
+                recruit=recruit
+            ).delete()
 
         # 새 이미지 추가
         for file in request.FILES.getlist('images'):
