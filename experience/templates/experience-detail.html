@@ -33,28 +33,33 @@
     <!-- 상단 헤더 -->
     <div class="ex-detail-header">
       <div class="ex-detail-info">
-        <div class="ex-detail-title">컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기컴공 과동아리 활동 후기</div>
-        <span class="ex-detail-nickname">닉네임</span>
+        <div class="ex-detail-title">{{ review.title }}</div>
+        <span class="ex-detail-nickname">{{ review.user.display_name }}</span>
 
         <div class="ex-detail-bottom">
           <div class="ex-detail-sub">
-            <span class="ex-detail-category">동아리</span>
-            <span class="ex-detail-period">활동 기간</span>
+            <span class="ex-detail-category">{{ review.get_category_display }}</span>
+            <span class="ex-detail-period">{{ review.grade }} / {{ review.year_term }}</span>
           </div>
 
           <div class="ex-detail-actions">
             <!-- 수정/삭제 버튼 (자기가 쓴 게시물일 때만 보이게 하면 될 듯..) -->
+            {% if request.user == review.user %}
             <div class="ex-edit-delete">
-              <a href="./experience-edit.html" class="ex-edit-btn">수정</a>
+              <a href="{% url 'experience:review_edit' review.id %}" class="ex-edit-btn">수정</a>
               <span class="ex-divider-line">|</span>
-              <button class="ex-delete-btn" type="button">삭제</button>
+              <a href="{% url 'experience:review_delete' review.id %}">
+                <button class="ex-delete-btn" type="button">삭제</button>
+              </a>
             </div>
+            {% endif %}
 
             <!--공감해요 버튼 눌리면 숫자 증가, 이것도 백에서 구현할 것 같아서 form 안에다가 넣어둠-->
-            <form method="POST" action="" class="ex-like-form">
+            <form method="POST" action="{% url 'experience:toggle_like' review.id %}" class="ex-like-form">
+              {% csrf_token %}
               <button type="submit" class="ex-detail-like-btn">
                 <img class="post-like-img" src="../../static/img/like.svg">
-                <span class="ex-like-count">63</span>
+                <span class="ex-like-count">{{ like_count }}</span>
               </button>
             </form>
           </div>
@@ -65,11 +70,19 @@
     </div>
 
     <!-- 첨부 파일 있다면 표시-->
+    {% if files %}
     <div class="ex-detail-files">
       <img class="ex-detail-file-img" src="../../static/img/file.svg" width="18px">
-      <span class="ex-detail-file-content">sample.pdf, 결과보고서.hwp</span>
+      <span class="ex-detail-file-content">
+        {% for f in files %}
+          <a href="{{ f.file.url }}" target="_blank">
+            {{ f.file.name|cut:"review_files/" }}
+          </a>
+          {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </span>
     </div>
-
+    {% endif %}
 
     <!-- 이미지 + 후기 내용 -->
     <div class="ex-detail-body">
@@ -78,9 +91,11 @@
       <div class="ex-detail-image-box">
         <button class="ex-image-scroll-btn left">&#8592;</button>
         <div class="ex-detail-image-scroll">
+          {% for img in images %}
+          <img src="{{ img.image.url }}" alt="활동 이미지">
           <img src="../../static/img/sample-img.png" alt="활동 이미지">
           <img src="../../static/img/sample-img.png" alt="활동 이미지">
-          <img src="../../static/img/sample-img.png" alt="활동 이미지">
+          {% endfor %}
         </div>
         <button class="ex-image-scroll-btn right">&#8594;</button>
       </div>
@@ -89,9 +104,7 @@
       <div class="ex-detail-text-box">
         <div class="ex-detail-text-title">후기 내용</div>
         <div class="ex-detail-text-content">
-          올해 한 학기 동안 컴퓨터정보학과 알고리즘 동아리에 참여하면서 정말 많은 경험을 할 수 있었습니다.
-          처음에는 알고리즘 문제를 푸는 게 무척 어렵게 느껴졌고,
-          매주 스터디를 통해 꾸준히 연습하다 보니 문제 접근 방식이 점점 익숙해졌습니다.
+          {{ review.content }}
         </div>
       </div>
 
@@ -99,16 +112,16 @@
 
     <div class="ex-detail-rating">
       <div class="ex-detail-rating-label">평점</div>
-      <span class="ex-rating-value">4.5</span>
+      <span class="ex-rating-value">{{ review.rating }}</span>
       <span class="ex-rating-divider">/</span>
       <span class="ex-rating-max">5</span>
     </div>
 
     <div class="ex-bottom-box">
       <div class="ex-detail-tags">
-        <span class="ex-tag-item">#태그1</span>
-        <span class="ex-tag-item">#태그2</span>
-        <span class="ex-tag-item">#태그3</span>
+        {% for tag in review.tags.all %}
+        <span class="ex-tag-item">#{{ tag.name }}</span>
+        {% endfor %}
       </div>
       <!--스크랩 버튼 눌러지면 이미지 scrap.fill로 변경, 백에서 구현할 것 같아서 프론트에서는 form 태그 안에만 넣어둠-->
       <form method="POST" class="ex-scrap-form">
@@ -122,8 +135,9 @@
 
 
     <!-- 댓글 작성 -->
-    <form method="POST" class="ex-detail-comment-box">
-      <textarea class="ex-detail-comment-content" placeholder="댓글 작성하기" required></textarea>
+    <form method="POST" action="{% url 'experience:add_comment' review.id %}" class="ex-detail-comment-box">
+      {% csrf_token %}
+      <textarea class="ex-detail-comment-content" name="content" placeholder="댓글 작성하기" required></textarea>
         <div class="ex-comment-btn-wrap">
           <button type="submit" class="ex-comment-submit-btn">
         보내기
@@ -134,48 +148,17 @@
 
     <!-- 댓글 리스트 -->
     <div class="ex-comment-list">
-      <div class="ex-comment-item">
-        <div class="ex-comment-top">
-          <span class="ex-comment-nickname">닉네임</span>
-          <span class="ex-comment-date">2025.10.05</span>
+      {% for c in comments %}
+        <div class="ex-comment-item">
+          <div class="ex-comment-top">
+            <span class="ex-comment-nickname">{{ c.user.display_name }}</span>
+            <span class="ex-comment-date">{{ c.created_at|date:"Y.m.d" }}</span>
+          </div>
+          <p class="ex-comment-text">
+            {{ c.content }}
+          </p>
         </div>
-        <p class="ex-comment-text">
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-        </p>
-      </div>
-
-      <div class="ex-comment-item">
-        <div class="ex-comment-top">
-          <span class="ex-comment-nickname">닉네임</span>
-          <span class="ex-comment-date">2025.10.05</span>
-        </div>
-        <p class="ex-comment-text">
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-        </p>
-      </div>
-
-      <div class="ex-comment-item">
-        <div class="ex-comment-top">
-          <span class="ex-comment-nickname">닉네임</span>
-          <span class="ex-comment-date">2025.10.05</span>
-        </div>
-        <p class="ex-comment-text">
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-        </p>
-      </div>
-
+      {% endfor %}
     </div>
   </div>
 </main>
