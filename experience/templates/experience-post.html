@@ -32,7 +32,8 @@
 
     <div class="ex-post-title">활동 후기 남기기</div>
 
-    <form method="POST" enctype="multipart/form-data" class="ex-post-form">
+    <form method="POST" action="{% url 'experience:review_create' %}" enctype="multipart/form-data" class="ex-post-form">
+      {% csrf_token %}
       <label class="ex-post-label">제목</label>
       <input type="text" class="ex-post-input" placeholder="활동 제목을 간단히 입력해주세요 (예: WAGI 3기 동아리 활동 후기)" required>
       

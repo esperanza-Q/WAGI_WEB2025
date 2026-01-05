@@ -54,7 +54,7 @@ def review_list(request):
         'selected_grade': grade,
     }
 
-    return render(request, "b_review_list.html", context)
+    return render(request, "experience-list.html", context)
 
 def review_create(request):
     if request.method == "POST":
@@ -90,6 +90,7 @@ def review_detail(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     images = review.images.all()
     comments = review.comments.all().order_by("-created_at")
+    files = review.files.all()
     like_count = ReviewLike.objects.filter(review=review, is_agree=True).count()
     user_like = None
     if request.user.is_authenticated:
@@ -101,11 +102,12 @@ def review_detail(request, review_id):
         "review": review,
         "images": images,
         "comments": comments,
+        "files": files,
         "like_count": like_count,
         "scrapped_by_user": scrapped_by_user,
         "user_like": user_like,
     }
-    return render(request, "b_review_detail.html", context)
+    return render(request, "experience-detail.html", context)
 
 @login_required
 def toggle_like(request, review_id):
@@ -119,7 +121,7 @@ def toggle_like(request, review_id):
         like.is_agree = True
         like.save()
 
-    return redirect("review_detail", review_id=review_id)
+    return redirect("experience:review_detail", review_id=review_id)
 
 @login_required
 def add_comment(request, review_id):
@@ -133,7 +135,7 @@ def add_comment(request, review_id):
             content=content
         )
 
-    return redirect("review_detail", review_id=review_id)
+    return redirect("experience:review_detail", review_id=review_id)
 
 @login_required
 def delete_comment(request, review_id, comment_id):
@@ -141,10 +143,10 @@ def delete_comment(request, review_id, comment_id):
 
     # 작성자 본인만 삭제 가능
     if comment.user != request.user:
-        return redirect("review_detail", review_id=review_id)
+        return redirect("experience:review_detail", review_id=review_id)
 
     comment.delete()
-    return redirect("review_detail", review_id=review_id)
+    return redirect("experience:review_detail", review_id=review_id)
 
 @login_required
 def review_edit(request, review_id):
@@ -152,7 +154,7 @@ def review_edit(request, review_id):
 
     # 작성자만 수정 가능
     if review.user != request.user:
-        return redirect("review_detail", review_id=review.id)
+        return redirect("experience:review_detail", review_id=review.id)
 
     if request.method == "POST":
         form = ReviewForm(request.POST, instance=review)
@@ -178,7 +180,7 @@ def review_edit(request, review_id):
             for f in request.FILES.getlist('files'):
                 ReviewFile.objects.create(review=review, file=f)
 
-            return redirect("review_detail", review_id=review.id)
+            return redirect("experience:review_detail", review_id=review.id)
 
     else:
         form = ReviewForm(instance=review, initial={
@@ -202,7 +204,7 @@ def delete_image(request, image_id):
     
     # 작성자 본인만 삭제 가능
     if image.review.user != request.user:
-        return redirect("review_detail", review_id=image.review.id)
+        return redirect("experience:review_detail", review_id=image.review.id)
 
     review_id = image.review.id
     image.delete()
@@ -214,12 +216,12 @@ def delete_file(request, file_id):
     file = get_object_or_404(ReviewFile, id=file_id)
 
     if file.review.user != request.user:
-        return redirect("review_detail", review_id=file.review.id)
+        return redirect("experience:review_detail", review_id=file.review.id)
 
     review_id = file.review.id
     file.delete()
 
-    return redirect("review_edit", review_id=review_id)
+    return redirect("experience:review_edit", review_id=review_id)
 
 @login_required
 def review_delete(request, review_id):
@@ -227,7 +229,7 @@ def review_delete(request, review_id):
 
     # 작성자 본인만 삭제 가능
     if review.user != request.user:
-        return redirect("review_detail", review_id=review.id)
+        return redirect("experience:review_detail", review_id=review.id)
 
     review.delete()
     return redirect("review_list")
@@ -245,4 +247,4 @@ def toggle_scrap(request, review_id):
         # 이미 스크랩 되어있으면 → 삭제(언스크랩)
         scrap.delete()
 
-    return redirect("review_detail", review_id=review.id)
+    return redirect("experience:review_detail", review_id=review.id)
