@@ -5,6 +5,19 @@
 <p>좋아요: {{ like_count }}</p>
 
 <hr>
+<!-- 첨부파일 -->
+{% if review.files.all %}
+<h4>첨부파일</h4>
+<ul>
+    {% for f in review.files.all %}
+        <li>
+            <a href="{{ f.file.url }}" download>
+                {{ f.file.name }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 <!-- 이미지 출력 -->
 {% if images %}
@@ -17,6 +30,18 @@
 
 <!-- 후기 본문 -->
 <p>{{ review.content }}</p>
+
+<p>
+    태그:
+    {% for tag in review.tags.all %}
+        <a href="{% url 'review_list' %}?tag={{ tag.name }}">
+            #{{ tag.name }}
+        </a>
+    {% empty %}
+        <span>태그 없음</span>
+    {% endfor %}
+</p>
+
 
 {% if request.user == review.user %}
     <a href="{% url 'review_edit' review.id %}">수정</a>
