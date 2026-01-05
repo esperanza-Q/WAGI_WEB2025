@@ -193,7 +193,7 @@ def search_reviews(request):
 
 
 #취업게시판
-from career.models import CareerReview
+from career.models import RoadmapEntry
 from accounts.models import College, Department, User
 from django.db.models import Q
 import re
@@ -214,9 +214,9 @@ def search_career_reviews(request):
 
     # 카테고리 필터
     if code:
-        reviews = CareerReview.objects.filter(category=code)
+        reviews = RoadmapEntry.objects.filter(category=code)
     else:
-        reviews = CareerReview.objects.all()
+        reviews = RoadmapEntry.objects.all()
 
     # 맞춤필터링
     if college:
