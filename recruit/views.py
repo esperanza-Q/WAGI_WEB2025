@@ -9,12 +9,35 @@ import json
 # 1. 모집글 목록 페이지
 # =========================
 def recruit_list(request):
+    category = request.GET.get('category')   # 동아리 / 공모전 / 스터디
+    status = request.GET.get('status')       # open / closed
+    order = request.GET.get('order')         # latest
+
     recruits = Recruit.objects.annotate(
         like_count=Count('likes')
-    ).order_by('-created_at')
+    )
+
+    # ------- 카테고리 필터 -------
+    if category in ['동아리', '공모전', '스터디']:
+        recruits = recruits.filter(category__category_name=category)
+
+    # ------- 모집 상태 필터 -------
+    if status == 'open':
+        recruits = recruits.filter(is_recruiting=True)
+    elif status == 'closed':
+        recruits = recruits.filter(is_recruiting=False)
+
+    # ------- 최신순 정렬 -------
+    if order == 'latest':
+        recruits = recruits.order_by('-created_at')
+    else:
+        recruits = recruits.order_by('-created_at')  # 기본 최신순
 
     return render(request, 'b_list.html', {
-        'recruits': recruits
+        'recruits': recruits,
+        'selected_category': category,
+        'selected_status': status,
+        'selected_order': order,
     })
 
 
