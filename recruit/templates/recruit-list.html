@@ -66,8 +66,38 @@
             <li><button type="button" class="order-btn" data-order="latest">최신순</button></li>
             <li><button type="button" class="order-btn" data-order="recruiting">모집중</button></li>
             <li><button type="button" class="order-btn" data-order="closed">모집완료</button></li>
-            <li><button type="button" class="order-btn" data-order="custom">맞춤 필터링</button></li>
           </ul>
+        </div>
+      </div>
+
+      <!-- 맞춤 필터링 -->
+      <div class="recruit-sub-filter-row">
+        <div class="recruit-custom-filter">
+          <select class="recruit-filter-select">
+            <option value="">단과대 전체</option>
+            <option value="engineering">공과대학</option>
+            <option value="humanities">인문대학</option>
+          </select>
+
+          <select class="recruit-filter-select">
+            <option value="">학과 전체</option>
+            <option value="computer">컴퓨터공학과</option>
+            <option value="ai">AI학과</option>
+          </select>
+
+          <select class="recruit-filter-select">
+            <option value="">학년 전체</option>
+            <option value="1">1학년</option>
+            <option value="2">2학년</option>
+            <option value="3">3학년</option>
+            <option value="4">4학년</option>
+            <option value="5">휴학</option>
+            <option value="6">졸업</option>
+          </select>
+
+          <button type="submit" class="recruit-custom-filter-btn">
+            맞춤 검색
+          </button>
         </div>
         <a class="recruit-write-btn" href="./recruit-post.html">글쓰기</a>
       </div>
@@ -75,25 +105,8 @@
     <div class="recruit-divider"></div>
 
     <div class="recruit-list">
-      <!--mock 데이터-->
-      <a href="./recruit-detail.html" class="recruit-card-link">
-        <div class="recruit-card">
-          <div class="recruit-card-header">
-            <div class="recruit-card-header-box">
-            <div class="recruit-card-lcategory">동아리</div>
-            <div class="recruit-card-rcategory">모집중</div>
-            </div>
-            <div class="recruit-card-date">2024.11.12</div>
-          </div>
-          <div class="recruit-card-title">컴공 과동아리 신입 부원 모집</div>
-          <div class="recruit-card-nickname">코딩러버</div>
-          <div class="recruit-card-period">2024.03 - 2024.11</div>
-          <div class="recruit-card-footer">
-            <div class="recruit-card-field">모집 분야</div>
-            <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
+
+      <!-- 연동 시 카드 구조 참고용
 
       <a href="./recruit-detail.html" class="recruit-card-link">
         <div class="recruit-card">
@@ -112,121 +125,8 @@
             <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
           </div>
         </div>
-      </a>
+      </a> -->
 
-      <a href="./recruit-detail.html" class="recruit-card-link">
-        <div class="recruit-card">
-          <div class="recruit-card-header">
-            <div class="recruit-card-header-box">
-            <div class="recruit-card-lcategory">동아리</div>
-            <div class="recruit-card-rcategory">모집중</div>
-            </div>
-            <div class="recruit-card-date">2024.11.12</div>
-          </div>
-          <div class="recruit-card-title">컴공 과동아리 신입 부원 모집</div>
-          <div class="recruit-card-nickname">코딩러버</div>
-          <div class="recruit-card-period">2024.03 - 2024.11</div>
-          <div class="recruit-card-footer">
-            <div class="recruit-card-field">모집 분야</div>
-            <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./recruit-detail.html" class="recruit-card-link">
-        <div class="recruit-card">
-          <div class="recruit-card-header">
-            <div class="recruit-card-header-box">
-            <div class="recruit-card-lcategory">동아리</div>
-            <div class="recruit-card-rcategory">모집중</div>
-            </div>
-            <div class="recruit-card-date">2024.11.12</div>
-          </div>
-          <div class="recruit-card-title">컴공 과동아리 신입 부원 모집</div>
-          <div class="recruit-card-nickname">코딩러버</div>
-          <div class="recruit-card-period">2024.03 - 2024.11</div>
-          <div class="recruit-card-footer">
-            <div class="recruit-card-field">모집 분야</div>
-            <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./recruit-detail.html" class="recruit-card-link">
-        <div class="recruit-card">
-          <div class="recruit-card-header">
-            <div class="recruit-card-header-box">
-            <div class="recruit-card-lcategory">동아리</div>
-            <div class="recruit-card-rcategory">모집중</div>
-            </div>
-            <div class="recruit-card-date">2024.11.12</div>
-          </div>
-          <div class="recruit-card-title">컴공 과동아리 신입 부원 모집</div>
-          <div class="recruit-card-nickname">코딩러버</div>
-          <div class="recruit-card-period">2024.03 - 2024.11</div>
-          <div class="recruit-card-footer">
-            <div class="recruit-card-field">모집 분야</div>
-            <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./recruit-detail.html" class="recruit-card-link">
-        <div class="recruit-card">
-          <div class="recruit-card-header">
-            <div class="recruit-card-header-box">
-            <div class="recruit-card-lcategory">동아리</div>
-            <div class="recruit-card-rcategory">모집중</div>
-            </div>
-            <div class="recruit-card-date">2024.11.12</div>
-          </div>
-          <div class="recruit-card-title">컴공 과동아리 신입 부원 모집</div>
-          <div class="recruit-card-nickname">코딩러버</div>
-          <div class="recruit-card-period">2024.03 - 2024.11</div>
-          <div class="recruit-card-footer">
-            <div class="recruit-card-field">모집 분야</div>
-            <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./recruit-detail.html" class="recruit-card-link">
-        <div class="recruit-card">
-          <div class="recruit-card-header">
-            <div class="recruit-card-header-box">
-            <div class="recruit-card-lcategory">동아리</div>
-            <div class="recruit-card-rcategory">모집중</div>
-            </div>
-            <div class="recruit-card-date">2024.11.12</div>
-          </div>
-          <div class="recruit-card-title">컴공 과동아리 신입 부원 모집</div>
-          <div class="recruit-card-nickname">코딩러버</div>
-          <div class="recruit-card-period">2024.03 - 2024.11</div>
-          <div class="recruit-card-footer">
-            <div class="recruit-card-field">모집 분야</div>
-            <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./recruit-detail.html" class="recruit-card-link">
-        <div class="recruit-card">
-          <div class="recruit-card-header">
-            <div class="recruit-card-header-box">
-            <div class="recruit-card-lcategory">동아리</div>
-            <div class="recruit-card-rcategory">모집중</div>
-            </div>
-            <div class="recruit-card-date">2024.11.12</div>
-          </div>
-          <div class="recruit-card-title">컴공 과동아리 신입 부원 모집</div>
-          <div class="recruit-card-nickname">코딩러버</div>
-          <div class="recruit-card-period">2024.03 - 2024.11</div>
-          <div class="recruit-card-footer">
-            <div class="recruit-card-field">모집 분야</div>
-            <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
     </div>
 
     <!-- 페이지네이션 -->

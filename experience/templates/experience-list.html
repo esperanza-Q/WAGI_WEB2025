@@ -68,12 +68,42 @@
             <li><button type="button" class="order-btn" data-order="latest">최신순</button></li>
             <li><button type="button" class="order-btn" data-order="rating">평점순</button></li>
             <li><button type="button" class="order-btn" data-order="likes">공감순</button></li>
-            <li><button type="button" class="order-btn" data-order="custom">맞춤 필터링</button></li>
           </ul>
         </div>
+      </div>
 
+      <!-- 맞춤 필터링 -->
+      <div class="ex-sub-filter-row">
+        <div class="ex-custom-filter">
+          <select class="ex-filter-select">
+            <option value="">단과대 전체</option>
+            <option value="engineering">공과대학</option>
+            <option value="humanities">인문대학</option>
+          </select>
+
+          <select class="ex-filter-select">
+            <option value="">학과 전체</option>
+            <option value="computer">컴퓨터공학과</option>
+            <option value="ai">AI학과</option>
+          </select>
+
+          <select class="ex-filter-select">
+            <option value="">학년 전체</option>
+            <option value="1">1학년</option>
+            <option value="2">2학년</option>
+            <option value="3">3학년</option>
+            <option value="4">4학년</option>
+            <option value="5">휴학</option>
+            <option value="6">졸업</option>
+          </select>
+
+          <button type="submit" class="ex-custom-filter-btn">
+            맞춤 검색
+          </button>
+        </div>
         <a class="ex-write-btn" href="./experience-post.html">글쓰기</a>
       </div>
+
     </form>
 
     <div class="ex-divider"></div>
