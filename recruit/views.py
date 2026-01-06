@@ -12,31 +12,28 @@ from django.http import HttpResponseForbidden
 # 1. 모집글 목록 페이지
 # =========================
 def recruit_list(request):
-    category = request.GET.get('category')   # 동아리 / 공모전 / 스터디
-    status = request.GET.get('status')       # open / closed
-    order = request.GET.get('order')         # latest
+    category = request.GET.get('category')   
+    status = request.GET.get('status')       
+    order = request.GET.get('order')         
 
     recruits = Recruit.objects.annotate(
         like_count=Count('likes')
     )
 
-    # ------- 카테고리 필터 -------
     if category in ['동아리', '공모전', '스터디']:
         recruits = recruits.filter(category__category_name=category)
 
-    # ------- 모집 상태 필터 -------
     if status == 'open':
         recruits = recruits.filter(is_recruiting=True)
     elif status == 'closed':
         recruits = recruits.filter(is_recruiting=False)
 
-    # ------- 최신순 정렬 -------
     if order == 'latest':
         recruits = recruits.order_by('-created_at')
     else:
-        recruits = recruits.order_by('-created_at')  # 기본 최신순
+        recruits = recruits.order_by('-like_count')  
 
-    return render(request, 'b_list.html', {
+    return render(request, 'recruit-list.html', {
         'recruits': recruits,
         'selected_category': category,
         'selected_status': status,
@@ -63,26 +60,24 @@ def recruit_post(request):
 
         recruit = Recruit.objects.create(
             title=title,
-            category=category,        # ✅ FK는 객체로
+            category=category,        
             deadline=deadline,
             body=description,
             contact=link,
             user=request.user,
-            college=None,             # 임시 유지
+            college=None,            
         )
 
-        # 태그
         if tags:
-            tag_names = json.loads(tags)  # 예: ["AI", "디자인", "프론트엔드"]
+            tag_names = json.loads(tags)  
             for tag_name in tag_names:
                 tag_obj, _ = Tag.objects.get_or_create(tag_name=tag_name)
                 RecruitTag.objects.get_or_create(
                     recruit=recruit,
                     tag=tag_obj,
-                    college=None  # 필요 시 college도 처리
+                    college=None  
                 )
 
-        # 이미지
         for file in request.FILES.getlist('images'):
             RecruitImage.objects.create(
                 recruit=recruit,
@@ -92,8 +87,7 @@ def recruit_post(request):
 
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
-    # 🔥 GET 요청 시 카테고리 내려주기 (필수)
-    return render(request, 'b_post.html', {
+    return render(request, 'recruit-post.html', {
         'categories': Category.objects.all()
     })
 
@@ -110,19 +104,17 @@ def recruit_detail(request, recruit_id):
     images = recruit.images.all()
     comments = Comment.objects.filter(recruit=recruit).select_related('user').order_by('created_at')
 
-    # 댓글 트리 구성
     parent_comments = comments.filter(parent__isnull=True)
     reply_map = {}
     for parent in parent_comments:
         reply_map[parent.id] = comments.filter(parent=parent)
 
-    # 댓글 작성
     if request.method == "POST":
         if not request.user.is_authenticated:
             return redirect("login")
 
         content = request.POST.get("content", "").strip()
-        parent_id = request.POST.get("parent_id")  # 대댓글 작성 시
+        parent_id = request.POST.get("parent_id")  
 
         if content:
             comment = Comment.objects.create(
@@ -133,15 +125,16 @@ def recruit_detail(request, recruit_id):
             )
             return redirect('recruit_detail', recruit_id=recruit_id)
 
-    return render(request, 'b_detail.html', {
+    return render(request, 'recruit-detail.html', {
         'recruit': recruit,
         'images': images,
         'comments': parent_comments,
         'reply_map': reply_map,
     })
 
+
 # =========================
-# 댓글 삭제
+# 4. 댓글 삭제
 # =========================
 @login_required
 def delete_comment(request, comment_id):
@@ -152,14 +145,14 @@ def delete_comment(request, comment_id):
     comment.delete()
     return redirect('recruit_detail', recruit_id=recruit_id)
 
+
 # =========================
-# 4. 모집글 수정
+# 5. 모집글 수정
 # =========================
 @login_required
 def recruit_edit(request, recruit_id):
     recruit = get_object_or_404(Recruit, pk=recruit_id)
 
-    # 본인 글만 수정 가능
     if recruit.user != request.user:
         return HttpResponseForbidden("수정 권한이 없습니다.")
 
@@ -171,30 +164,34 @@ def recruit_edit(request, recruit_id):
         recruit.contact = request.POST.get('link')
         recruit.save()
 
-        # 태그 수정
-        RecruitTag.objects.filter(recruit=recruit).delete()
         tags = request.POST.get('tags')
         if tags:
-            for tag_id in json.loads(tags):
-                RecruitTag.objects.create(recruit=recruit, tag_id=tag_id, college=None)
+            tag_names = json.loads(tags)
+            RecruitTag.objects.filter(recruit=recruit).delete()
+            for tag_name in tag_names:
+                tag_obj, _ = Tag.objects.get_or_create(tag_name=tag_name)
+                RecruitTag.objects.create(
+                    recruit=recruit,
+                    tag=tag_obj,
+                    college=None
+                )
 
-        # 이미지 삭제
         deleted_files = json.loads(request.POST.get('deleted_files', '[]'))
         RecruitImage.objects.filter(id__in=deleted_files, recruit=recruit).delete()
 
-        # 새 이미지 추가
         for file in request.FILES.getlist('images'):
             RecruitImage.objects.create(recruit=recruit, image_url=file, college=None)
 
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
-    return render(request, 'recruit/b_edit.html', {
+    return render(request, 'recruit-edit.html', {
         'recruit': recruit,
         'categories': Category.objects.all(),
     })
 
+
 # =========================
-# 모집글 삭제
+# 6. 모집글 삭제
 # =========================
 @login_required
 def recruit_delete(request, recruit_id):
@@ -202,5 +199,4 @@ def recruit_delete(request, recruit_id):
     if recruit.user != request.user:
         return HttpResponseForbidden("삭제 권한이 없습니다.")
     recruit.delete()
-    return redirect('recruit_list')  # 목록 페이지로 이동
-
+    return redirect('recruit_list')
