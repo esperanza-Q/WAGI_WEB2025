@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+import re  # ✅ [추가] 시작 연도 파싱용
 
 
 class RoadmapEntry(models.Model):
@@ -27,11 +28,13 @@ class RoadmapEntry(models.Model):
         default=Category.OTHER
     )
 
-    # 날짜(YYYY-MM-DD)
-    date = models.DateField()
-
-    # 기간을 텍스트로 쓰고 싶을 때 (예: 2025-1학기) – 선택사항
-    period_text = models.CharField(max_length=50, blank=True)
+    # ✅ [수정] 기간을 텍스트로 저장 (예: "2024.03 - 2024.11")
+    # ✅ period_text 삭제 요구사항 반영: date가 그 역할을 수행
+    date = models.CharField(
+        max_length=50,
+        null=False,
+        blank=False
+    )
 
     # 본문(활동 소개)
     description = models.TextField(blank=True)
@@ -58,11 +61,17 @@ class RoadmapEntry(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-date', '-id']  # 최근 날짜가 위로 오도록
+        # ✅ [수정] date는 문자열이므로 정렬 안정성 위해 -id 우선 권장
+        ordering = ['-id']
 
     def __str__(self):
         return f'{self.title} ({self.date})'
 
     @property
     def year(self):
-        return self.date.year
+        """
+        ✅ [수정] date가 문자열이므로 시작 연도를 파싱해서 반환
+        예: "2024.01 - 2025.01" -> 2024
+        """
+        m = re.search(r"(19|20)\d{2}", self.date or "")
+        return int(m.group()) if m else 0
