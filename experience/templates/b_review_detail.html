@@ -34,7 +34,7 @@
 <p>
     태그:
     {% for tag in review.tags.all %}
-        <a href="{% url 'review_list' %}?tag={{ tag.name }}">
+        <a href="{% url 'experience:review_list' %}?tag={{ tag.name }}">
             #{{ tag.name }}
         </a>
     {% empty %}
@@ -44,8 +44,8 @@
 
 
 {% if request.user == review.user %}
-    <a href="{% url 'review_edit' review.id %}">수정</a>
-    <a href="{% url 'review_delete' review.id %}">삭제</a>
+    <a href="{% url 'experience:review_edit' review.id %}">수정</a>
+    <a href="{% url 'experience:review_delete' review.id %}">삭제</a>
 {% endif %}
 <hr>
 
@@ -104,4 +104,4 @@
 {% endif %}
 
 <!-- 뒤로가기 -->
-<a href="{% url 'review_list' %}">← 목록으로</a>
+<a href="{% url 'experience:review_list' %}">← 목록으로</a>

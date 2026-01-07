@@ -25,17 +25,13 @@ class Review(models.Model):
     rating = models.PositiveSmallIntegerField(default=5)
     is_verified = models.BooleanField(default=False)
     #활동기간
-    grade = models.CharField(max_length=10, default="1학년")
-    year = models.CharField(max_length=4, default="2025")
-    term = models.CharField(max_length=20, default="1학기")
-    year_term = models.CharField(max_length=30, editable=False, default="")
+    activity_period = models.CharField(
+    max_length=30,
+    verbose_name="활동 기간"
+    )
     @property
     def like_count(self):
         return self.reviewlike_set.filter(is_agree=True).count()
-
-    def save(self, *args, **kwargs):
-        self.year_term = f"{self.year} {self.term}"
-        super().save(*args, **kwargs)
 
     # created / updated
     created_at = models.DateTimeField(auto_now_add=True)
@@ -44,14 +40,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f"[{self.get_category_display()}] {self.title}"
-
-class ReviewImage(models.Model):
-    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to="review_images/")
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Image for {self.review.title}"
 
 class ReviewLike(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
@@ -89,7 +77,12 @@ class ReviewFile(models.Model):
     )
     file = models.FileField(upload_to="review_files/")
     uploaded_at = models.DateTimeField(auto_now_add=True)
-
+    def is_image(self):
+        return self.file.name.lower().endswith(
+            (".jpg", ".jpeg", ".png", ".gif", ".webp")
+        )
+    def filename(self):
+        return self.file.name.split("/")[-1]
     def __str__(self):
         return self.file.name
 

@@ -2,7 +2,7 @@
 
 <!-- 카테고리 필터 버튼 -->
 <div>
-    <a href="{% url 'review_list' %}">전체</a>
+    <a href="{% url 'experience:review_list' %}">전체</a>
     {% for value, label in categories %}
         <a href="?category={{ value }}">{{ label }}</a>
     {% endfor %}
