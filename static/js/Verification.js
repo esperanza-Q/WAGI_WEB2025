@@ -28,3 +28,11 @@ VerifyResetBtn.addEventListener('click', () => {
     VerifyPreviewArea.style.display="none";
     VerifyUploadArea.style.display="flex";
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const hasExisting = VerifyPreviewImg.dataset.existing === "1";
+  if (hasExisting) {
+    VerifyUploadArea.style.display = "none";
+    VerifyPreviewArea.style.display = "flex";
+  }
+});

@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
 from .forms import SignupForm, LoginForm, VerificationForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.conf import settings
 from django.http import JsonResponse
 from .models import Department, Verification
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 # Create your views here.
+User = get_user_model()
+
 #회원가입 뷰
 def signup_view(request):
     college_id = request.GET.get("college") if request.method == "GET" else request.POST.get("college")
@@ -37,13 +40,19 @@ def login_view(request):
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
 
+             # 1) 학번(아이디) 존재 여부 먼저 확인
+            if not User.objects.filter(username=username).exists():
+                messages.error(request, "존재하지 않는 학번입니다.")
+                return render(request, "Login.html", {"form": form})
+
+            # 2) 학번이 존재하면 비밀번호 검증
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 messages.success(request, "로그인 성공!")
                 return redirect("accounts:verification")
             else:
-                messages.error(request, "아이디 또는 비밀번호가 올바르지 않습니다.")
+                messages.error(request, "비밀번호가 올바르지 않습니다.")
         else:
             messages.error(request, "로그인에 실패했습니다. 다시 시도해주세요.")
 
@@ -63,8 +72,8 @@ def departments_api(request):
     if not college_id:
         return JsonResponse({"departments": []})
     qs = Department.objects.filter(
-        college__id=college_id  
-    ).order_by("dept_name").values("id", "dept_name")
+        college__college_id=college_id 
+    ).order_by("dept_name").values("dept_id", "dept_name")
     return JsonResponse({"departments": list(qs)})
 
 @login_required

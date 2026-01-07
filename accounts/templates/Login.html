@@ -38,6 +38,15 @@
       </div>
 
       <div class="login-bottom">
+        {% if messages %}
+          <div class="msg-box">
+            {% for message in messages %}
+              {% if message.tags == "error" %}
+                <p class="msg {{ message.tags }}">{{ message }}</p>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
         <form method="post">
           {% csrf_token %}
           <input type="text" name="username" placeholder="학번">
