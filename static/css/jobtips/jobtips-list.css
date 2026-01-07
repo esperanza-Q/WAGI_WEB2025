@@ -187,7 +187,6 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
 }
 
 .jobtips-sub-filters ul {
@@ -236,6 +235,48 @@ main {
   height: 1px;
   background: var(--purple-dark);
   margin-bottom: 2rem;
+}
+
+.jobtips-sub-filter-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.jobtips-custom-filter {
+  display: flex;
+  gap: 12px;
+  margin: 1.5rem 0 1.5rem;
+  flex-wrap: wrap;
+}
+
+.jobtips-filter-select {
+  padding: 5px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(150, 120, 180, 0.3);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--purple-dark);
+  font-size: 13px;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.jobtips-custom-filter-btn {
+  padding: 3px 10px;
+  border-radius: 30px;
+  background: rgba(105,37,90,0.22);
+  color: var(--purple-dark);
+  border: 1px solid rgba(55, 27, 75, 0.2);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.jobtips-custom-filter-btn:hover {
+  background: rgba(105, 37, 90, 0.35);
+  color: var(--purple-dark);
+  border-color: #cbb6e6;
 }
 
 .jobtips-write-btn {

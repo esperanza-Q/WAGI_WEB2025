@@ -1,3 +1,5 @@
+
+#활동후기게시판
 from django.shortcuts import render
 from experience.models import Review
 from django.db.models import Q
@@ -190,17 +192,124 @@ def search_reviews(request):
     )
 
 
+#취업게시판
+from career.models import RoadmapEntry
+from accounts.models import College, Department, User
+from django.db.models import Q
+import re
+# --- 검색 테스트용 뷰 (search/career/) ---
+def search_career_reviews(request):
+    query = request.GET.get('q', '')
+    category = request.GET.get('category', '전체')
+    college = request.GET.get('college', '')
+    department = request.GET.get('department', '')
+    grade = request.GET.get('grade', '')
 
-# --- 취업후기 게시판 검색/리스트 뷰 ---
+    category_map = {
+        '자소서': 'resume',
+        '면접': 'interview',
+        '포트폴리오': 'portfolio',
+    }
+    code = category_map.get(category, None) if category != '전체' else None
 
-# --- 취업후기 게시판 검색/리스트 뷰 (search 앱 내부에서만 동작) ---
-# from career.models import CareerReview
-# def career_review_list(request):
-#     ... (주석처리: CareerReview 모델 없음)
+    # 카테고리 필터
+    if code:
+        reviews = RoadmapEntry.objects.filter(category=code)
+    else:
+        reviews = RoadmapEntry.objects.all()
 
-# --- 모집 게시판 검색/리스트 뷰 ---
+    # 맞춤필터링
+    if college:
+        reviews = reviews.filter(user__department__college__college_name=college)
+    if department:
+        reviews = reviews.filter(user__department__dept_name=department)
+    if grade:
+        reviews = reviews.filter(user__student_id__startswith=grade)
 
-# --- 모집 게시판 검색/리스트 뷰 (search 앱 내부에서만 동작) ---
+    # 검색어 필터
+    if query and query.strip():
+        words = [w.strip() for w in re.split(r'[ ,]+', query) if w.strip()]
+        q_obj = Q()
+        for word in words:
+            q_obj |= Q(title__icontains=word) | Q(content__icontains=word)
+        reviews = reviews.filter(q_obj).distinct()
+
+    # 드롭다운용 목록 준비
+    college_list = list(College.objects.values_list('college_name', flat=True))
+    department_list = list(Department.objects.values_list('dept_name', flat=True))
+    grade_list = sorted(set([u[:4] for u in User.objects.values_list('student_id', flat=True) if len(u) >= 4]))
+
+    context = {
+        'reviews': reviews,
+        'q_query': query,
+        'category': category,
+        'categories': ['전체', '자소서', '면접', '포트폴리오'],
+        'selected_college': college,
+        'selected_department': department,
+        'selected_grade': grade,
+        'college_list': college_list,
+        'department_list': department_list,
+        'grade_list': grade_list,
+    }
+    return render(request, "b_search_career.html", context)
+
+#모집게시판
 # from recruit.models import RecruitPost
-# def recruit_post_list(request):
-#     ... (주석처리: RecruitPost 모델 없음)
+# from accounts.models import College, Department, User
+# from django.db.models import Q
+# import re
+# # --- 검색 테스트용 뷰 (search/recruit/) ---
+# def search_recruit_posts(request):
+#     query = request.GET.get('q', '')
+#     category = request.GET.get('category', '전체')
+#     college = request.GET.get('college', '')
+#     department = request.GET.get('department', '')
+#     grade = request.GET.get('grade', '')
+
+#     category_map = {
+#         '동아리': 'club',
+#         '공모전': 'contest',
+#         '스터디': 'study',
+#     }
+#     code = category_map.get(category, None) if category != '전체' else None
+
+#     # 카테고리 필터
+#     if code:
+#         posts = RecruitPost.objects.filter(category=code)
+#     else:
+#         posts = RecruitPost.objects.all()
+
+#     # 맞춤필터링
+#     if college:
+#         posts = posts.filter(user__department__college__college_name=college)
+#     if department:
+#         posts = posts.filter(user__department__dept_name=department)
+#     if grade:
+#         posts = posts.filter(user__student_id__startswith=grade)
+
+#     # 검색어 필터
+#     if query and query.strip():
+#         words = [w.strip() for w in re.split(r'[ ,]+', query) if w.strip()]
+#         q_obj = Q()
+#         for word in words:
+#             q_obj |= Q(title__icontains=word) | Q(content__icontains=word)
+#         posts = posts.filter(q_obj).distinct()
+
+#     # 드롭다운용 목록 준비
+#     college_list = list(College.objects.values_list('college_name', flat=True))
+#     department_list = list(Department.objects.values_list('dept_name', flat=True))
+#     grade_list = sorted(set([u[:4] for u in User.objects.values_list('student_id', flat=True) if len(u) >= 4]))
+
+#     context = {
+#         'posts': posts,
+#         'q_query': query,
+#         'category': category,
+#         'categories': ['전체', '동아리', '공모전', '스터디'],
+#         'selected_college': college,
+#         'selected_department': department,
+#         'selected_grade': grade,
+#         'college_list': college_list,
+#         'department_list': department_list,
+#         'grade_list': grade_list,
+#     }
+#     return render(request, "b_search_recruit.html", context)
