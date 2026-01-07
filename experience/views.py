@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Review, ReviewLike, ActivityCategory, ReviewScrap, ReviewFile, Tag
-from .forms import ReviewForm, ReviewImageMultipleForm, ReviewFileMultipleForm
+from .forms import ReviewForm, ReviewFileMultipleForm
 from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
-from .models import ReviewComment, ReviewImage
+from .models import ReviewComment
 
 def review_list(request):
     category = request.GET.get('category', '')
@@ -57,38 +57,31 @@ def review_list(request):
     return render(request, "experience-list.html", context)
 
 def review_create(request):
+    file_form = ReviewFileMultipleForm()
     if request.method == "POST":
         form = ReviewForm(request.POST)
-        image_form = ReviewImageMultipleForm(request.POST, request.FILES)
+        file_form = ReviewFileMultipleForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
             review.save()
-            tag_string = form.cleaned_data.get("tags", "")
+            tag_string = request.POST.get("tags", "")
             tag_names = [t.strip() for t in tag_string.split(",") if t.strip()]
             for name in tag_names:
                 tag, _ = Tag.objects.get_or_create(name=name)
                 review.tags.add(tag)
-            images = request.FILES.getlist('images')
-            for img in images:
-                ReviewImage.objects.create(review=review, image=img)
-            files = request.FILES.getlist("files")
-            for f in files:
+            for f in request.FILES.getlist("files"):
                 ReviewFile.objects.create(review=review, file=f)
-            return redirect("review_list")
+            return redirect("experience:review_list")
     else:
         form = ReviewForm()
-        image_form = ReviewImageMultipleForm()
-        file_form = ReviewFileMultipleForm()
-    return render(request, "b_review_create.html", {
+    return render(request, "experience-post.html", {
         "form": form,
-        "image_form": image_form,
         "file_form": file_form
     })
 
 def review_detail(request, review_id):
     review = get_object_or_404(Review, id=review_id)
-    images = review.images.all()
     comments = review.comments.all().order_by("-created_at")
     files = review.files.all()
     like_count = ReviewLike.objects.filter(review=review, is_agree=True).count()
@@ -100,7 +93,6 @@ def review_detail(request, review_id):
         scrapped_by_user = review.scraps.filter(user=request.user).exists()
     context = {
         "review": review,
-        "images": images,
         "comments": comments,
         "files": files,
         "like_count": like_count,
@@ -158,8 +150,10 @@ def review_edit(request, review_id):
 
     if request.method == "POST":
         form = ReviewForm(request.POST, instance=review)
-        image_form = ReviewImageMultipleForm(request.POST, request.FILES)
         file_form = ReviewFileMultipleForm(request.POST, request.FILES)
+
+        print("FILES 개수:", len(request.FILES.getlist("files")))
+        print("FILES 목록:", request.FILES.getlist("files"))
 
         if form.is_valid():
             form.save()
@@ -170,46 +164,27 @@ def review_edit(request, review_id):
             for name in tag_names:
                 tag, _ = Tag.objects.get_or_create(name=name)
                 review.tags.add(tag)
-
-            #새 이미지 추가
-            new_images = request.FILES.getlist('images')
-            for img in new_images:
-                ReviewImage.objects.create(review=review, image=img)
-            
             #새 첨부파일 추가
             for f in request.FILES.getlist('files'):
                 ReviewFile.objects.create(review=review, file=f)
 
             return redirect("experience:review_detail", review_id=review.id)
-
+        else:
+            print("❌ 수정 폼 에러:", form.errors)
     else:
-        form = ReviewForm(instance=review, initial={
+        form = ReviewForm(
+            instance=review,
+            initial={
                 "tags": ", ".join(review.tags.values_list("name", flat=True))
             })
-        image_form = ReviewImageMultipleForm()
         file_form = ReviewFileMultipleForm()
 
-    return render(request, "b_review_edit.html", {
+    return render(request, "experience-edit.html", {
         "form": form,
-        "image_form": image_form,
-        "review": review,
         "file_form": file_form,
-        "images": review.images.all(),
+        "review": review,
         "files": review.files.all(),
     })
-
-@login_required
-def delete_image(request, image_id):
-    image = get_object_or_404(ReviewImage, id=image_id)
-    
-    # 작성자 본인만 삭제 가능
-    if image.review.user != request.user:
-        return redirect("experience:review_detail", review_id=image.review.id)
-
-    review_id = image.review.id
-    image.delete()
-
-    return redirect("review_edit", review_id=review_id)
 
 @login_required
 def delete_file(request, file_id):
@@ -232,7 +207,7 @@ def review_delete(request, review_id):
         return redirect("experience:review_detail", review_id=review.id)
 
     review.delete()
-    return redirect("review_list")
+    return redirect("experience:review_list")
 
 @login_required
 def toggle_scrap(request, review_id):

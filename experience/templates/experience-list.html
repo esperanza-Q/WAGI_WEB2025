@@ -119,7 +119,7 @@
             </div>
             <div class="ex-card-title">{{ r.title }}</div>
             <div class="ex-card-nickname">{{ r.user.display_name }}</div>
-            <div class="ex-card-period">{{ r.year }}.{{ r.term }}</div>
+            <div class="ex-card-period">{{ review.activity_period }}</div>
             <div class="ex-card-footer">
               <div class="ex-card-star">평점 {{ r.rating }}</div>
               <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">{{ r.like_count_db }}</div>
@@ -128,6 +128,7 @@
         </a>
       {% endfor %}
 
+      <!--
       <a href="./experience-detail.html" class="ex-card-link">
         <div class="ex-card">
           <div class="ex-card-header">
@@ -240,6 +241,7 @@
         </div>
       </a>
     </div>
+  -->
 
     <!-- 페이지네이션 -->
     <div class="ex-pagination">
