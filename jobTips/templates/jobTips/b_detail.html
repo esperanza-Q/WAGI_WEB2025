@@ -34,6 +34,7 @@
 <main>
 <div class="container">
 
+  <!-- ===== 상단 헤더 ===== -->
   <div class="jobtips-detail-header">
     <div class="jobtips-detail-info">
       <div class="jobtips-detail-title">{{ post.title }}</div>
@@ -69,31 +70,30 @@
     </div>
   </div>
 
+  <!-- ===== 첨부파일 ===== -->
   <div class="jobtips-detail-middle-box">
     <div class="jobtips-detail-important">{{ post.pass_info }}</div>
 
     {% if post.file_attachment %}
     <div class="jobtips-detail-files">
       <img src="{% static 'img/file.svg' %}" width="18px">
-      <a href="{{ post.file_attachment.url }}" download
-         style="max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block;">
+      <a href="{{ post.file_attachment.url }}" download>
         {{ post.file_attachment.name|cut:"jobtips/files/" }}
       </a>
     </div>
     {% endif %}
   </div>
 
+  <!-- ===== 본문 ===== -->
   <div class="jobtips-detail-body">
     <div class="jobtips-detail-image-box">
-      <button class="jobtips-image-scroll-btn left">&#8592;</button>
       <div class="jobtips-detail-image-scroll">
         {% if post.file_attachment %}
-          <img src="{{ post.file_attachment.url }}" alt="{{ post.title }}">
+          <img src="{{ post.file_attachment.url }}">
         {% else %}
           <img src="{% static 'img/sample-img.png' %}">
         {% endif %}
       </div>
-      <button class="jobtips-image-scroll-btn right">&#8594;</button>
     </div>
 
     <div class="jobtips-detail-text-box">
@@ -104,64 +104,79 @@
     </div>
   </div>
 
+  <!-- ===== 팁 ===== -->
   <div class="jobtips-detail-tip-box">
     <div class="jobtips-detail-tip-title">개인 경험이나 팁</div>
     <div class="jobtips-detail-tip-content">
-      {% if post.experience_tip %}
-        {{ post.experience_tip|linebreaks }}
-      {% else %}
-        <span>등록된 팁이 없습니다.</span>
-      {% endif %}
+      {{ post.experience_tip|default:"등록된 팁이 없습니다."|linebreaks }}
     </div>
   </div>
 
-  <div style="display:flex; align-items:center; width:100%; gap:12px; margin-top:20px;">
-    <div style="display:flex; flex-wrap:wrap; gap:8px; flex:1;">
-      {% if tags_list %}
-        {% for tag in tags_list %}
-          <span class="jobtips-tag-item" style="background:#e9ecef; padding:5px 12px; border-radius:20px; font-size:14px;">#{{ tag }}</span>
-        {% endfor %}
-      {% else %}
-        <span class="jobtips-tag-item">#태그없음</span>
-      {% endif %}
-    </div>
-
-    <form method="POST" action="#" style="margin-left:auto;">
-      {% csrf_token %}
-      <button type="submit" style="background:none; border:none; padding:0; cursor:pointer;">
-        {% if is_scrapped %}
-          <img src="{% static 'img/scrap-fill.svg' %}" width="24px">
-        {% else %}
-          <img src="{% static 'img/scrap.svg' %}" width="24px">
-        {% endif %}
-      </button>
-    </form>
+  <!-- ===== 태그 ===== -->
+  <div style="display:flex; gap:12px; margin-top:20px;">
+    {% for tag in tags_list %}
+      <span class="jobtips-tag-item">#{{ tag }}</span>
+    {% empty %}
+      <span class="jobtips-tag-item">#태그없음</span>
+    {% endfor %}
   </div>
 
-  <div class="jobtips-divider" style="height:1px; background:#eee; margin:30px 0;"></div>
+  <div class="jobtips-divider" style="margin:30px 0;"></div>
 
-  <form method="POST" action="#" class="jobtips-detail-comment-box"
-        style="border:1.5px solid #d1d1d1; border-radius:12px; padding:15px; display:flex; flex-direction:column; position:relative;">
+  <!-- ========================= -->
+  <!-- ✅ 댓글 목록 -->
+  <!-- ========================= -->
+  <div class="jobtips-comment-list" style="margin-bottom:16px;">
+    {% for c in comments %}
+      <div style="border:1px solid #eee; border-radius:12px; padding:12px; margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between;">
+          <div>
+            <b>{{ c.author.username }}</b>
+            <span style="color:#999; font-size:13px;">{{ c.created_at|date:"Y.m.d H:i" }}</span>
+          </div>
+
+          {% if user.is_authenticated and c.author == user %}
+            <form method="POST" action="{% url 'jobTips:comment_delete' post.pk c.pk %}">
+              {% csrf_token %}
+              <button type="submit"
+                      style="background:none; border:none; color:#999;"
+                      onclick="return confirm('댓글 삭제할까요?');">
+                삭제
+              </button>
+            </form>
+          {% endif %}
+        </div>
+        <div style="margin-top:8px;">{{ c.content }}</div>
+      </div>
+    {% empty %}
+      <p style="color:#999;">아직 댓글이 없습니다.</p>
+    {% endfor %}
+  </div>
+
+  <!-- ========================= -->
+  <!-- ✅ 댓글 작성 -->
+  <!-- ========================= -->
+  {% if user.is_authenticated %}
+  <form method="POST"
+        action="{% url 'jobTips:comment_create' post.pk %}"
+        class="jobtips-detail-comment-box">
     {% csrf_token %}
-    <textarea placeholder="댓글 작성하기" 
-              required 
-              style="width:100%; border:none; outline:none; resize:none; min-height:80px; font-size:15px;"></textarea>
-    <div style="display:flex; justify-content:flex-end; width:100%;">
-      <button type="submit" 
-              style="background:#9d88b9; color:white; border:none; padding:8px 20px; border-radius:20px; cursor:pointer; font-weight:bold; font-size:14px;">
-        보내기
-      </button>
+    <textarea name="content"
+              placeholder="댓글 작성하기"
+              required></textarea>
+    <div style="text-align:right;">
+      <button type="submit">보내기</button>
     </div>
   </form>
+  {% else %}
+    <p style="color:#999;">댓글을 작성하려면 로그인하세요.</p>
+  {% endif %}
 
 </div>
 </main>
 
 <footer class="footer">
   <p>© SSWU_WAGI 3기 CampusBridge</p>
-  <p>BACKEND<br>FRONTEND</p>
 </footer>
-
-<script src="{% static 'js/jobtips-detail.js' %}"></script>
 </body>
 </html>
