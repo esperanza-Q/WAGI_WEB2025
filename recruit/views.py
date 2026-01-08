@@ -4,7 +4,6 @@ from django.db.models import Count
 from .models import Recruit, RecruitImage, RecruitTag, Category, Tag, Comment
 import json
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 from django.http import HttpResponseForbidden
 
 
@@ -12,9 +11,9 @@ from django.http import HttpResponseForbidden
 # 1. 모집글 목록 페이지
 # =========================
 def recruit_list(request):
-    category = request.GET.get('category')   
-    status = request.GET.get('status')       
-    order = request.GET.get('order')         
+    category = request.GET.get('category')
+    status = request.GET.get('status')
+    order = request.GET.get('order')
 
     recruits = Recruit.objects.annotate(
         like_count=Count('likes')
@@ -31,9 +30,9 @@ def recruit_list(request):
     if order == 'latest':
         recruits = recruits.order_by('-created_at')
     else:
-        recruits = recruits.order_by('-like_count')  
+        recruits = recruits.order_by('-like_count')
 
-    return render(request, 'recruit-list.html', {
+    return render(request, 'b_list.html', {
         'recruits': recruits,
         'selected_category': category,
         'selected_status': status,
@@ -44,40 +43,44 @@ def recruit_list(request):
 # =========================
 # 2. 모집글 작성
 # =========================
+@login_required
 def recruit_post(request):
     if request.method == 'POST':
         title = request.POST.get('title')
 
-        category_id = request.POST.get('category')
-        category = get_object_or_404(Category, pk=category_id)
+        # 🔥 category는 pk가 아니라 이름으로 들어옴
+        category_name = request.POST.get('category')
+        category = get_object_or_404(Category, category_name=category_name)
 
         deadline_str = request.POST.get('deadline')
-        description = request.POST.get('description')
-        link = request.POST.get('link')
+        body = request.POST.get('body')
+        contact = request.POST.get('contact')
         tags = request.POST.get('tags')
 
         deadline = datetime.strptime(deadline_str, "%Y-%m-%d").date()
 
         recruit = Recruit.objects.create(
             title=title,
-            category=category,        
+            category=category,
             deadline=deadline,
-            body=description,
-            contact=link,
+            body=body,
+            contact=contact,
             user=request.user,
-            college=None,            
+            college=None,
         )
 
+        # 태그 저장
         if tags:
-            tag_names = json.loads(tags)  
+            tag_names = json.loads(tags)
             for tag_name in tag_names:
                 tag_obj, _ = Tag.objects.get_or_create(tag_name=tag_name)
                 RecruitTag.objects.get_or_create(
                     recruit=recruit,
                     tag=tag_obj,
-                    college=None  
+                    college=None
                 )
 
+        # 이미지 저장
         for file in request.FILES.getlist('images'):
             RecruitImage.objects.create(
                 recruit=recruit,
@@ -87,7 +90,7 @@ def recruit_post(request):
 
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
-    return render(request, 'recruit-post.html', {
+    return render(request, 'b_post.html', {
         'categories': Category.objects.all()
     })
 
@@ -114,10 +117,10 @@ def recruit_detail(request, recruit_id):
             return redirect("login")
 
         content = request.POST.get("content", "").strip()
-        parent_id = request.POST.get("parent_id")  
+        parent_id = request.POST.get("parent_id")
 
         if content:
-            comment = Comment.objects.create(
+            Comment.objects.create(
                 recruit=recruit,
                 user=request.user,
                 content=content,
@@ -158,10 +161,16 @@ def recruit_edit(request, recruit_id):
 
     if request.method == 'POST':
         recruit.title = request.POST.get('title')
-        recruit.category = get_object_or_404(Category, pk=request.POST.get('category'))
-        recruit.deadline = datetime.strptime(request.POST.get('deadline'), "%Y-%m-%d").date()
-        recruit.body = request.POST.get('description')
-        recruit.contact = request.POST.get('link')
+
+        category_name = request.POST.get('category')
+        recruit.category = get_object_or_404(Category, category_name=category_name)
+
+        recruit.deadline = datetime.strptime(
+            request.POST.get('deadline'), "%Y-%m-%d"
+        ).date()
+
+        recruit.body = request.POST.get('body')
+        recruit.contact = request.POST.get('contact')
         recruit.save()
 
         tags = request.POST.get('tags')
@@ -177,10 +186,17 @@ def recruit_edit(request, recruit_id):
                 )
 
         deleted_files = json.loads(request.POST.get('deleted_files', '[]'))
-        RecruitImage.objects.filter(id__in=deleted_files, recruit=recruit).delete()
+        RecruitImage.objects.filter(
+            id__in=deleted_files,
+            recruit=recruit
+        ).delete()
 
         for file in request.FILES.getlist('images'):
-            RecruitImage.objects.create(recruit=recruit, image_url=file, college=None)
+            RecruitImage.objects.create(
+                recruit=recruit,
+                image_url=file,
+                college=None
+            )
 
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
