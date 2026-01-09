@@ -94,6 +94,11 @@ class RecruitImage(models.Model):
 
 # ✅ 모집글-태그 중간 테이블 (ERD 동일)
 class RecruitTag(models.Model):
+    TAG_TYPE_CHOICES = (
+        ('FIELD', '모집분야'),
+        ('HASHTAG', '해시태그'),
+    )
+
     tag = models.ForeignKey(
         Tag,
         on_delete=models.CASCADE,
@@ -111,11 +116,18 @@ class RecruitTag(models.Model):
         related_name='recruit_tags'
     )
 
+    # 🔥 추가된 핵심 필드
+    tag_type = models.CharField(
+        max_length=10,
+        choices=TAG_TYPE_CHOICES,
+        default='HASHTAG'
+    )
+
     class Meta:
-        unique_together = ('tag', 'recruit')
+        unique_together = ('tag', 'recruit', 'tag_type')
 
     def __str__(self):
-        return f"{self.recruit.title} - {self.tag.tag_name}"
+        return f"{self.recruit.title} - {self.tag.tag_name} ({self.get_tag_type_display()})"
 
 
 # ✅ 좋아요
