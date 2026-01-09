@@ -28,6 +28,7 @@ class Recruit(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
     contact = models.CharField(max_length=100)
+    field = models.CharField(max_length=100, default='기탄')
     deadline = models.DateField()
     is_recruiting = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
