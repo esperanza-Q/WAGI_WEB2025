@@ -1,21 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/experience/experience-list.css">
+  <link rel="stylesheet" href="{% static 'css/experience/experience-list.css' %}">
 </head>
 
 <body>
   <header class="main-header">
     <div class="logo">
-        <a href="../../home/templates/home.html">
-            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+        <a href="{% url 'home' %}">
+            <img class="main-logo" src="{% static 'img/main-logo.svg' %}"></a>
     </div>
     <nav class="main-nav">
       <ul class="main-nav-links">
-        <li><a href="../../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
         <li><a href="#">자소서·면접·포폴</a></li>
         <li><a href="#">모집</a></li>
         <li><a href="#">나의 로드맵</a></li>
@@ -42,7 +43,7 @@
         />
 
         <button type="submit" class="ex-search-btn">
-          <img src="../../static/img/search.svg" alt="검색">
+          <img src="{% static 'img/search.svg' %}" alt="검색">
         </button>
       </div>
 
@@ -110,7 +111,7 @@
 
     <div class="ex-card-list">
       {% for r in reviews %}
-      <!--mock 데이터 넣어둠-->
+      
         <a href="{% url 'experience:review_detail' r.id %}" class="ex-card-link">
           <div class="ex-card">
             <div class="ex-card-header">
@@ -122,12 +123,13 @@
             <div class="ex-card-period">{{ review.activity_period }}</div>
             <div class="ex-card-footer">
               <div class="ex-card-star">평점 {{ r.rating }}</div>
-              <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">{{ r.like_count_db }}</div>
+              <div class="ex-card-like"><img class="ex-card-like-img" src="{% static 'img/like.svg' %}">{{ r.like_count_db }}</div>
             </div>
           </div>
         </a>
       {% endfor %}
 
+      <!--mock 데이터 넣어둠-->
       <!--
       <a href="./experience-detail.html" class="ex-card-link">
         <div class="ex-card">
@@ -259,7 +261,7 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="../../static/js/board-list.js"></script>
+  <script src="{% static 'js/experience-edit.js' %}"></script>
 </body>
 </html>
 

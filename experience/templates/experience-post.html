@@ -1,21 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/experience/experience-post.css">
+  <link rel="stylesheet" href="{% static 'css/experience/experience-post.css' %}">
 </head>
 
 <body>
   <header class="main-header">
     <div class="logo">
-        <a href="../../home/templates/home.html">
-            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+        <a href="{% url 'home' %}">
+            <img class="main-logo" src="{% static 'img/main-logo.svg' %}"></a>
     </div>
     <nav class="main-nav">
       <ul class="main-nav-links">
-        <li><a href="../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
         <li><a href="#">자소서·면접·포폴</a></li>
         <li><a href="#">모집</a></li>
         <li><a href="#">나의 로드맵</a></li>
@@ -90,6 +91,6 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="../../static/js/experience-post.js"></script>
+  <script src="{% static 'js/experience-edit.js' %}"></script>
 </body>
 </html>
