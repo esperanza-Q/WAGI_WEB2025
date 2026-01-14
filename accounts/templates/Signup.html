@@ -38,37 +38,40 @@
       <form method="post" class="signup-form">
         <div class="signup-box">
 
-          <input class="signup-input" type="text" placeholder="이메일">
-          <input class="signup-input" type="text" placeholder="학번">
-          <input class="signup-input" type="text" placeholder="닉네임">
-          <input class="signup-input" type="password" placeholder="비밀번호">
-          <input class="signup-input" type="password" placeholder="비밀번호 확인">
+          <input class="signup-input" type="text" name="email" placeholder="이메일">
+          <input class="signup-input" type="text" name="username" placeholder="학번">
+          <input class="signup-input" type="text" name="display_name" placeholder="닉네임">
+          <input class="signup-input" type="password" name="password1" placeholder="비밀번호">
+          <input class="signup-input" type="password" name="password2" placeholder="비밀번호 확인">
 
           <div class="signup-academic">
-            <select class="signup-grade-select">
+            <select name="grade" class="signup-grade-select">
               <option disabled selected>학년 선택</option>
-              <option>1학년</option>
-              <option>2학년</option>
-              <option>3학년</option>
-              <option>4학년</option>
-              <option>휴학</option>
-              <option>졸업</option>
+              <option value="1">1학년</option>
+              <option value="2">2학년</option>
+              <option value="3">3학년</option>
+              <option value="4">4학년</option>
+              <option value="5">휴학</option>
+              <option value="6">졸업생</option>
             </select>
 
-            <select class="signup-college-select">
+            <select id="collegeSelect" name="college" class="signup-college-select">
               <option disabled selected>단과대 선택</option>
-              <option>공대</option>
-              <option>인문대</option>
-              <option>미대</option>
-          </select>
+              <option value="NUR">간호대학</option>
+              <option value="ENG">공과대학</option>
+              <option value="ART">미술대학</option>
+              <option value="LAW">법과대학</option>
+              <option value="EDU">사범대학</option>
+              <option value="SOC">사회과학대학</option>
+              <option value="LIF">생활산업대학</option>
+              <option value="MUS">음악대학</option>
+              <option value="HUMA">인문융합예술대학</option>
+              <option value="NAT">자연과학대학</option>
+            </select>
           </div>
 
-          <select class="signup-department-select">
-            <option disabled selected>학과 선택</option>
-            <option>컴퓨터공학과</option>
-            <option>소프트웨어학과</option>
-            <option>경영학과</option>
-            <option>심리학과</option>
+          <select id="deptSelect" name="department" class="signup-department-select" disabled>
+            <option value="" disabled selected>학과 선택</option>
           </select>
 
         </div>
@@ -85,6 +88,7 @@
     <p>© SSWU_WAGI 3기 CampusBridge</p>
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
+  <script src="../../static/js/Signup.js"></script>
 </body>
 </html>
 

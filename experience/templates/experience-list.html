@@ -101,7 +101,7 @@
             맞춤 검색
           </button>
         </div>
-        <a class="ex-write-btn" href="./experience-post.html">글쓰기</a>
+        <a class="ex-write-btn" href="{% url 'experience:review_create' %}">글쓰기</a>
       </div>
 
     </form>
@@ -109,23 +109,26 @@
     <div class="ex-divider"></div>
 
     <div class="ex-card-list">
+      {% for r in reviews %}
       <!--mock 데이터 넣어둠-->
-      <a href="./experience-detail.html" class="ex-card-link">
-        <div class="ex-card">
-          <div class="ex-card-header">
-            <div class="ex-card-category">동아리</div>
-            <div class="ex-card-date">2024.11.12</div>
+        <a href="{% url 'experience:review_detail' r.id %}" class="ex-card-link">
+          <div class="ex-card">
+            <div class="ex-card-header">
+              <div class="ex-card-category">{{ r.get_category_display }}</div>
+              <div class="ex-card-date">{{ r.created_at|date:"Y.m.d" }}</div>
+            </div>
+            <div class="ex-card-title">{{ r.title }}</div>
+            <div class="ex-card-nickname">{{ r.user.display_name }}</div>
+            <div class="ex-card-period">{{ review.activity_period }}</div>
+            <div class="ex-card-footer">
+              <div class="ex-card-star">평점 {{ r.rating }}</div>
+              <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">{{ r.like_count_db }}</div>
+            </div>
           </div>
-          <div class="ex-card-title">컴공 과동아리 활동 후기</div>
-          <div class="ex-card-nickname">코딩러버</div>
-          <div class="ex-card-period">2024.03 - 2024.11</div>
-          <div class="ex-card-footer">
-            <div class="ex-card-star">평점 4.5</div>
-            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">15</div>
-          </div>
-        </div>
-      </a>
+        </a>
+      {% endfor %}
 
+      <!--
       <a href="./experience-detail.html" class="ex-card-link">
         <div class="ex-card">
           <div class="ex-card-header">
@@ -238,6 +241,7 @@
         </div>
       </a>
     </div>
+  -->
 
     <!-- 페이지네이션 -->
     <div class="ex-pagination">

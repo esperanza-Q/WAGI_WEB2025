@@ -40,13 +40,14 @@
         </p>
       </div>
 
-      <form method="post" class="verification-form">
+      <form method="post" class="verification-form" enctype="multipart/form-data">
+        {% csrf_token %}
 
         <div class="verification-img">
-          <input class="verify-img-input" type="file" accept="image/*">
+          <input class="verify-img-input" type="file" accept="image/*" name="verification_document">
 
           <!-- 사진 업로드 전 -->
-          <div class="verify-img-upload">
+          <div class="verify-img-upload" style="display:none">
             <button type="button" class="verify-img-btn">+</button>
             <p>
               학생증 전체가 나오도록 촬영해주세요.<br>
@@ -55,14 +56,22 @@
           </div>
 
           <!-- 사진 업로드 후 -->
-          <div class="verify-img-preview" style="display:none">
-            <img class="verify-preview-img">
+          <div class="verify-img-preview" style="display:flex">
+            <img class="verify-preview-img" {% if verification_obj and verification_obj.verification_document %} 
+              src="{{ verification_obj.verification_document.url }}" data-existing="1" {% endif %} alt="학생증 미리보기">
             <button type="button" class="verify-reset-btn">사진 초기화</button>
           </div>
         </div>
 
+        {% if form.verification_document.errors %}
+          <p class="field-error">학생증 사진을 업로드해 주세요.</p>
+        {% endif %}
+
         <div class="verification-info">
-          <input class="verification-name" type="text" placeholder="성명">
+          <input class="verification-name" type="text" placeholder="성명" name="real_name">
+          {% if form.real_name.errors %}
+            <p class="field-error">이름을 입력해 주세요.</p>
+          {% endif %}
         </div>
 
         <button class="verification-submit" type="submit">

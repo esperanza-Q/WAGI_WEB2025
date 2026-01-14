@@ -318,3 +318,5 @@ main {
   font-size: 14px;
   opacity: 0.8;
 }
+
+.verify-img-preview { display: none; }
