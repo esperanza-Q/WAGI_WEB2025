@@ -1,21 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/experience/experience-detail.css">
+  <link rel="stylesheet" href="{% static 'css/experience/experience-detail.css' %}">
 </head>
 
 <body>
   <header class="main-header">
     <div class="logo">
-        <a href="../../home/templates/home.html">
-            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+        <a href="{% url 'home' %}">
+            <img class="main-logo" src="{% static 'img/main-logo.svg' %}"></a>
     </div>
     <nav class="main-nav">
       <ul class="main-nav-links">
-        <li><a href="../../experience/templates/experience/experience-list.html">활동 후기</a></li>
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
         <li><a href="#">자소서·면접·포폴</a></li>
         <li><a href="#">모집</a></li>
         <li><a href="#">나의 로드맵</a></li>
@@ -58,7 +59,7 @@
             <form method="POST" action="{% url 'experience:toggle_like' review.id %}" class="ex-like-form">
               {% csrf_token %}
               <button type="submit" class="ex-detail-like-btn">
-                <img class="post-like-img" src="../../static/img/like.svg">
+                <img class="post-like-img" src="{% static 'img/like.svg' %}">
                 <span class="ex-like-count">{{ like_count }}</span>
               </button>
             </form>
@@ -72,7 +73,7 @@
     <!-- 첨부 파일 있다면 표시-->
     {% if files %}
       <div class="ex-detail-files">
-        <img class="ex-detail-file-img" src="../../static/img/file.svg" width="18px">
+        <img class="ex-detail-file-img" src="{% static 'img/file.svg' %}" width="18px">
         <span class="ex-detail-file-content">
           {% for f in files %}
             {% if not f.is_image %}
@@ -130,9 +131,9 @@
         {% csrf_token %}
         <button type="submit" class="ex-scrap-btn">
           {% if scrapped_by_user %}
-            <img src="../../static/img/scrap-fill.svg" class="scrap-img">
+            <img src="{% static 'img/scrap-fill.svg' %}" class="scrap-img">
           {% else %}
-            <img src="../../static/img/scrap.svg" class="scrap-img">
+            <img src="{% static 'img/scrap.svg' %}" class="scrap-img">
           {% endif %}
         </button>
       </form>
@@ -176,6 +177,6 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="../../static/js/experience-detail.js"></script>
+  <script src="{% static 'js/experience-edit.js' %}"></script>
 </body>
 </html>
