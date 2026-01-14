@@ -9,4 +9,6 @@ urlpatterns = [
     path('recruit/<int:recruit_id>/delete/', views.recruit_delete, name='recruit_delete'),
     path('comment/<int:comment_id>/edit/', views.comment_edit, name='comment_edit'),
     path('comment/<int:comment_id>/delete/', views.comment_delete, name='comment_delete'),
+    path('recruit/<int:recruit_id>/comment/<int:comment_id>/reply/', views.comment_reply, name='comment_reply'),
+    path('like/<int:recruit_id>/', views.recruit_like, name='recruit_like'),
 ]

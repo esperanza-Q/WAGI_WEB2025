@@ -7,7 +7,7 @@ import json
 from django.utils.timezone import now
 from django.db.models import Q
 
-from .models import Recruit, RecruitImage, RecruitTag, Category, Tag, Comment
+from .models import Recruit, RecruitLike, RecruitImage, RecruitTag, Category, Tag, Comment
 
 
 # =========================
@@ -20,21 +20,23 @@ def recruit_list(request):
 
     today = now().date()
 
-    # 🔥 [추가] 마감일 지난 모집글 DB 상태 동기화
+    # 🔥 마감일 지난 모집글 상태 동기화
     Recruit.objects.filter(
         is_recruiting=True,
         deadline__lt=today
     ).update(is_recruiting=False)
 
+    # ✅ 좋아요 수 + 댓글 수 annotate (여기만 추가)
     recruits = Recruit.objects.annotate(
-        like_count=Count('likes')
+        like_count=Count('likes', distinct=True),
+        comment_count=Count('comments', distinct=True),
     )
 
     # 카테고리 필터
     if category in ['동아리', '공모전', '스터디']:
         recruits = recruits.filter(category__category_name=category)
 
-    # 모집 상태 필터 (status 값 있을 때만)
+    # 모집 상태 필터
     if status == 'open':
         recruits = recruits.filter(
             is_recruiting=True,
@@ -45,11 +47,20 @@ def recruit_list(request):
             Q(is_recruiting=False) | Q(deadline__lt=today)
         )
 
-    # 정렬 (기본은 최신순)
-    if order == 'latest' or order is None:
+    # =========================
+    # 정렬 (🔥 최소 수정 핵심)
+    # =========================
+    if order == 'latest':
+        # 최신순
         recruits = recruits.order_by('-created_at')
     else:
-        recruits = recruits.order_by('-like_count')
+        # 기본 정렬:
+        # 좋아요 ↓ → 댓글 ↓ → 최신순 ↓
+        recruits = recruits.order_by(
+            '-like_count',
+            '-comment_count',
+            '-created_at'
+        )
 
     return render(request, 'b_list.html', {
         'recruits': recruits,
@@ -57,6 +68,25 @@ def recruit_list(request):
         'selected_status': status,
         'selected_order': order,
     })
+
+@login_required
+def recruit_like(request, recruit_id):
+    recruit = get_object_or_404(Recruit, recruit_id=recruit_id)
+
+    like = RecruitLike.objects.filter(
+        user=request.user,
+        recruit=recruit
+    )
+
+    if like.exists():
+        like.delete()
+    else:
+        RecruitLike.objects.create(
+            user=request.user,
+            recruit=recruit
+        )
+
+    return redirect('recruit_list')
 
 
 # =========================
@@ -118,33 +148,32 @@ def recruit_post(request):
 # =========================
 # 3. 모집글 상세 페이지
 # =========================
+@login_required
 def recruit_detail(request, recruit_id):
     recruit = get_object_or_404(
         Recruit.objects.annotate(like_count=Count('likes')),
         recruit_id=recruit_id
     )
 
-    images = recruit.images.all()
+    images = recruit.images.all().order_by('image_id')
 
     comments = Comment.objects.filter(
         recruit=recruit
     ).select_related('user').order_by('created_at')
 
     parent_comments = comments.filter(parent__isnull=True)
+
     reply_map = {
         parent.id: comments.filter(parent=parent)
         for parent in parent_comments
     }
 
-    # ✅ 태그 조회
+    # ✅ 해시태그 조회만
     tags = RecruitTag.objects.filter(
         recruit=recruit
     ).select_related('tag')
 
     if request.method == "POST":
-        if not request.user.is_authenticated:
-            return redirect("login")
-
         content = request.POST.get("content", "").strip()
         parent_id = request.POST.get("parent_id")
 
@@ -156,19 +185,6 @@ def recruit_detail(request, recruit_id):
                 parent_id=parent_id if parent_id else None
             )
 
-        # ✅ 태그 저장 처리
-        tags_str = request.POST.get("tags", "")  # 예: "디자인,프론트엔드"
-        tag_names = [t.strip() for t in tags_str.split(",") if t.strip()]
-
-        for tag_name in tag_names:
-            tag_obj, _ = Tag.objects.get_or_create(tag_name=tag_name)
-            RecruitTag.objects.create(
-                recruit=recruit,
-                tag=tag_obj,
-                tag_type="HASHTAG",               # 모델 필드에 따라 조정
-                college=request.user.college      # 유저 모델에 college 필드 있어야 함
-            )
-
         return redirect('recruit_detail', recruit_id=recruit_id)
 
     return render(request, 'b_detail.html', {
@@ -178,11 +194,11 @@ def recruit_detail(request, recruit_id):
         'reply_map': reply_map,
         'tags': tags,
     })
-
-
 # =========================
-# 4. 댓글 삭제/수정
+# 4. 댓글 수정/삭제/답글
 # =========================
+
+# 댓글 수정
 @login_required
 def comment_edit(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
@@ -195,9 +211,11 @@ def comment_edit(request, comment_id):
         if content:
             comment.content = content
             comment.save()
-    
+
     return redirect('recruit_detail', recruit_id=comment.recruit.recruit_id)
 
+
+# 댓글 삭제 (원댓글 및 답글 공통)
 @login_required
 def comment_delete(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
@@ -207,9 +225,28 @@ def comment_delete(request, comment_id):
 
     recruit_id = comment.recruit.recruit_id
     comment.delete()
+
     return redirect('recruit_detail', recruit_id=recruit_id)
 
 
+# ✅ 답글 등록 (추가된 부분)
+@login_required
+def comment_reply(request, recruit_id, comment_id):
+    # 원댓글(부모 댓글)을 가져옵니다.
+    parent_comment = get_object_or_404(Comment, id=comment_id)
+    recruit = get_object_or_404(Recruit, recruit_id=recruit_id)
+
+    if request.method == "POST":
+        content = request.POST.get("content", "").strip()
+        if content:
+            Comment.objects.create(
+                recruit=recruit,
+                user=request.user,
+                content=content,
+                parent=parent_comment  # 부모 댓글을 지정하여 답글로 저장
+            )
+
+    return redirect('recruit_detail', recruit_id=recruit_id)
 
 
 # =========================
@@ -223,22 +260,35 @@ def recruit_edit(request, recruit_id):
         return HttpResponseForbidden("수정 권한이 없습니다.")
 
     if request.method == 'POST':
+        # 제목
         recruit.title = request.POST.get('title')
 
+        # 카테고리
         category_name = request.POST.get('category')
         recruit.category = get_object_or_404(Category, category_name=category_name)
 
-        recruit.deadline = datetime.strptime(
-            request.POST.get('deadline'), "%Y-%m-%d"
-        ).date()
+        # 날짜 (여러 포맷 허용)
+        deadline_str = request.POST.get('deadline', '').strip()
+        for fmt in ("%Y-%m-%d", "%Y.%m.%d", "%Y/%m/%d"):
+            try:
+                recruit.deadline = datetime.strptime(deadline_str, fmt).date()
+                break
+            except ValueError:
+                continue
 
+        # 본문 / 연락처
         recruit.body = request.POST.get('body')
         recruit.contact = request.POST.get('contact')
         recruit.save()
 
+        # 태그 처리
         tags = request.POST.get('tags')
         if tags:
-            tag_names = json.loads(tags)
+            try:
+                tag_names = json.loads(tags)
+            except json.JSONDecodeError:
+                tag_names = []
+
             RecruitTag.objects.filter(recruit=recruit).delete()
             for tag_name in tag_names:
                 tag_obj, _ = Tag.objects.get_or_create(tag_name=tag_name)
@@ -248,13 +298,28 @@ def recruit_edit(request, recruit_id):
                     college=None
                 )
 
-        deleted_files = json.loads(request.POST.get('deleted_files', '[]'))
-        RecruitImage.objects.filter(
-            id__in=deleted_files,
-            recruit=recruit
-        ).delete()
+        # ✅ 삭제된 파일 처리 (🔥 여기만 핵심 수정)
+        try:
+            deleted_files = json.loads(request.POST.get('deleted_files', '[]'))
+        except json.JSONDecodeError:
+            deleted_files = []
 
-        for file in request.FILES.getlist('images'):
+        # 숫자인 image_id만 추출
+        deleted_ids = []
+        for item in deleted_files:
+            try:
+                deleted_ids.append(int(item))
+            except (ValueError, TypeError):
+                pass  # 'sample-img.png' 같은 값은 무시
+
+        if deleted_ids:
+            RecruitImage.objects.filter(
+                image_id__in=deleted_ids,
+                recruit=recruit
+            ).delete()
+
+        # 새 파일 업로드
+        for file in request.FILES.getlist('files'):
             RecruitImage.objects.create(
                 recruit=recruit,
                 image_url=file,
@@ -263,7 +328,7 @@ def recruit_edit(request, recruit_id):
 
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
-    # ✅ GET 요청: 기존 데이터 recruit, category 전달 (form 채우기 위함)
+    # GET 요청
     return render(request, 'b_edit.html', {
         'recruit': recruit,
         'categories': Category.objects.all(),
