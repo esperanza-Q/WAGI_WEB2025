@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Review, ReviewLike, ActivityCategory, ReviewScrap, ReviewFile, Tag
+from .models import Review, ReviewLike, ActivityCategory, ReviewScrap
 from .forms import ReviewForm, ReviewFileMultipleForm
 from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
