@@ -62,7 +62,7 @@ def recruit_list(request):
             '-created_at'
         )
 
-    return render(request, 'b_list.html', {
+    return render(request, 'recruit-list.html', {
         'recruits': recruits,
         'selected_category': category,
         'selected_status': status,
@@ -140,7 +140,7 @@ def recruit_post(request):
 
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
-    return render(request, 'b_post.html', {
+    return render(request, 'recruit-post.html', {
         'categories': Category.objects.all()
     })
 
@@ -187,7 +187,7 @@ def recruit_detail(request, recruit_id):
 
         return redirect('recruit_detail', recruit_id=recruit_id)
 
-    return render(request, 'b_detail.html', {
+    return render(request, 'recruit-detail.html', {
         'recruit': recruit,
         'images': images,
         'comments': parent_comments,
@@ -329,7 +329,7 @@ def recruit_edit(request, recruit_id):
         return redirect('recruit_detail', recruit_id=recruit.recruit_id)
 
     # GET 요청
-    return render(request, 'b_edit.html', {
+    return render(request, 'recruit-edit.html', {
         'recruit': recruit,
         'categories': Category.objects.all(),
     })
