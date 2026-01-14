@@ -47,7 +47,9 @@
             <div class="recruit-edit-delete">
               <a href="./recruit-edit.html" class="recruit-edit-btn">수정</a>
               <span class="recruit-divider-line">|</span>
-              <button class="recruit-delete-btn" type="button">삭제</button>
+              <form method="post" action="#" class="recruit-delete-form">
+                <button type="submit" class="recruit-delete-btn">삭제</button>
+              </form>
             </div>
             <!--공감해요 버튼 눌리면 숫자 증가, 이것도 백에서 구현할 것 같아서 form 안에다가 넣어둠-->
             <form method="POST" action="" class="recruit-detail-like-form">
@@ -104,7 +106,7 @@
       </div>
     </div>
 
- <div class="recruit-bottom-box">
+    <div class="recruit-bottom-box">
       <div class="recruit-detail-tags">
         <span class="recruit-tag-item">#태그1</span>
         <span class="recruit-tag-item">#태그2</span>
@@ -124,16 +126,19 @@
     <!-- 댓글 작성 -->
     <form method="POST" class="recruit-detail-comment-box">
       <textarea class="recruit-detail-comment-content" placeholder="댓글 작성하기" required></textarea>
-        <div class="recruit-comment-btn-wrap">
-          <button type="submit" class="recruit-comment-submit-btn">
-        보내기
-      </button>
-    </div>
+      <div class="recruit-comment-btn-wrap">
+        <button type="submit" class="recruit-comment-submit-btn">
+          보내기
+        </button>
+      </div>
     </form>
 
 
     <!-- 댓글 리스트 -->
     <div class="recruit-comment-list">
+
+      <!-- 댓글 아이템 구조 참고용
+
       <div class="recruit-comment-item">
         <div class="recruit-comment-top">
           <span class="recruit-comment-nickname">닉네임</span>
@@ -141,39 +146,10 @@
         </div>
         <p class="recruit-comment-text">
           타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
         </p>
-      </div>
-      <div class="recruit-comment-item">
-          <div class="recruit-comment-top">
-            <span class="recruit-comment-nickname">닉네임</span>
-            <span class="recruit-comment-date">2025.10.05</span>
-          </div>
-          <p class="recruit-comment-text">
-            타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-            타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-            타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-            타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-            타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-          </p>
-      </div>
-      <div class="recruit-comment-item">
-            <div class="recruit-comment-top">
-              <span class="recruit-comment-nickname">닉네임</span>
-              <span class="recruit-comment-date">2025.10.05</span>
-            </div>
-            <p class="recruit-comment-text">
-              타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-              타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-              타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-              타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-              타임 리뷰에서 같은 경험이 있어서 매우 공감했어요!
-            </p>
-      </div>
+      </div> -->
     </div>
+
   </div>
 </main>
 
