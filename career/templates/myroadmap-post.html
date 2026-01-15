@@ -1,17 +1,18 @@
-<!DOCTYPE html>  
+{% load static %}
+<!DOCTYPE html>   
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/myroadmap/myroadmap-post.css">
+  <link rel="stylesheet" href="{% static 'css/myroadmap/myroadmap-post.css' %}">
 </head>
 
 <body>
   <header class="main-header">
     <div class="logo">
         <a href="../../home/templates/home.html">
-            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+            <img class="main-logo" src="{% static 'img/main-logo.svg' %}"></a>
     </div>
     <nav class="main-nav">
       <ul class="main-nav-links">
@@ -29,15 +30,12 @@
 
 <main>
   <div class="container">
-
     <div class="roadmap-post-title">나의 로드맵 남기기</div>
 
-    <!-- ✅ Django POST 요청 폼 -->
     <form method="POST" enctype="multipart/form-data" class="roadmap-post-form">
       {% csrf_token %}
 
       <label class="roadmap-post-label">제목</label>
-      <!-- ✅ 서버에서 request.POST['title']로 받기 위한 name -->
       <input
         type="text"
         name="title"
@@ -48,7 +46,6 @@
 
       <label class="roadmap-post-label">카테고리</label>
       <div class="roadmap-post-category">
-        <!-- ✅ 서버에서 request.POST['category']로 받기 위한 name -->
         <label><input type="radio" name="category" value="동아리" required> 동아리</label>
         <label><input type="radio" name="category" value="학회"> 학회</label>
         <label><input type="radio" name="category" value="공모전"> 공모전</label>
@@ -57,7 +54,6 @@
       </div>
 
       <label class="roadmap-post-label">활동 기간</label>
-      <!-- ✅ 서버에서 request.POST['date']로 받음 (기간 문자열) -->
       <input
         type="text"
         name="date"
@@ -67,7 +63,6 @@
       >
 
       <label class="roadmap-post-label">활동 기록</label>
-      <!-- ✅ 서버에서 request.POST['description']로 받음 -->
       <textarea
         name="description"
         class="roadmap-post-textarea"
@@ -78,7 +73,6 @@
       <div class="roadmap-post-upload-area">
         <label class="roadmap-post-upload-btn">
           +
-          <!-- ✅ 서버에서 request.FILES.getlist('files')로 받음 -->
           <input
             type="file"
             id="roadmap-upload-input"
@@ -88,16 +82,13 @@
           >
         </label>
 
-        <div class="roadmap-post-upload-preview" id="roadmap-upload-preview">
-          <!-- 미리보기 영역 (JS 없으면 비어 있어도 무관) -->
-        </div>
+        <div class="roadmap-post-upload-preview" id="roadmap-upload-preview"></div>
       </div>
 
       <button type="submit" class="roadmap-post-submit-btn">
         완료하기
       </button>
     </form>
-
   </div>
 </main>
 
@@ -106,6 +97,6 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="../../static/js/myroadmap-post.js"></script>
+  <script src="{% static 'js/myroadmap-post.js' %}"></script>
 </body>
 </html>

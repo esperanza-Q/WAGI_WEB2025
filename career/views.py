@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from .models import RoadmapEntry
 
@@ -100,3 +101,16 @@ def roadmap_delete(request, pk):
         return redirect("career:roadmap_home")
 
     return redirect("career:roadmap_detail_front", pk=entry.pk)
+
+
+@login_required
+def roadmap_detail_query(request):
+    """
+    /career/myroadmap-detail.html?id=13 형태를 받아서
+    기존 pk 기반 상세 페이지로 리다이렉트한다.
+    """
+    pk = request.GET.get("id")
+    if not pk or not pk.isdigit():
+        raise Http404("Invalid id")
+
+    return redirect("career:roadmap_detail_front", pk=int(pk))
