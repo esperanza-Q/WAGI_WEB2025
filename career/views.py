@@ -1,134 +1,116 @@
-# career/views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from django import forms
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from .models import RoadmapEntry
 
 
-# --------- 폼 정의 (모델 기반) ---------
-class RoadmapEntryForm(forms.ModelForm):
-    class Meta:
-        model = RoadmapEntry
-        fields = [
-            'title',
-            'category',
-            'date',
-            'period_text',
-            'description',
-            'image',
-            'attachment',
-            'tags',
-        ]
+@login_required
+def roadmap_home(request):
+    # ✅ date는 문자열이라 안정 정렬은 -id 기준
+    entries = RoadmapEntry.objects.filter(user=request.user).order_by("-id")
 
-
-# ---------------------------------------
-#  비로그인 테스트용 VIEW 전체 버전
-# ---------------------------------------
-
-def roadmap_list(request):
-    """
-    익명 사용자도 접속 가능.
-    로그인한 경우 → 본인 글만
-    익명인 경우 → 빈 리스트(오류 방지)
-    """
-    if request.user.is_authenticated:
-        entries = RoadmapEntry.objects.filter(user=request.user).order_by('-date')
-    else:
-        # 테스트용: 아무 글 없게
-        entries = RoadmapEntry.objects.none()
-
+    # ✅ 시작 연도 기준 그룹핑 (models.py의 @property year 사용)
     grouped = {}
     for e in entries:
         grouped.setdefault(e.year, []).append(e)
 
-    return render(request, 'career/b_roadmap_list.html', {
-        'entries': entries,
-        'grouped_entries': grouped
+    return render(request, "myroadmaphome.html", {
+        "entries": entries,
+        "grouped_entries": grouped,
     })
 
 
-
-def roadmap_detail(request, pk):
-    """
-    테스트용: user 제한 없이 로드맵 항목 detail 열람 가능.
-    (원래는 user=request.user로 제한하지만 테스트라 제거)
-    """
-    entry = get_object_or_404(RoadmapEntry, pk=pk)
-    return render(request, 'career/b_roadmap_detail.html', {'entry': entry})
+@login_required
+def roadmap_detail_front(request, pk):
+    entry = get_object_or_404(RoadmapEntry, pk=pk, user=request.user)
+    return render(request, "myroadmap-detail.html", {"entry": entry})
 
 
+@login_required
+def roadmap_create_front(request):
+    if request.method == "POST":
+        # ✅ 텍스트 기반으로만 받음 (프론트와 계약 일치)
+        title = request.POST.get("title", "").strip()
+        category = request.POST.get("category", "").strip()
+        date = request.POST.get("date", "").strip()  # ✅ 기간 문자열
+        description = request.POST.get("description", "").strip()
 
-def roadmap_create(request):
-    """
-    비로그인 테스트용:
-      - 익명일 때도 페이지는 뜸
-      - POST 시 실제 저장은 못 하게 처리 (user가 없기 때문)
-    """
-    if request.method == 'POST':
-        form = RoadmapEntryForm(request.POST, request.FILES)
+        # ✅ date는 NOT NULL 이므로 최소한 빈 문자열 방지
+        if not date:
+            date = "미입력"
 
-        if form.is_valid():
-            if request.user.is_authenticated:
-                # 로그인한 경우에만 실제 저장
-                roadmap = form.save(commit=False)
-                roadmap.user = request.user
-                roadmap.save()
-                return redirect('career:roadmap_list')
+        entry = RoadmapEntry(
+            user=request.user,
+            title=title,
+            category=category,
+            date=date,  # ✅ 문자열 그대로 저장
+            description=description,
+        )
+
+        # ✅ 파일 업로드 (1차 연동: 1개만 저장)
+        files = request.FILES.getlist("files")
+        if files:
+            first = files[0]
+            if first.content_type and first.content_type.startswith("image/"):
+                entry.image = first
             else:
-                # 익명일 때는 저장 대신 메시지만 띄우고 리다이렉트
-                print("익명 사용자: 저장 생략 (테스트 모드)")
-                return redirect('career:roadmap_list')
-    else:
-        form = RoadmapEntryForm()
+                entry.attachment = first
 
-    return render(request, 'career/b_roadmap_form.html', {'form': form})
+        entry.save()
+        return redirect("career:roadmap_home")
 
+    return render(request, "myroadmap-post.html")
 
 
-def roadmap_update(request, pk):
-    """
-    비로그인 테스트용:
-      - 익명 사용자는 수정 페이지는 열리지만 저장은 불가
-    """
-    # 원래는 user 검증해야 하지만 테스트라 제거
-    entry = get_object_or_404(RoadmapEntry, pk=pk)
+@login_required
+def roadmap_update_front(request, pk):
+    entry = get_object_or_404(RoadmapEntry, pk=pk, user=request.user)
 
-    if request.method == 'POST':
-        form = RoadmapEntryForm(request.POST, request.FILES, instance=entry)
+    if request.method == "POST":
+        entry.title = request.POST.get("title", entry.title).strip()
+        entry.category = request.POST.get("category", entry.category).strip()
 
-        if form.is_valid():
-            if request.user.is_authenticated:
-                form.save()
-                return redirect('career:roadmap_detail', pk=entry.pk)
+        # ✅ 문자열 date 그대로 갱신
+        date = request.POST.get("date", "").strip()
+        if date:
+            entry.date = date
+
+        entry.description = request.POST.get("description", entry.description).strip()
+
+        files = request.FILES.getlist("files")
+        if files:
+            first = files[0]
+            if first.content_type and first.content_type.startswith("image/"):
+                entry.image = first
             else:
-                print("익명 사용자: 수정 저장 생략 (테스트 모드)")
-                return redirect('career:roadmap_detail', pk=entry.pk)
-    else:
-        form = RoadmapEntryForm(instance=entry)
+                entry.attachment = first
 
-    return render(request, 'career/b_roadmap_form.html', {
-        'form': form,
-        'entry': entry
-    })
+        entry.save()
+        return redirect("career:roadmap_detail_front", pk=entry.pk)
+
+    return render(request, "myroadmap-edit.html", {"entry": entry})
 
 
-
+@login_required
 def roadmap_delete(request, pk):
+    entry = get_object_or_404(RoadmapEntry, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        entry.delete()
+        return redirect("career:roadmap_home")
+
+    return redirect("career:roadmap_detail_front", pk=entry.pk)
+
+
+@login_required
+def roadmap_detail_query(request):
     """
-    비로그인 테스트용:
-      - 삭제 페이지는 열리지만
-      - 익명 사용자는 실제 삭제 불가
+    /career/myroadmap-detail.html?id=13 형태를 받아서
+    기존 pk 기반 상세 페이지로 리다이렉트한다.
     """
-    entry = get_object_or_404(RoadmapEntry, pk=pk)
+    pk = request.GET.get("id")
+    if not pk or not pk.isdigit():
+        raise Http404("Invalid id")
 
-    if request.method == 'POST':
-        if request.user.is_authenticated:
-            entry.delete()
-        else:
-            print("익명 사용자: 삭제 생략 (테스트 모드)")
-
-        return redirect('career:roadmap_list')
-
-    return render(request, 'career/b_roadmap_confirm_delete.html', {
-        'entry': entry
-    })
+    return redirect("career:roadmap_detail_front", pk=int(pk))
