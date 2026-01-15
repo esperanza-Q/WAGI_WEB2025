@@ -137,13 +137,14 @@ main {
   gap: 12px;
 }
 
-.qna-detail-title{
-  display: flex;
-  flex: none;
+.qna-detail-title {
   color: var(--purple-dark);
-  font-size:  25px;
+  font-size: 25px;
   font-weight: 700;
-  align-items: center;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .qna-detail-info{
