@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/myhome-edit.css">
+</head> 
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+      <a href="../../home/templates/home.html">
+        <img class="main-logo" src="../../static/img/main-logo.svg">
+      </a>
+    </div>
+
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="../../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="#">자소서·면접·포폴</a></li>
+        <li><a href="#">모집</a></li>
+        <li><a href="#">나의 로드맵</a></li>
+      </ul>
+    </nav>
+
+    <div class="main-header-r">
+      <button class="header-mypage-btn">마이페이지</button>
+      <button class="header-login-btn">로그인</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <section class="profile-edit-wrapper">
+        <h2 class="profile-edit-title">프로필 수정</h2>
+
+        <!-- 프로필 수정 form -->
+        <form class="profile-edit-form" id="profileEditForm">
+
+          <!-- 프로필 이미지 -->
+          <div class="profile-image-box">
+            <img class="profile-image" id="profilePreview">
+            <button type="button" class="profile-image-edit-btn" id="imageEditBtn">✎</button>
+
+            <!-- 실제 파일 input (숨김) -->
+            <input 
+              type="file"
+              accept="image/*"
+              id="profileImageInput"
+              style="display: none;"
+            >
+          </div>
+
+          <div class="profile-edit-row">
+            <div class="profile-edit-field">
+              <div class="profile-edit-label">학번</div>
+              <input type="text" class="profile-edit-input" value="20242024" disabled>
+            </div>
+
+            <div class="profile-edit-field">
+              <div class="profile-edit-label">이메일</div>
+              <input type="email" class="profile-edit-input" value="2024@naver.com" disabled>
+            </div>
+          </div>
+
+          <div class="profile-edit-row">
+            <div class="profile-edit-field">
+              <div class="profile-edit-label">닉네임</div>
+              <input type="text" class="profile-edit-input" value="long">
+            </div>
+
+            <div class="profile-edit-field">
+              <div class="profile-edit-label">학년</div>
+              <select class="profile-edit-input">
+                <option>1학년</option>
+                <option selected>2학년</option>
+                <option>3학년</option>
+                <option>4학년</option>
+                <option>휴학</option>
+                <option>졸업</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="profile-edit-row">
+            <div class="profile-edit-field">
+              <div class="profile-edit-label">단과대</div>
+              <select class="profile-edit-input">
+                <option selected>공과대학</option>
+                <option>인문대학</option>
+              </select>
+            </div>
+
+            <div class="profile-edit-field">
+              <div class="profile-edit-label">학과</div>
+              <select class="profile-edit-input">
+                <option selected>컴퓨터공학과</option>
+                <option>AI학과</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="profile-edit-submit-btn">
+            수정 완료
+          </button>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND<br>FRONTEND</p>
+  </footer>
+
+  <!-- JS (연동 전 동작용) -->
+  <script>
+    const imageEditBtn = document.getElementById("imageEditBtn");
+    const imageInput = document.getElementById("profileImageInput");
+    const preview = document.getElementById("profilePreview");
+    const form = document.getElementById("profileEditForm");
+
+    // ✎ 버튼 → 파일 선택
+    imageEditBtn.addEventListener("click", () => {
+      imageInput.click();
+    });
+
+    // 이미지 선택 → 미리보기
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        preview.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // submit (연동 전)
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("프로필 정보가 수정되었습니다.");
+    });
+  </script>
+</body>
+</html>
+
