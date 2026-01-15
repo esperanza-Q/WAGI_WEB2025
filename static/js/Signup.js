@@ -29,3 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   resetDept();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector(".signup-form");
+  const deptSelect = document.getElementById("deptSelect");
+
+  if (form && deptSelect) {
+    form.addEventListener("submit", () => {
+      deptSelect.disabled = false; // 제출할 때는 무조건 전송되게
+    });
+  }
+});

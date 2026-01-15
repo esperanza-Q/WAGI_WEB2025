@@ -1,29 +1,30 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/signup.css">
+  <link rel="stylesheet" href="{% static 'css/Signup.css' %}">
 </head>
 
 <body>
   <header class="main-header">
     <div class="logo">
-        <a href="../../home/templates/home.html">
-            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+        <a href="{% url 'home' %}">
+            <img class="main-logo" src="{% static 'img/main-logo.svg' %}"></a>
     </div>
     <nav class="main-nav">
       <ul class="main-nav-links">
-        <li><a href="../../experience/templates/experience-list.html">활동 후기</a></li>
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
         <li><a href="#">자소서·면접·포폴</a></li>
         <li><a href="#">모집</a></li>
         <li><a href="#">나의 로드맵</a></li>
       </ul>
     </nav>
     <div class="main-header-r">
-      <button class="mypage-btn">마이페이지</button>
-      <button class="login-btn" href="{% url 'accounts:login' %}">로그인</button>
+      <button class="header-mypage-btn">마이페이지</button>
+      <a class="header-login-btn" href="{% url 'accounts:login' %}">로그인</a>
     </div>
   </header>
 
@@ -35,44 +36,70 @@
         <div class="signup-title">회원가입</div>
       </div>
 
-      <form method="post" class="signup-form">
+      <form method="post" class="signup-form" enctype="multipart/form-data">
+        {% csrf_token %}
         <div class="signup-box">
 
-          <input class="signup-input" type="text" name="email" placeholder="이메일">
-          <input class="signup-input" type="text" name="username" placeholder="학번">
+          <input class="signup-input" type="text" name="email" placeholder="이메일" value="{{ request.POST.email|default:'' }}">
+          {% if form.email.errors %}
+            <p class="field-error">이메일을 입력해 주세요.</p>
+          {% endif %}
+          <input class="signup-input" type="text" name="username" placeholder="학번" value="{{ request.POST.username|default:'' }}">
+          {% if form.username.errors %}
+            <p class="field-error">학번을 입력해 주세요.</p>
+          {% endif %}
           <input class="signup-input" type="text" name="display_name" placeholder="닉네임">
+          {% if form.display_name.errors %}
+            <p class="field-error">닉네임을 입력해 주세요.</p>
+          {% endif %}
           <input class="signup-input" type="password" name="password1" placeholder="비밀번호">
+          {% if form.password1.errors %}
+            <p class="field-error">닉네임을 입력해 주세요.</p>
+          {% endif %}
           <input class="signup-input" type="password" name="password2" placeholder="비밀번호 확인">
+          {% if form.password2.errors %}
+            <p class="field-error">닉네임을 입력해 주세요.</p>
+          {% endif %}
 
           <div class="signup-academic">
             <select name="grade" class="signup-grade-select">
-              <option disabled selected>학년 선택</option>
-              <option value="1">1학년</option>
-              <option value="2">2학년</option>
-              <option value="3">3학년</option>
-              <option value="4">4학년</option>
-              <option value="5">휴학</option>
-              <option value="6">졸업생</option>
+              <option value="" disabled {% if not request.POST.grade %}selected{% endif %}>학년 선택</option>
+              <option value="1" {% if request.POST.grade == "1" %}selected{% endif %}>1학년</option>
+              <option value="2" {% if request.POST.grade == "2" %}selected{% endif %}>2학년</option>
+              <option value="3" {% if request.POST.grade == "3" %}selected{% endif %}>3학년</option>
+              <option value="4" {% if request.POST.grade == "4" %}selected{% endif %}>4학년</option>
+              <option value="5" {% if request.POST.grade == "5" %}selected{% endif %}>휴학</option>
+              <option value="6" {% if request.POST.grade == "6" %}selected{% endif %}>졸업생</option>
             </select>
 
             <select id="collegeSelect" name="college" class="signup-college-select">
-              <option disabled selected>단과대 선택</option>
-              <option value="NUR">간호대학</option>
-              <option value="ENG">공과대학</option>
-              <option value="ART">미술대학</option>
-              <option value="LAW">법과대학</option>
-              <option value="EDU">사범대학</option>
-              <option value="SOC">사회과학대학</option>
-              <option value="LIF">생활산업대학</option>
-              <option value="MUS">음악대학</option>
-              <option value="HUMA">인문융합예술대학</option>
-              <option value="NAT">자연과학대학</option>
+              <option value="" disabled {% if not request.POST.college %}selected{% endif %}>단과대 선택</option>
+              <option value="NUR" {% if request.POST.college == "NUR" %}selected{% endif %}>간호대학</option>
+              <option value="ENG" {% if request.POST.college == "ENG" %}selected{% endif %}>공과대학</option>
+              <option value="ART" {% if request.POST.college == "ART" %}selected{% endif %}>미술대학</option>
+              <option value="LAW" {% if request.POST.college == "LAW" %}selected{% endif %}>법과대학</option>
+              <option value="EDU" {% if request.POST.college == "EDU" %}selected{% endif %}>사범대학</option>
+              <option value="SOC" {% if request.POST.college == "SOC" %}selected{% endif %}>사회과학대학</option>
+              <option value="LIF" {% if request.POST.college == "LIF" %}selected{% endif %}>생활산업대학</option>
+              <option value="MUS" {% if request.POST.college == "MUS" %}selected{% endif %}>음악대학</option>
+              <option value="HUMA" {% if request.POST.college == "HUMA" %}selected{% endif %}>인문융합예술대학</option>
+              <option value="NAT" {% if request.POST.college == "NAT" %}selected{% endif %}>자연과학대학</option>
             </select>
           </div>
+
+          {% if form.grade.errors %}
+            <p class="field-error">학년을 선택해 주세요.</p>
+          {% endif %}
+          {% if form.college.errors %}
+            <p class="field-error">단과대를 선택해 주세요.</p>
+          {% endif %}
 
           <select id="deptSelect" name="department" class="signup-department-select" disabled>
             <option value="" disabled selected>학과 선택</option>
           </select>
+          {% if form.department.errors %}
+            <p class="field-error">학과를 선택해 주세요.</p>
+          {% endif %}
 
         </div>
         <button class="signup-submit" type="submit">가입하기</button>
@@ -88,7 +115,7 @@
     <p>© SSWU_WAGI 3기 CampusBridge</p>
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
-  <script src="../../static/js/Signup.js"></script>
+  <script src="{% static 'js/Signup.js' %}"></script>
 </body>
 </html>
 
