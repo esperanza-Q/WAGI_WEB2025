@@ -10,21 +10,15 @@ import re
 def search_expr_test(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
-    sort = request.GET.get('sort', 'latest')
+    order = request.GET.get('order', 'latest')
     college = request.GET.get('college', '')
     department = request.GET.get('department', '')
     grade = request.GET.get('grade', '')
-    category_map = {
-        '동아리': 'club',
-        '학회': 'academic',
-        '공모전': 'contest',
-        '인턴': 'intern',
-    }
-    code = category_map.get(category, None) if category != '전체' else None
+    
 
     # 카테고리 필터
-    if code:
-        reviews = Review.objects.filter(category=code)
+    if category and category != '전체':
+        reviews = Review.objects.filter(category=category)
     else:
         reviews = Review.objects.all()
 
@@ -57,15 +51,19 @@ def search_expr_test(request):
             return score
         reviews = sorted(reviews, key=count_score, reverse=True)
     else:
-        if sort == 'agree':
+        if order == 'agree':
             reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
-        else:
+        elif order == 'rating':
+            reviews = reviews.order_by('-rating')
+        else:  # 최신순
             reviews = reviews.order_by('-created_at')
+            
 
     # 드롭다운용 목록 준비
     from accounts.models import College, Department, User
     college_list = list(College.objects.values_list('college_name', flat=True))
     department_list = list(Department.objects.values_list('dept_name', flat=True))
+    print("[DEBUG] department_list:", department_list)
     grade_list = sorted(set([u[:4] for u in User.objects.values_list('username', flat=True) if len(u) >= 4]))
 
     context = {
@@ -73,7 +71,7 @@ def search_expr_test(request):
         'q_query': query,
         'category': category,
         'categories': ['전체', '동아리', '학회', '공모전', '인턴'],
-        'sort': sort,
+        'order': order,
         'selected_college': college,
         'selected_department': department,
         'selected_grade': grade,
@@ -87,7 +85,7 @@ def search_expr_test(request):
 def search_reviews_page(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
-    sort = request.GET.get('sort', 'latest')
+    order = request.GET.get('order', 'latest')
     category_map = {
         '동아리': 'club',
         '학회': 'academic',
@@ -108,7 +106,7 @@ def search_reviews_page(request):
             else:
                 q_obj |= (Q(title__icontains=word) | Q(content__icontains=word))
         reviews = reviews.filter(q_obj).distinct()
-    if sort == 'agree':
+    if order == 'agree':
         reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
     else:
         reviews = reviews.order_by('-created_at')
@@ -117,7 +115,7 @@ def search_reviews_page(request):
         'q_query': query,
         'category': category,
         'categories': ['전체', '동아리', '학회', '공모전', '인턴'],
-        'sort': sort,
+        'order': order,
     }
     return render(request, "b_search_expr.html", context)
 from django.http import JsonResponse
@@ -186,6 +184,7 @@ def search_recruit_posts(request):
         'q_query': query,
         'category': category,
         'categories': ['전체', '동아리', '공모전', '스터디'],
+        'order': order,
         'selected_college': college,
         'selected_department': department,
         'selected_grade': grade,
@@ -201,7 +200,7 @@ import re
 def search_career_reviews(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
-    # --- 검색 테스트용 뷰 (search/recruit/) ---
+    order = request.GET.get('order', 'latest')
 # from django.db.models import Q
 # import re
 # # --- 검색 테스트용 뷰 (search/recruit/) ---
