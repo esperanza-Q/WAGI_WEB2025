@@ -58,23 +58,30 @@ def post_detail(request, pk):
         pk=pk
     )
 
+    # 좋아요 여부 확인
     is_liked = (
         post.likes.filter(pk=request.user.pk).exists()
+        if request.user.is_authenticated else False
+    )
+
+    # ✅ 스크랩 여부 확인 (True/False 판단)
+    is_scrapped = (
+        post.scraps.filter(pk=request.user.pk).exists()
         if request.user.is_authenticated else False
     )
 
     # "아이유, 졸려" -> ["아이유", "졸려"]
     tags_list = [t.strip() for t in (post.tags or "").split(",") if t.strip()]
 
-    # ✅ 댓글들: related_name='comments' 덕분에 바로 가져올 수 있음
+    # 댓글 목록
     comments = post.comments.select_related("author").all()
 
     return render(request, "jobTips/b_detail.html", {
         "post": post,
         "is_liked": is_liked,
+        "is_scrapped": is_scrapped,  # ✅ 이제 False 고정 아님!
         "tags_list": tags_list,
-        "is_scrapped": False,  # 스크랩 미구현이면 일단 False 고정
-        "comments": comments,  # ✅ 템플릿에서 댓글 렌더링용
+        "comments": comments,
     })
 
 
@@ -88,7 +95,20 @@ def post_like(request, pk):
     else:
         post.likes.add(request.user)
 
-    # ✅ 너 urls.py에서 detail name이 'detail'이니까 이게 정답!
+    return HttpResponseRedirect(reverse("jobTips:detail", args=[pk]))
+
+
+# ✅ 스크랩 기능 추가
+@require_POST
+@login_required
+def post_scrap(request, pk):
+    post = get_object_or_404(JobTipPost, pk=pk)
+
+    if post.scraps.filter(pk=request.user.pk).exists():
+        post.scraps.remove(request.user)
+    else:
+        post.scraps.add(request.user)
+
     return HttpResponseRedirect(reverse("jobTips:detail", args=[pk]))
 
 
@@ -101,11 +121,10 @@ def post_create(request):
             post = form.save(commit=False)
             post.author = request.user
 
-            # tags: JSON(list) or 문자열 둘 다 대응
             tags_raw = request.POST.get("tags", "")
             if tags_raw:
                 try:
-                    tags_list = json.loads(tags_raw)  # ["삼성", "백엔드"]
+                    tags_list = json.loads(tags_raw)
                     if isinstance(tags_list, list):
                         post.tags = ", ".join([str(t).strip() for t in tags_list if str(t).strip()])
                 except json.JSONDecodeError:
@@ -127,7 +146,6 @@ def post_create(request):
 def post_edit(request, pk):
     post = get_object_or_404(JobTipPost, pk=pk)
 
-    # 본인 글만 수정 가능
     if post.author != request.user:
         return HttpResponseForbidden("수정 권한이 없습니다.")
 
@@ -136,7 +154,6 @@ def post_edit(request, pk):
         if form.is_valid():
             edited = form.save(commit=False)
 
-            # tags: JSON(list) or 문자열 둘 다 대응
             tags_raw = request.POST.get("tags", "")
             if tags_raw:
                 try:
@@ -163,7 +180,6 @@ def post_edit(request, pk):
 def post_delete(request, pk):
     post = get_object_or_404(JobTipPost, pk=pk)
 
-    # 본인 글만 삭제 가능
     if post.author != request.user:
         return HttpResponseForbidden("삭제 권한이 없습니다.")
 
@@ -178,10 +194,6 @@ def post_delete(request, pk):
 @login_required
 @require_POST
 def comment_create(request, pk):
-    """
-    댓글 작성
-    - pk: 게시글 pk (post pk)
-    """
     post = get_object_or_404(JobTipPost, pk=pk)
     content = request.POST.get("content", "").strip()
 
@@ -198,11 +210,6 @@ def comment_create(request, pk):
 @login_required
 @require_POST
 def comment_delete(request, pk, comment_id):
-    """
-    댓글 삭제
-    - pk: 게시글 pk
-    - comment_id: 댓글 pk
-    """
     post = get_object_or_404(JobTipPost, pk=pk)
     comment = get_object_or_404(Comment, pk=comment_id, post=post)
 
