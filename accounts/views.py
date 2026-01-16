@@ -65,7 +65,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.info(request, "로그아웃되었습니다.")
-    return redirect("home")
+    return redirect("home:home")
 
 def departments_api(request):
     college_id = request.GET.get("college") or request.GET.get("college_id")
@@ -101,7 +101,7 @@ def verification_view(request):
                 request,
                 "인증 요청이 제출되었습니다. 관리자의 승인을 기다려주세요.",
             )
-            return redirect("home")  # 프로젝트 메인 url 이름에 맞게 수정
+            return redirect("home:home")  # 프로젝트 메인 url 이름에 맞게 수정
     else:
         form = VerificationForm(instance=verification_obj)
 
