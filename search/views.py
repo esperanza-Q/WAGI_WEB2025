@@ -10,21 +10,15 @@ import re
 def search_expr_test(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
-    sort = request.GET.get('sort', 'latest')
+    order = request.GET.get('order', 'latest')
     college = request.GET.get('college', '')
     department = request.GET.get('department', '')
     grade = request.GET.get('grade', '')
-    category_map = {
-        '동아리': 'club',
-        '학회': 'academic',
-        '공모전': 'contest',
-        '인턴': 'intern',
-    }
-    code = category_map.get(category, None) if category != '전체' else None
+    
 
     # 카테고리 필터
-    if code:
-        reviews = Review.objects.filter(category=code)
+    if category and category != '전체':
+        reviews = Review.objects.filter(category=category)
     else:
         reviews = Review.objects.all()
 
@@ -57,15 +51,19 @@ def search_expr_test(request):
             return score
         reviews = sorted(reviews, key=count_score, reverse=True)
     else:
-        if sort == 'agree':
+        if order == 'agree':
             reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
-        else:
+        elif order == 'rating':
+            reviews = reviews.order_by('-rating')
+        else:  # 최신순
             reviews = reviews.order_by('-created_at')
+            
 
     # 드롭다운용 목록 준비
     from accounts.models import College, Department, User
     college_list = list(College.objects.values_list('college_name', flat=True))
     department_list = list(Department.objects.values_list('dept_name', flat=True))
+    print("[DEBUG] department_list:", department_list)
     grade_list = sorted(set([u[:4] for u in User.objects.values_list('username', flat=True) if len(u) >= 4]))
 
     context = {
@@ -73,7 +71,7 @@ def search_expr_test(request):
         'q_query': query,
         'category': category,
         'categories': ['전체', '동아리', '학회', '공모전', '인턴'],
-        'sort': sort,
+        'order': order,
         'selected_college': college,
         'selected_department': department,
         'selected_grade': grade,
@@ -87,7 +85,7 @@ def search_expr_test(request):
 def search_reviews_page(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
-    sort = request.GET.get('sort', 'latest')
+    order = request.GET.get('order', 'latest')
     category_map = {
         '동아리': 'club',
         '학회': 'academic',
@@ -108,7 +106,7 @@ def search_reviews_page(request):
             else:
                 q_obj |= (Q(title__icontains=word) | Q(content__icontains=word))
         reviews = reviews.filter(q_obj).distinct()
-    if sort == 'agree':
+    if order == 'agree':
         reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
     else:
         reviews = reviews.order_by('-created_at')
@@ -117,7 +115,7 @@ def search_reviews_page(request):
         'q_query': query,
         'category': category,
         'categories': ['전체', '동아리', '학회', '공모전', '인턴'],
-        'sort': sort,
+        'order': order,
     }
     return render(request, "b_search_expr.html", context)
 from django.http import JsonResponse
@@ -134,71 +132,13 @@ def search_reviews(request):
     JSON API: /search/reviews/
     """
     users = filter_users_by_params(request.GET)
-
-    q = request.GET.get("q")
-    category = request.GET.get("category")
-    sort = request.GET.get("sort", "latest")
-
-    reviews = Review.objects.filter(user__in=users)
-
-    if category:
-        reviews = reviews.filter(category=category)
-
-    if q:
-        reviews = reviews.filter(
-            Q(title__icontains=q) |
-            Q(content__icontains=q)
-        )
-
-    if sort == "agree":
-        reviews = sorted(reviews, key=lambda r: r.like_count, reverse=True)
-    else:
-        reviews = reviews.order_by("-created_at")
-
-    results = []
-    for review in reviews:
-        user = review.user
-        dept = user.department
-        college = dept.college if dept else None
-
-        created = localtime(review.created_at).strftime("%Y-%m-%d")
-
-        results.append({
-            "board": "review",
-            "id": review.id,
-            "title": review.title,
-            "content_preview": review.content[:100],
-            "rating": review.rating,
-            "category": review.get_category_display(),
-            "created_at": created,
-            "like_count": review.like_count,
-            "author": {
-                "id": user.id,
-                "username": user.username,
-                "display_name": user.display_name,
-                "grade": user.grade,
-                "is_verified": user.is_verified,
-                "department": dept.dept_name if dept else None,
-                "department_id": dept.dept_id if dept else None,
-                "college": college.college_name if college else None,
-                "college_id": college.college_id if college else None,
-            }
-        })
-
-    return JsonResponse(
-        {"results": results, "count": len(results)},
-        status=200,
-        json_dumps_params={"ensure_ascii": False},
-    )
-
-
-#취업게시판
-from career.models import RoadmapEntry
+ # 모집게시판
+from recruit.models import Recruit
 from accounts.models import College, Department, User
 from django.db.models import Q
 import re
-# --- 검색 테스트용 뷰 (search/career/) ---
-def search_career_reviews(request):
+ # --- 검색 테스트용 뷰 (search/recruit/) ---
+def search_recruit_posts(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
     college = request.GET.get('college', '')
@@ -206,44 +146,45 @@ def search_career_reviews(request):
     grade = request.GET.get('grade', '')
 
     category_map = {
-        '자소서': 'resume',
-        '면접': 'interview',
-        '포트폴리오': 'portfolio',
+        '동아리': 'club',
+        '공모전': 'contest',
+        '스터디': 'study',
     }
     code = category_map.get(category, None) if category != '전체' else None
 
     # 카테고리 필터
     if code:
-        reviews = RoadmapEntry.objects.filter(category=code)
+        posts = Recruit.objects.filter(category__category_name=category)
     else:
-        reviews = RoadmapEntry.objects.all()
+        posts = Recruit.objects.all()
 
-    # 맞춤필터링
+    # 맞춤필터링: 단과대, 학과, 학번
     if college:
-        reviews = reviews.filter(user__department__college__college_name=college)
+        posts = posts.filter(college__college_name=college)
     if department:
-        reviews = reviews.filter(user__department__dept_name=department)
+        posts = posts.filter(user__department__dept_name=department)
     if grade:
-        reviews = reviews.filter(user__student_id__startswith=grade)
+        posts = posts.filter(user__username__startswith=grade)
 
-    # 검색어 필터
+    # 검색어 필터 (제목+본문)
     if query and query.strip():
         words = [w.strip() for w in re.split(r'[ ,]+', query) if w.strip()]
         q_obj = Q()
         for word in words:
-            q_obj |= Q(title__icontains=word) | Q(content__icontains=word)
-        reviews = reviews.filter(q_obj).distinct()
+            q_obj |= Q(title__icontains=word) | Q(body__icontains=word)
+        posts = posts.filter(q_obj).distinct()
 
     # 드롭다운용 목록 준비
     college_list = list(College.objects.values_list('college_name', flat=True))
     department_list = list(Department.objects.values_list('dept_name', flat=True))
-    grade_list = sorted(set([u[:4] for u in User.objects.values_list('student_id', flat=True) if len(u) >= 4]))
+    grade_list = sorted(set([u[:4] for u in User.objects.values_list('username', flat=True) if len(u) >= 4]))
 
     context = {
-        'reviews': reviews,
+        'posts': posts,
         'q_query': query,
         'category': category,
-        'categories': ['전체', '자소서', '면접', '포트폴리오'],
+        'categories': ['전체', '동아리', '공모전', '스터디'],
+        'order': order,
         'selected_college': college,
         'selected_department': department,
         'selected_grade': grade,
@@ -251,11 +192,15 @@ def search_career_reviews(request):
         'department_list': department_list,
         'grade_list': grade_list,
     }
-    return render(request, "b_search_career.html", context)
-
-#모집게시판
-# from recruit.models import RecruitPost
-# from accounts.models import College, Department, User
+    return render(request, "b_search_recruit.html", context)
+from accounts.models import College, Department, User
+from django.db.models import Q
+import re
+# --- 검색 테스트용 뷰 (search/career/) ---
+def search_career_reviews(request):
+    query = request.GET.get('q', '')
+    category = request.GET.get('category', '전체')
+    order = request.GET.get('order', 'latest')
 # from django.db.models import Q
 # import re
 # # --- 검색 테스트용 뷰 (search/recruit/) ---

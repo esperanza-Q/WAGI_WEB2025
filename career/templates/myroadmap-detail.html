@@ -1,26 +1,33 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/myroadmap/myroadmap-detail.css">
+
+  <!-- ✅ Django static 사용 -->
+  <link rel="stylesheet" href="{% static 'css/myroadmap/myroadmap-detail.css' %}">
 </head>
 
 <body>
   <header class="main-header">
     <div class="logo">
-        <a href="../../home/templates/home.html">
-            <img class="main-logo" src="../../static/img/main-logo.svg"></a>
+      <!-- ⚠️ 홈 링크는 아직 정적 유지 -->
+      <a href="#">
+        <img class="main-logo" src="{% static 'img/main-logo.svg' %}">
+      </a>
     </div>
+
     <nav class="main-nav">
       <ul class="main-nav-links">
-        <li><a href="../../experience/templates/experience/experience-list.html">활동 후기</a></li>
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
         <li><a href="#">자소서·면접·포폴</a></li>
         <li><a href="#">모집</a></li>
         <li><a href="#">나의 로드맵</a></li>
       </ul>
     </nav>
+
     <div class="main-header-r">
       <button class="header-mypage-btn">마이페이지</button>
       <button class="header-login-btn">로그인</button>
@@ -28,74 +35,84 @@
   </header>
 
   <main>
-  <div class="container">
+    <div class="container">
 
-    <!-- 상단 헤더 -->
-    <div class="roadmap-detail-header">
-      <div class="roadmap-detail-info">
-        <div class="roadmap-detail-title">나의 로드맵 제목</div>
-        <span class="roadmap-detail-category">카테고리</span>
+      <!-- 상단 헤더 -->
+      <div class="roadmap-detail-header">
+        <div class="roadmap-detail-info">
 
-        <div class="roadmap-detail-bottom">
-          <div class="roadmap-detail-sub">
-            <span class="roadmap-detail-period">활동 기간</span>
-          </div>
+          <div class="roadmap-detail-title">{{ entry.title }}</div>
+          <span class="roadmap-detail-category">{{ entry.category }}</span>
 
-          <div class="roadmap-detail-actions">
-            <!-- 수정/삭제 버튼 -->
-            <div class="roadmap-edit-delete">
-              <a href="./myroadmap-edit.html" class="roadmap-edit-btn">수정</a>
-              <span class="roadmap-divider-line">|</span>
-              <button class="roadmap-delete-btn" type="button">삭제</button>
+          <div class="roadmap-detail-bottom">
+            <div class="roadmap-detail-sub">
+              <span class="roadmap-detail-period">{{ entry.date }}</span>
+            </div>
+
+            <div class="roadmap-detail-actions">
+              <div class="roadmap-edit-delete">
+                <a href="{% url 'career:roadmap_update_front' entry.pk %}"
+                   class="roadmap-edit-btn">수정</a>
+
+                <span class="roadmap-divider-line">|</span>
+
+                <form method="POST"
+                      action="{% url 'career:roadmap_delete' entry.pk %}"
+                      style="display:inline;">
+                  {% csrf_token %}
+                  <button class="roadmap-delete-btn" type="submit">삭제</button>
+                </form>
+              </div>
             </div>
           </div>
 
         </div>
-
       </div>
-    </div>
 
-    <!-- 첨부 파일 있다면 표시-->
-    <div class="roadmap-detail-files">
-      <img class="roadmap-detail-file-img" src="../../static/img/file.svg" width="18px">
-      <span class="roadmap-detail-file-content">sample.pdf, 결과보고서.hwp</span>
-    </div>
+      <!-- 첨부 파일 -->
+      <div class="roadmap-detail-files">
+        <img class="roadmap-detail-file-img"
+             src="{% static 'img/file.svg' %}" width="18px">
 
+        {% if entry.attachment %}
+          <span class="roadmap-detail-file-content">
+            {{ entry.attachment.name }}
+          </span>
+        {% endif %}
+      </div>
 
-    <!-- 이미지 + 후기 내용 -->
-    <div class="roadmap-detail-body">
+      <!-- 이미지 + 후기 -->
+      <div class="roadmap-detail-body">
 
-      <!-- 왼쪽: 이미지 슬라이더 -->
-      <div class="roadmap-detail-image-box">
-        <button class="roadmap-image-scroll-btn left">&#8592;</button>
-        <div class="roadmap-detail-image-scroll">
-          <img src="../../static/img/sample-img.png" alt="활동 이미지">
-          <img src="../../static/img/sample-img.png" alt="활동 이미지">
-          <img src="../../static/img/sample-img.png" alt="활동 이미지">
+        <div class="roadmap-detail-image-box">
+          <button class="roadmap-image-scroll-btn left">&#8592;</button>
+
+          <div class="roadmap-detail-image-scroll">
+            {% if entry.image %}
+              <img src="{{ entry.image.url }}" alt="활동 이미지">
+            {% endif %}
+          </div>
+
+          <button class="roadmap-image-scroll-btn right">&#8594;</button>
         </div>
-        <button class="roadmap-image-scroll-btn right">&#8594;</button>
-      </div>
 
-      <!-- 오른쪽: 후기 내용 -->
-      <div class="roadmap-detail-text-box">
-        <div class="roadmap-detail-text-title">후기 내용</div>
-        <div class="roadmap-detail-text-content">
-          올해 한 학기 동안 컴퓨터정보학과 알고리즘 동아리에 참여하면서 정말 많은 경험을 할 수 있었습니다.
-          처음에는 알고리즘 문제를 푸는 게 무척 어렵게 느껴졌고,
-          매주 스터디를 통해 꾸준히 연습하다 보니 문제 접근 방식이 점점 익숙해졌습니다.
+        <div class="roadmap-detail-text-box">
+          <div class="roadmap-detail-text-title">후기 내용</div>
+          <div class="roadmap-detail-text-content">
+            {{ entry.description }}
+          </div>
         </div>
+
       </div>
-
     </div>
-    </div>
-</main>
-
+  </main>
 
   <footer class="footer">
     <p>© SSWU_WAGI 3기 CampusBridge</p>
-    <p class="member">BACKEND  <br /> FRONTEND </p>
+    <p class="member">BACKEND <br /> FRONTEND</p>
   </footer>
 
-  <script src="../../static/js/myroadmap-detail.js"></script>
+  <!-- ✅ Django static JS -->
+  <script src="{% static 'js/myroadmap-detail.js' %}"></script>
 </body>
 </html>

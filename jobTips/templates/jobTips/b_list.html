@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="{% static 'css/jobtips/jobtips-list.css' %}">
 </head>
 
-
 <body>
   <header class="main-header">
     <div class="logo">
@@ -99,8 +98,8 @@
             </ul>
           </div>
 
-          <!-- 글쓰기(아직 미구현이면 #) -->
-          <a class="jobtips-write-btn" href="#">글쓰기</a>
+          <!-- ✅ 글쓰기 연결 완료 -->
+          <a class="jobtips-write-btn" href="{% url 'jobTips:create' %}">글쓰기</a>
         </div>
       </form>
 

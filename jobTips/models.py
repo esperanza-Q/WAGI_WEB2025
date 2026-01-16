@@ -29,14 +29,25 @@ class JobTipPost(models.Model):
 
     tags = models.CharField(max_length=200, blank=True)
 
+    # 공감(좋아요) 필드
     likes = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
         related_name='liked_jobtip_posts'
     )
 
+    # ✅ 스크랩 필드 추가
+    scraps = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='scrapped_jobtip_posts'
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
 
 class Comment(models.Model):
     post = models.ForeignKey(
