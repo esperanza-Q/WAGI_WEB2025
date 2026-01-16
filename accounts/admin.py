@@ -65,11 +65,17 @@ class VerificationAdmin(admin.ModelAdmin):
     def is_verified_selected(self, request, queryset):
         count = 0
         for ver in queryset.select_related("user"):
-            if not ver.is_verified:
-                ver.is_verified = True
-                ver.save(update_fields=["is_verified"])
-            if not ver.user.is_verified:
+            if ver.is_verified:
+                continue
+            ver.is_verified = True
+            ver.save(update_fields=["is_verified"])
+            if hasattr(ver.user, "is_verified") and not ver.user.is_verified:
                 ver.user.is_verified = True
                 ver.user.save(update_fields=["is_verified"])
                 count += 1
-        self.message_user(request, f"{count}명의 사용자를 인증 처리했습니다.")
+            self.message_user(request, f"{count}명의 사용자를 인증 처리했습니다.")
+    def save_model(self, request, obj, form, change):
+            super().save_model(request, obj, form, change)
+            if obj.is_verified and hasattr(obj.user, "is_verified") and not obj.user.is_verified:
+                obj.user.is_verified = True
+                obj.user.save(update_fields=["is_verified"])
