@@ -8,14 +8,11 @@ from django.core.exceptions import ValidationError
 User = get_user_model()
 
 class SignupForm(forms.ModelForm):
-    college = forms.ModelChoiceField(
-        queryset=College.objects.all().order_by("college_name"),
-        required=True, 
-        label="단과대학",
-    )
+    college = forms.CharField(required=True, label="단과대학")
     
     department = forms.ModelChoiceField(
         queryset=Department.objects.none(),
+        to_field_name="dept_id",   # ⭐⭐⭐ 핵심
         required=True,
         label="학과",
     )
@@ -51,6 +48,7 @@ class SignupForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
+            "college",
             "department",
             "display_name",
             "email",
@@ -59,22 +57,25 @@ class SignupForm(forms.ModelForm):
         ]
     
     def __init__(self, *args, **kwargs):
-        college_id = kwargs.pop("college_id", None)  # ← view에서 넘겨줄 값
         super().__init__(*args, **kwargs)
 
         self.fields["username"].label = "아이디(학번)"
         self.fields["username"].help_text = None
 
         self.fields["department"].queryset = Department.objects.none()
-        if not college_id:
-            college_id = self.data.get("college") or self.initial.get("college")
-        if college_id:
-            try:
-                self.fields["department"].queryset = Department.objects.filter(
-                    college_id=college_id
-                ).order_by("dept_name")
-            except (TypeError, ValueError):
-                pass
+        college_code = (self.data.get("college") or self.initial.get("college") or "").strip()
+        if college_code and College.objects.filter(college_id=college_code).exists():
+            self.fields["department"].queryset = Department.objects.filter(
+                college__college_id=college_code
+            ).order_by("dept_name")
+
+    def clean_college(self):
+        code = (self.cleaned_data.get("college") or "").strip()
+        if not code:
+            raise ValidationError("단과대를 선택해 주세요.")
+        if not College.objects.filter(college_id=code).exists():
+            raise ValidationError("유효하지 않은 단과대입니다.")
+        return code
 
     def clean_username(self):
         u = self.cleaned_data["username"].strip()
