@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SujeongBridge - {% if is_edit %}후기 수정{% else %}후기 작성{% endif %}</title>
+  <title>SujeongBridge</title>
   <link rel="stylesheet" href="{% static 'css/jobtips/jobtips-post.css' %}">
 </head>
 
@@ -12,8 +12,7 @@
   <header class="main-header">
     <div class="logo">
         <a href="{% url 'jobTips:list' %}">
-            <img class="main-logo" src="{% static 'img/main-logo.svg' %}">
-        </a>
+            <img class="main-logo" src="{% static 'img/main-logo.svg' %}" alt="logo"></a>
     </div>
     <nav class="main-nav">
       <ul class="main-nav-links">
@@ -29,112 +28,98 @@
     </div>
   </header>
 
-  <main>
-    <div class="container">
-      <h2 class="jobtips-post-title">
-        {% if is_edit %}자소서·면접·포폴 후기 수정하기{% else %}자소서·면접·포폴 후기 남기기{% endif %}
-      </h2>
+<main>
+  <div class="container">
 
-      <form method="POST"
-            action="{% if is_edit %}{% url 'jobTips:edit' post.pk %}{% else %}{% url 'jobTips:create' %}{% endif %}"
-            enctype="multipart/form-data"
-            class="jobtips-post-form">
-        {% csrf_token %}
+    <h2 class="jobtips-post-title">
+      {% if is_edit %}자소서·면접·포폴 후기 수정하기{% else %}자소서·면접·포폴 후기 남기기{% endif %}
+    </h2>
 
-        <label class="jobtips-post-label">제목</label>
-        <input type="text" name="title" class="jobtips-post-input"
-               placeholder="활동 제목을 간단히 입력해주세요"
-               value="{% if is_edit %}{{ post.title }}{% endif %}"
-               required>
+    <form method="POST" enctype="multipart/form-data" class="jobtips-post-form">
+      {% csrf_token %}
 
-        <label class="jobtips-post-label">카테고리</label>
-        <div class="jobtips-post-category">
-          <label>
-            <input type="radio" name="category" value="resume" required
-              {% if is_edit and post.category == 'resume' %}checked{% endif %}>
-            자소서
-          </label>
-          <label>
-            <input type="radio" name="category" value="interview"
-              {% if is_edit and post.category == 'interview' %}checked{% endif %}>
-            면접
-          </label>
-          <label>
-            <input type="radio" name="category" value="portfolio"
-              {% if is_edit and post.category == 'portfolio' %}checked{% endif %}>
-            포트폴리오
-          </label>
-        </div>
+      <label class="jobtips-post-label">제목</label>
+      {{ form.title }}
 
-        <label class="jobtips-post-label">지원 분야</label>
-        <input type="text" name="position" class="jobtips-post-input"
-               placeholder="직무 / 포지션"
-               value="{% if is_edit %}{{ post.position }}{% endif %}"
-               required>
+      <label class="jobtips-post-label">카테고리</label>
+      <div class="jobtips-post-category">
+        {# 라디오 직접 구성(프론트 구조 유지) #}
+        <label>
+          <input type="radio" name="category" value="resume"
+                 {% if form.instance.category == "resume" or not is_edit %}checked{% endif %} required>
+          자소서
+        </label>
+        <label>
+          <input type="radio" name="category" value="interview"
+                 {% if form.instance.category == "interview" %}checked{% endif %}>
+          면접
+        </label>
+        <label>
+          <input type="radio" name="category" value="portfolio"
+                 {% if form.instance.category == "portfolio" %}checked{% endif %}>
+          포트폴리오
+        </label>
+      </div>
 
-        <label class="jobtips-post-label">합격 연도와 전형 유형</label>
-        <input type="text" name="pass_info" class="jobtips-post-input"
-               placeholder="예: 2023 동계 인턴 / 2024 교내 공모전"
-               value="{% if is_edit %}{{ post.pass_info }}{% endif %}"
-               required>
+      <label class="jobtips-post-label">지원 분야</label>
+      {{ form.position }}
 
-        <label class="jobtips-post-label">후기 본문</label>
-        <textarea name="content" class="jobtips-post-textarea" required>{% if is_edit %}{{ post.content }}{% endif %}</textarea>
+      <label class="jobtips-post-label">합격 연도와 전형 유형</label>
+      {{ form.pass_info }}
 
-        <label class="jobtips-post-label">파일 업로드</label>
-        <div class="jobtips-post-upload-area">
-          <label class="jobtips-post-upload-btn">
-            +
-            <input type="file" name="file_attachment" id="jobtips-upload-input">
-          </label>
-          <div class="jobtips-post-upload-preview" id="jobtips-upload-preview"></div>
+      <label class="jobtips-post-label">후기 본문</label>
+      {{ form.content }}
 
-          {% if is_edit and post.file_attachment %}
-            <p style="margin-top:8px;">
-              현재 파일: {{ post.file_attachment.name }}
-            </p>
+      <label class="jobtips-post-label">파일 업로드</label>
+      <div class="jobtips-post-upload-area">
+        <label class="jobtips-post-upload-btn">
+          +
+          <input type="file" name="file_attachment" id="jobtips-upload-input">
+        </label>
+
+        <div class="jobtips-post-upload-preview" id="jobtips-upload-preview">
+          {% if is_edit and form.instance.file_attachment %}
+            <div style="margin-top:8px;">
+              현재 파일: {{ form.instance.file_attachment.name|cut:"jobtips/files/" }}
+            </div>
           {% endif %}
         </div>
+      </div>
 
-        <label class="jobtips-post-label">개인 경험이나 팁</label>
-        <textarea name="experience_tip" class="jobtips-post-textarea">{% if is_edit %}{{ post.experience_tip }}{% endif %}</textarea>
+      <label class="jobtips-post-label">개인 경험이나 팁</label>
+      {{ form.experience_tip }}
 
-        <label class="jobtips-post-label">태그 추가</label>
-        <div class="jobtips-tag-input-wrapper">
-          <input type="text" id="jobtips-tag-input" class="jobtips-tag-input" 
-                 placeholder="태그를 입력해주세요"
-                 value="{% if is_edit %}{{ post.tags }}{% endif %}">
-          <button type="button" id="jobtips-add-tag-btn" class="jobtips-tag-add-btn">추가</button>
-        </div>
+      <label class="jobtips-post-label">태그 추가</label>
+      <div class="jobtips-tag-input-wrapper">
+        <input type="text" id="jobtips-tag-input" class="jobtips-tag-input" placeholder="태그를 입력해주세요">
+        <button type="button" id="jobtips-add-tag-btn" class="jobtips-tag-add-btn">추가</button>
+      </div>
 
-        <div class="jobtips-tag-list" id="jobtips-tag-list"></div>
+      <div class="jobtips-tag-list" id="jobtips-tag-list"></div>
 
-        <input type="hidden" name="tags" id="jobtips-hidden-tags"
-               value="{% if is_edit %}{{ post.tags }}{% endif %}">
+      {# 서버로 보낼 hidden input: views에서 request.POST.get("tags")로 받게 할 거라 name="tags" 필수 #}
+      <input type="hidden" id="jobtips-hidden-tags" name="tags" value="">
 
-        <button type="submit" class="jobtips-post-submit-btn">
-          {% if is_edit %}수정 완료{% else %}완료하기{% endif %}
-        </button>
-      </form>
-    </div>
-  </main>
+      <button type="submit" class="jobtips-post-submit-btn">
+        {% if is_edit %}수정 완료{% else %}완료하기{% endif %}
+      </button>
+    </form>
+
+  </div>
+</main>
 
   <footer class="footer">
     <p>© SSWU_WAGI 3기 CampusBridge</p>
-    <p class="member">BACKEND <br /> FRONTEND </p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
   <script src="{% static 'js/jobtips-post.js' %}"></script>
+
+  {# ✅ 수정일 때: 기존 tags를 JS에 넘겨서 화면에 뿌려주기 #}
+  {% if is_edit %}
   <script>
-    // 수정 모드에서 기존 태그를 리스트로 복구하는 스크립트
-    document.addEventListener('DOMContentLoaded', function() {
-        const hiddenInput = document.getElementById('jobtips-hidden-tags');
-        if (hiddenInput && hiddenInput.value && !hiddenInput.value.startsWith('[')) {
-            // "태그1, 태그2"를 ["태그1", "태그2"] JSON 형태로 변환하여 views.py와 맞춤
-            const tagsArray = hiddenInput.value.split(',').map(tag => tag.trim()).filter(tag => tag !== "");
-            hiddenInput.value = JSON.stringify(tagsArray);
-        }
-    });
+    window.__INITIAL_TAGS__ = "{{ form.instance.tags|default:''|escapejs }}";
   </script>
+  {% endif %}
 </body>
 </html>
