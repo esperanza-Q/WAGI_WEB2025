@@ -77,11 +77,10 @@ form.addEventListener("submit", function (e) {
     }
 
     // 태그 hidden 값 업데이트
-    hiddenTags.value = JSON.stringify(tags);
+    hiddenTags.value = tags.join(",");
 });
 
 
-// 태그 저장 관련
 const tagInput = document.getElementById("ex-tag-input");
 const addTagBtn = document.getElementById("ex-add-tag-btn");
 const tagList = document.getElementById("ex-tag-list");
@@ -89,15 +88,28 @@ const hiddenTags = document.getElementById("ex-hidden-tags");
 
 let tags = [];
 
+// 태그 추가 버튼
 addTagBtn.addEventListener("click", () => {
     const value = tagInput.value.trim();
 
     if (!value) return;
     if (tags.includes(value)) return;
+    if (tags.length >= 5) {
+        alert("태그는 최대 5개까지 추가할 수 있습니다.");
+        return;
+    }
 
     tags.push(value);
     tagInput.value = "";
     renderTags();
+});
+
+// 엔터로 태그 추가
+tagInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        addTagBtn.click();
+    }
 });
 
 function renderTags() {
@@ -125,5 +137,7 @@ function renderTags() {
 }
 
 function updateHiddenTags() {
-    hiddenTags.value = JSON.stringify(tags);  
+    // Django로 보낼 값 (쉼표 문자열)
+    hiddenTags.value = tags.join(",");
 }
+
