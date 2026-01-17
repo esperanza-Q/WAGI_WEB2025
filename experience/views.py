@@ -4,6 +4,7 @@ from .forms import ReviewForm, ReviewFileMultipleForm
 from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
 from .models import ReviewComment
+import json
 
 def review_list(request):
     category = request.GET.get('category', '')
@@ -158,13 +159,25 @@ def review_edit(request, review_id):
         if form.is_valid():
             form.save()
             review.tags.clear()
-            #새 태그 저장
-            tag_string = form.cleaned_data.get("tags", "")
+            #삭제된 파일 처리
+            deleted_ids_raw = request.POST.get("deleted_files", "")
+            if deleted_ids_raw:
+                try:
+                    deleted_ids = json.loads(deleted_ids_raw)
+                    ReviewFile.objects.filter(
+                        id__in=deleted_ids,
+                        review=review
+                    ).delete()
+                except json.JSONDecodeError:
+                    pass
+            # 태그 처리
+            review.tags.clear()
+            tag_string = request.POST.get("tags", "")
             tag_names = [t.strip() for t in tag_string.split(",") if t.strip()]
             for name in tag_names:
                 tag, _ = Tag.objects.get_or_create(name=name)
                 review.tags.add(tag)
-            #새 첨부파일 추가
+            #새 파일 저장
             for f in request.FILES.getlist('files'):
                 ReviewFile.objects.create(review=review, file=f)
 
