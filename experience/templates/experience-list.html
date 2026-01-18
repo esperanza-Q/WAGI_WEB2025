@@ -181,7 +181,7 @@
             </div>
             <div class="ex-card-title">{{ r.title }}</div>
             <div class="ex-card-nickname">{{ r.user.display_name }}</div>
-            <div class="ex-card-period">{{ review.activity_period }}</div>
+            <div class="ex-card-period">{{ r.activity_period }}</div>
             <div class="ex-card-footer">
               <div class="ex-card-star">평점 {{ r.rating }}</div>
               <div class="ex-card-like"><img class="ex-card-like-img" src="{% static 'img/like.svg' %}">{{ r.like_count_db }}</div>
@@ -189,122 +189,6 @@
           </div>
         </a>
       {% endfor %}
-
-      <!--mock 데이터 넣어둠-->
-      <!--
-      <a href="./experience-detail.html" class="ex-card-link">
-        <div class="ex-card">
-          <div class="ex-card-header">
-            <div class="ex-card-category">학회</div>
-            <div class="ex-card-date">2024.11.11</div>
-          </div>
-          <div class="ex-card-title">AI 연구회 프로젝트 경험담</div>
-          <div class="ex-card-nickname">AI탐험가</div>
-          <div class="ex-card-period">2024.09 - 2024.11</div>
-          <div class="ex-card-footer">
-            <div class="ex-card-star">평점 4.8</div>
-            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">23</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./experience-detail.html" class="ex-card-link">
-        <div class="ex-card">
-          <div class="ex-card-header">
-            <div class="ex-card-category">학회</div>
-            <div class="ex-card-date">2024.11.11</div>
-          </div>
-          <div class="ex-card-title">AI 연구회 프로젝트 경험담</div>
-          <div class="ex-card-nickname">AI탐험가</div>
-          <div class="ex-card-period">2024.09 - 2024.11</div>
-          <div class="ex-card-footer">
-            <div class="ex-card-star">평점 4.8</div>
-            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">23</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./experience-detail.html" class="ex-card-link">
-        <div class="ex-card">
-          <div class="ex-card-header">
-            <div class="ex-card-category">학회</div>
-            <div class="ex-card-date">2024.11.11</div>
-          </div>
-          <div class="ex-card-title">AI 연구회 프로젝트 경험담</div>
-          <div class="ex-card-nickname">AI탐험가</div>
-          <div class="ex-card-period">2024.09 - 2024.11</div>
-          <div class="ex-card-footer">
-            <div class="ex-card-star">평점 4.8</div>
-            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">23</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./experience-detail.html" class="ex-card-link">
-        <div class="ex-card">
-          <div class="ex-card-header">
-            <div class="ex-card-category">공모전</div>
-            <div class="ex-card-date">2024.11.10</div>
-          </div>
-          <div class="ex-card-title">SW 공모전 대상 수상기</div>
-          <div class="ex-card-nickname">개발천재</div>
-          <div class="ex-card-period">2024.08 - 2024.10</div>
-          <div class="ex-card-footer">
-            <div class="ex-card-star">평점 5.0</div>
-            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">45</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./experience-detail.html" class="ex-card-link">
-        <div class="ex-card">
-          <div class="ex-card-header">
-            <div class="ex-card-category">인턴</div>
-            <div class="ex-card-date">2024.11.09</div>
-          </div>
-          <div class="ex-card-title">네이버 인턴십 생생 후기</div>
-          <div class="ex-card-nickname">인턴경험자</div>
-          <div class="ex-card-period">2024.07 - 2024.08</div>
-          <div class="ex-card-footer">
-            <div class="ex-card-star">평점 4.7</div>
-            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">67</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./experience-detail.html" class="ex-card-link">
-        <div class="ex-card">
-          <div class="ex-card-header">
-            <div class="ex-card-category">동아리</div>
-            <div class="ex-card-date">2024.11.08</div>
-          </div>
-          <div class="ex-card-title">밴드 동아리 공연 활동기</div>
-          <div class="ex-card-nickname">음악광</div>
-          <div class="ex-card-period">2024.03 - 2024.10</div>
-          <div class="ex-card-footer">
-            <div class="ex-card-star">평점 4.2</div>
-            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">12</div>
-          </div>
-        </div>
-      </a>
-
-      <a href="./experience-detail.html" class="ex-card-link">
-        <div class="ex-card">
-          <div class="ex-card-header">
-            <div class="ex-card-category">학회</div>
-            <div class="ex-card-date">2024.11.07</div>
-          </div>
-          <div class="ex-card-title">경영학회 마케팅 프로젝트</div>
-          <div class="ex-card-nickname">마케터</div>
-          <div class="ex-card-period">2024.09 - 2024.11</div>
-          <div class="ex-card-footer">
-            <div class="ex-card-star">평점 4.3</div>
-            <div class="ex-card-like"><img class="ex-card-like-img" src="../../static/img/like.svg">18</div>
-          </div>
-        </div>
-      </a>
-    </div>
-  -->
 
     <!-- 페이지네이션 -->
     <div class="ex-pagination">
@@ -322,7 +206,7 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="{% static 'js/experience-edit.js' %}"></script>
+  <script src="{% static 'js/experience-list.js' %}"></script>
 </body>
 </html>
 

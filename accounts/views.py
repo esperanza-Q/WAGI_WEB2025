@@ -16,21 +16,31 @@ def signup_view(request):
     college_id = request.GET.get("college") if request.method == "GET" else request.POST.get("college")
 
     if request.method == "GET":
-        form = SignupForm(
-            college_id=college_id,  # ← forms.py의 __init__(..., college_id=...) 받도록 되어 있어야 함
-            initial={"college": college_id} if college_id else None
-        )
-        return render(request, "Signup.html", {"form": form})
+        college_code = request.GET.get("college", "")
+        form = SignupForm(initial={"college": college_code} if college_code else None)
+        context = {
+            "form": form,
+            "selected_grade": "",
+            "selected_college": college_code,
+            "selected_department": "",
+        }
+        return render(request, "Signup.html", context)
 
     # POST (최종 제출)
-    form = SignupForm(request.POST, request.FILES, college_id=college_id)
+    form = SignupForm(request.POST, request.FILES)
+    context = {
+        "form": form,
+        "selected_grade": request.POST.get("grade", ""),
+        "selected_college": request.POST.get("college", ""),
+        "selected_department": request.POST.get("department", ""),
+    }
     if form.is_valid():
         form.save(commit=True)
         messages.success(request, "회원가입이 완료되었습니다. 로그인해주세요.")
         return redirect("accounts:login")
 
     messages.error(request, "회원가입에 실패했습니다. 다시 시도해주세요.")
-    return render(request, "Signup.html", {"form": form})
+    return render(request, "Signup.html", context)
 
 #로그인 뷰
 def login_view(request):
@@ -50,16 +60,16 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "로그인 성공!")
+                if user.is_verified:
+                    return redirect("home:home")
                 return redirect("accounts:verification")
-            else:
-                messages.error(request, "비밀번호가 올바르지 않습니다.")
+            messages.error(request, "비밀번호가 올바르지 않습니다.")
         else:
             messages.error(request, "로그인에 실패했습니다. 다시 시도해주세요.")
 
         return render(request, "Login.html", {"form": form})
-    else:
-        form = LoginForm()
-        return render(request, "Login.html", {"form": form})
+    form = LoginForm()
+    return render(request, "Login.html", {"form": form})
 
 #로그아웃 뷰
 def logout_view(request):
@@ -83,6 +93,9 @@ def verification_view(request):
         verification_obj = request.user.verification
     except Verification.DoesNotExist:
         verification_obj = None
+
+    if verification_obj and verification_obj.is_verified:
+        return redirect("home:home")
 
     if request.method == "POST":
         # 기존 것이 있으면 수정, 없으면 새로 생성

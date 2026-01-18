@@ -39,12 +39,6 @@ class RoadmapEntry(models.Model):
     # 본문(활동 소개)
     description = models.TextField(blank=True)
 
-    # 이미지 업로드
-    image = models.ImageField(
-        upload_to='roadmap/images/',
-        blank=True,
-        null=True
-    )
 
     # 파일 업로드(증빙 자료 등)
     attachment = models.FileField(
@@ -53,12 +47,15 @@ class RoadmapEntry(models.Model):
         null=True
     )
 
+
     # 태그 (쉼표로 구분해서 입력)
     tags = models.CharField(max_length=100, blank=True)
 
     # 자동 시간 기록
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    
 
     class Meta:
         # ✅ [수정] date는 문자열이므로 정렬 안정성 위해 -id 우선 권장
@@ -75,3 +72,12 @@ class RoadmapEntry(models.Model):
         """
         m = re.search(r"(19|20)\d{2}", self.date or "")
         return int(m.group()) if m else 0
+
+
+class RoadmapImage(models.Model):
+    entry = models.ForeignKey(
+        RoadmapEntry,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+    image = models.ImageField(upload_to="roadmap/images/")
