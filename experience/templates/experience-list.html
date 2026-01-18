@@ -36,7 +36,7 @@
   <div class="container">
 
     <!-- 전체 검색 + 필터 form 하나로 묶음 -->
-    <form method="GET" id="filter-form" class="ex-search-form">
+    <form method="GET" id="filter-form" class="ex-search-form" action="{% url 'search:search-expr-test' %}">
 
       <!-- 검색창 -->
       <div class="ex-search-section">
@@ -53,16 +53,17 @@
       </div>
 
       <!-- 숨겨진 값 (카테고리 / 정렬) -->
-      <!-- 카테고리/정렬 hidden input 제거 (카테고리 버튼이 직접 전달) -->
+      <input type="hidden" name="category" id="hidden-category" value="{{ category }}">
+      <input type="hidden" name="order" id="hidden-order" value="{{ order }}">
 
       <!-- 필터링- 카테고리 -->
       <nav class="ex-filter-tabs">
         <ul>
-          <li><button type="submit" class="tab-btn" name="category" value="">전체</button></li>
-          <li><button type="submit" class="tab-btn" name="category" value="club">동아리</button></li>
-          <li><button type="submit" class="tab-btn" name="category" value="academic">학회</button></li>
-          <li><button type="submit" class="tab-btn" name="category" value="contest">공모전</button></li>
-          <li><button type="submit" class="tab-btn" name="category" value="intern">인턴</button></li>
+          <li><button type="button" class="tab-btn" onclick="setCategory('')">전체</button></li>
+          <li><button type="button" class="tab-btn" onclick="setCategory('club')">동아리</button></li>
+          <li><button type="button" class="tab-btn" onclick="setCategory('academic')">학회</button></li>
+          <li><button type="button" class="tab-btn" onclick="setCategory('contest')">공모전</button></li>
+          <li><button type="button" class="tab-btn" onclick="setCategory('intern')">인턴</button></li>
         </ul>
       </nav>
 
@@ -70,9 +71,9 @@
       <div class="ex-sub-filter-bar">
         <div class="ex-sub-filters">
           <ul>
-            <li><button type="button" class="order-btn" data-order="latest" name="order">최신순</button></li>
-            <li><button type="button" class="order-btn" data-order="rating" name="order">평점순</button></li>
-            <li><button type="button" class="order-btn" data-order="likes" name="order">공감순</button></li>
+            <li><button type="button" class="order-btn" onclick="setOrder('latest')">최신순</button></li>
+            <li><button type="button" class="order-btn" onclick="setOrder('rating')">평점순</button></li>
+            <li><button type="button" class="order-btn" onclick="setOrder('agree')">공감순</button></li>
           </ul>
         </div>
       </div>
@@ -207,6 +208,16 @@
   </footer>
 
   <script src="{% static 'js/experience-list.js' %}"></script>
+  <script>
+    function setCategory(val) {
+      document.getElementById('hidden-category').value = val;
+      document.getElementById('filter-form').submit();
+    }
+    function setOrder(val) {
+      document.getElementById('hidden-order').value = val;
+      document.getElementById('filter-form').submit();
+    }
+  </script>
 </body>
 </html>
 

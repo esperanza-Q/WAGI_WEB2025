@@ -30,7 +30,7 @@ urlpatterns = [
     path('mypage/', include('mypage.urls')),
     path('qNa/', include('qNa.urls')),
     path('recruit/', include('recruit.urls')),
-    path("search/", include("search.urls")),
+    path("search/", include("search.urls", namespace='search')),
 ]
 
 if settings.DEBUG:
