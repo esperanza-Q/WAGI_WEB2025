@@ -91,41 +91,58 @@
           required>{{ entry.description }}</textarea>
 
         <label class="roadmap-edit-label">파일 업로드</label>
-        <div class="roadmap-edit-upload-area">
-          <label class="roadmap-edit-upload-btn">
-            +
-            <input
-              type="file"
-              id="roadmap-edit-upload-input"
-              name="files"
-              multiple
-            >
-          </label>
+<div class="roadmap-edit-upload-area">
+  <label class="roadmap-edit-upload-btn">
+    +
+    <input
+      type="file"
+      id="roadmap-edit-upload-input"
+      name="files"
+      multiple
+      accept="image/*"
+    >
+  </label>
 
-          <div class="roadmap-edit-upload-preview">
-            {% if entry.image %}
-              <div class="roadmap-edit-preview-item">
-                <img src="{{ entry.image.url }}"
-                     class="roadmap-edit-preview-img">
-              </div>
-            {% endif %}
+  <!-- ✅ 기존 이미지: 딱 한 번만 -->
+  <div
+    class="roadmap-edit-upload-preview"
+    id="roadmap-edit-upload-preview"
+  >
+    {% for img in entry.images.all %}
+    <div class="roadmap-edit-preview-item existing-item">
+      <img
+        src="{{ img.image.url }}"
+        class="roadmap-edit-preview-img"
+      >
+    </div>
+    {% endfor %}
 
-            {% if entry.attachment %}
-              <div class="roadmap-edit-preview-item">
-                <div class="roadmap-edit-preview-file">
-                  {{ entry.attachment.name }}
-                </div>
-              </div>
-            {% endif %}
-          </div>
-        </div>
+    {% if entry.attachment %}
+    <div class="roadmap-edit-preview-item">
+      <div class="roadmap-edit-preview-file">
+        {{ entry.attachment.name }}
+      </div>
+    </div>
+    {% endif %}
+  </div>
 
-        <input type="hidden" name="deleted_files" value="">
+  <!-- ✅ 새로 선택한 파일 전용 -->
+  <div id="live-preview"></div>
+</div>
+
+  
+</div>
+
+
+        <input type="hidden" name="deleted_files" id="roadmap-deleted-files" value="">
 
         <button type="submit" class="roadmap-edit-submit-btn">
           수정 완료
         </button>
       </form>
+      <input type="hidden" id="hiddenTagsInput" name="tags_json" value="[]">
+
+
 
     </div>
   </main>

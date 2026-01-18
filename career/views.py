@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-
-from .models import RoadmapEntry
+from .models import RoadmapEntry, RoadmapImage
 
 
 @login_required
@@ -48,18 +47,18 @@ def roadmap_create_front(request):
             description=description,
         )
 
-        # ✅ 파일 업로드 (1차 연동: 1개만 저장)
+        #파일 여러개 가능하게 수정함
         files = request.FILES.getlist("files")
-        if files:
-            first = files[0]
-            if first.content_type and first.content_type.startswith("image/"):
-                entry.image = first
+        entry.save()  # ✅ 먼저 entry를 저장해야 FK로 이미지 저장 가능
+
+        for f in files:
+            if f.content_type and f.content_type.startswith("image/"):
+                RoadmapImage.objects.create(entry=entry, image=f)
             else:
-                entry.attachment = first
+                entry.attachment = f
+                entry.save()
 
-        entry.save()
         return redirect("career:roadmap_home")
-
     return render(request, "myroadmap-post.html")
 
 
@@ -71,7 +70,6 @@ def roadmap_update_front(request, pk):
         entry.title = request.POST.get("title", entry.title).strip()
         entry.category = request.POST.get("category", entry.category).strip()
 
-        # ✅ 문자열 date 그대로 갱신
         date = request.POST.get("date", "").strip()
         if date:
             entry.date = date
@@ -79,17 +77,33 @@ def roadmap_update_front(request, pk):
         entry.description = request.POST.get("description", entry.description).strip()
 
         files = request.FILES.getlist("files")
-        if files:
-            first = files[0]
-            if first.content_type and first.content_type.startswith("image/"):
-                entry.image = first
+
+        # ✅ 기존 이미지 개수
+        existing_image_count = entry.images.count()
+
+        # ✅ 새로 업로드한 이미지 개수
+        new_image_files = [
+            f for f in files
+            if f.content_type and f.content_type.startswith("image/")
+        ]
+
+        # 🔒 최대 5개 제한
+        if existing_image_count + len(new_image_files) > 5:
+            # 필요하면 messages 써도 됨
+            return redirect("career:roadmap_edit", pk=entry.pk)
+
+        # ✅ 파일 저장
+        for f in files:
+            if f.content_type and f.content_type.startswith("image/"):
+                RoadmapImage.objects.create(entry=entry, image=f)
             else:
-                entry.attachment = first
+                entry.attachment = f
 
         entry.save()
         return redirect("career:roadmap_detail_front", pk=entry.pk)
 
     return render(request, "myroadmap-edit.html", {"entry": entry})
+
 
 
 @login_required
@@ -104,11 +118,19 @@ def roadmap_delete(request, pk):
 
 
 @login_required
+def roadmap_detail_html_redirect(request):
+    """
+    JS에서 오는 myroadmap-detail.html?id=xx 요청을
+    공식 엔드포인트 myroadmap-detail?id=xx 로 리다이렉트
+    """
+    query = request.META.get("QUERY_STRING", "")
+    url = "/career/myroadmap-detail"
+    if query:
+        url = f"{url}?{query}"
+    return redirect(url)
+
+
 def roadmap_detail_query(request):
-    """
-    /career/myroadmap-detail.html?id=13 형태를 받아서
-    기존 pk 기반 상세 페이지로 리다이렉트한다.
-    """
     pk = request.GET.get("id")
     if not pk or not pk.isdigit():
         raise Http404("Invalid id")

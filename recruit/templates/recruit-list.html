@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/recruit/recruit-list.css">
+  <link rel="stylesheet" href="{% static 'css/recruit/recruit-list.css' %}">
 </head>
 
 <body>
@@ -68,14 +68,27 @@
       </nav>
 
       <!-- 필터링 - 정렬 -->
-      <div class="recruit-sub-filter-bar">
-        <div class="recruit-sub-filters">
-          <ul>
-            <li><button type="button" class="order-btn {% if selected_order == 'latest' %}active{% endif %}" data-order="latest">최신순</button></li>
-            <li><button type="button" class="order-btn {% if selected_order == 'open' %}active{% endif %}" data-order="recruiting">모집중</button></li>
-            <li><button type="button" class="order-btn {% if selected_order == 'closed' %}active{% endif %}" data-order="closed">모집완료</button></li>
-          </ul>
-        </div>
+      <div class="recruit-sub-filters">
+        <ul>
+          <li>
+            <button type="submit" 
+                    name="order" 
+                    value="latest" 
+                    class="order-btn {% if selected_order == 'latest' %}active{% endif %}">최신순</button>
+          </li>
+          <li>
+            <button type="submit" 
+                    name="status" 
+                    value="open" 
+                    class="order-btn {% if selected_status == 'open' %}active{% endif %}">모집중</button>
+          </li>
+          <li>
+            <button type="submit" 
+                    name="status" 
+                    value="closed" 
+                    class="order-btn {% if selected_status == 'closed' %}active{% endif %}">모집완료</button>
+          </li>
+        </ul>
       </div>
 
       <!-- 맞춤 필터링 -->
@@ -143,11 +156,25 @@
 
     <!-- 페이지네이션 -->
     <div class="recruit-pagination">
-      <button class="recruit-page-btn">&lt;</button>
-      <button class="recruit-page-btn active">1</button>
-      <button class="recruit-page-btn">2</button>
-      <button class="recruit-page-btn">3</button>
-      <button class="recruit-page-btn">&gt;</button>
+      {% if recruits.has_previous %}
+        <button class="recruit-page-btn" onclick="location.href='?page={{ recruits.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order %}&order={{ selected_order }}{% endif %}'">&lt;</button>
+      {% else %}
+        <button class="recruit-page-btn" disabled style="opacity: 0.5; cursor: default;">&lt;</button>
+      {% endif %}
+
+      {% for num in recruits.paginator.page_range %}
+        {% if recruits.number == num %}
+          <button class="recruit-page-btn active">{{ num }}</button>
+        {% elif num > recruits.number|add:'-3' and num < recruits.number|add:'3' %}
+          <button class="recruit-page-btn" onclick="location.href='?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order %}&order={{ selected_order }}{% endif %}'">{{ num }}</button>
+        {% endif %}
+      {% endfor %}
+
+      {% if recruits.has_next %}
+        <button class="recruit-page-btn" onclick="location.href='?page={{ recruits.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order %}&order={{ selected_order }}{% endif %}'">&gt;</button>
+      {% else %}
+        <button class="recruit-page-btn" disabled style="opacity: 0.5; cursor: default;">&gt;</button>
+      {% endif %}
     </div>
   </div>
   </main>
