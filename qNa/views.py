@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Qna, Answer
-from django.http import HttpResponseForbidden
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST, require_GET
+from .models import Qna, Answer
 
 User = get_user_model()
 
+
+@login_required
 def qna_my_list(request):
-    sent_list = Qna.objects.filter(sender=request.user)
-    received_list = Qna.objects.filter(receiver=request.user)
+    sent_list = Qna.objects.filter(sender=request.user).order_by("-id")
+    received_list = Qna.objects.filter(receiver=request.user).order_by("-id")
 
     return render(request, 'qna_my.html', {
         'sent_list': sent_list,
@@ -23,22 +26,25 @@ def qna_user_list(request, user_id):
     target_user = get_object_or_404(User, id=user_id)
 
     # 답변이 하나라도 달린 질문만 공개
-    received_list = Qna.objects.filter(
-        receiver=target_user,
-        answers__isnull=False
-    ).distinct()
+    received_list = (
+        Qna.objects.filter(receiver=target_user, answers__isnull=False)
+        .distinct()
+        .order_by("-id")
+    )
 
     return render(request, 'qna_user.html', {
         'target_user': target_user,
         'received_list': received_list,
     })
 
-
+@login_required
 def qna_answer_list(request):
-    # qnas = Qna.objects.filter(answers__isnull=True)
-    qnas = Qna.objects.all()
+    # 원래 의도가 "답변할 리스트"면 unanswered만 보여주는 게 보통
+    qnas = Qna.objects.filter(answers__isnull=True).order_by("-id")
     return render(request, 'qna_answer_list.html', {'qnas': qnas})
 
+
+@login_required
 def qna_write(request):
     receiver_id = request.GET.get('receiver')
     if not receiver_id:
@@ -46,60 +52,126 @@ def qna_write(request):
 
     receiver = get_object_or_404(User, id=receiver_id)
 
-    sender = request.user
+    # 자기 자신에게 질문 금지
+    if receiver == request.user:
+        return HttpResponseForbidden("자기 자신에게는 질문할 수 없습니다.")
 
     return render(request, 'qna_write.html', {
-        'sender': sender,
+        'sender': request.user,
         'receiver': receiver,
     })
 
+@login_required
+@require_POST
 def qna_submit(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        receiver_id = request.POST.get('receiver_id')
+    title = (request.POST.get('title') or "").strip()
+    content = (request.POST.get('content') or "").strip()
+    receiver_id = request.POST.get('receiver_id')
 
-        receiver = get_object_or_404(User, id=receiver_id)
+    if not title or not content or not receiver_id:
+        return HttpResponseBadRequest("필수값이 누락되었습니다.")
 
-        Qna.objects.create(
-            title=title,
-            content=content,
-            sender=request.user,
-            receiver=receiver
-        )
+    receiver = get_object_or_404(User, id=receiver_id)
 
-        # 질문 받은 사람 QnA 페이지로 이동
-        return redirect('qna:user_qna', user_id=receiver.id)
+    if receiver == request.user:
+        return HttpResponseForbidden("자기 자신에게는 질문할 수 없습니다.")
+
+    qna = Qna.objects.create(
+        title=title,
+        content=content,
+        sender=request.user,
+        receiver=receiver
+    )
+
+    return redirect('qna:detail', qna_id=qna.id)
 
 def qna_detail(request, qna_id):
+    print("qna check")
     qna = get_object_or_404(Qna, pk=qna_id)
     user = request.user
 
-    # 답변 없는 질문 접근 제한 (receiver / sender는 허용)
-    if not qna.answers.exists():
-        if user != qna.receiver and user != qna.sender:
+    has_answer = qna.answers.exists()
+    if not has_answer:
+        if not user.is_authenticated or (user != qna.receiver and user != qna.sender):
             return HttpResponseForbidden("아직 답변이 달리지 않은 질문입니다.")
+
+    answers = qna.answers.all().order_by("id")
+
+    can_answer = (
+        user.is_authenticated
+        and user == qna.receiver          
+        and not has_answer               
+    )
 
     return render(request, 'qna_detail.html', {
         'qna': qna,
-        'answers': qna.answers.all(), 
+        'answers': answers,
+        'has_answer': has_answer,
+        'can_answer': can_answer,
     })
 
-
+@login_required
+@require_POST
 def answer_submit(request, qna_id):
-    if request.method == 'POST':
-        qna = get_object_or_404(Qna, id=qna_id)
-        content = request.POST.get('content')
+    qna = get_object_or_404(Qna, id=qna_id)
+    content = (request.POST.get('content') or "").strip()
 
-        user = request.user
+    if not content:
+        return HttpResponseBadRequest("답변 내용을 입력해주세요.")
 
-        Answer.objects.create(
-            qna=qna,
-            content=content,
-            user=user,
-            display_name=user.username   # 또는 user.nickname
-        )
+    user = request.user
 
-        return redirect('qna:detail', qna_id=qna.id)
+    if user != qna.receiver:
+        return HttpResponseForbidden("답변 권한이 없습니다.")
 
-    return redirect('qna:detail', qna_id=qna_id)
+    if qna.answers.exists():
+        return HttpResponseForbidden("이미 답변이 등록된 질문입니다.")
+
+    Answer.objects.create(
+        qna=qna,
+        content=content,
+        user=user,
+        display_name=getattr(user, "username", "익명")  
+    )
+
+    return redirect('qna:detail', qna_id=qna.id)
+
+@login_required
+@require_GET
+def my_qna_api(request):
+    sent_qs = (
+        Qna.objects.filter(sender=request.user)
+        .select_related("receiver")
+        .order_by("-id")
+    )
+    received_qs = (
+        Qna.objects.filter(receiver=request.user)
+        .select_related("sender")
+        .order_by("-id")
+    )
+
+    sent = [
+        {
+            "id": q.id,
+            "title": q.title,
+            "content": q.content,
+            "created_at": q.created_at.isoformat(),
+            "receiver_id": q.receiver_id,
+            "receiver_username": getattr(q.receiver, "username", None),
+        }
+        for q in sent_qs
+    ]
+
+    received = [
+        {
+            "id": q.id,
+            "title": q.title,
+            "content": q.content,
+            "created_at": q.created_at.isoformat(),
+            "sender_id": q.sender_id,
+            "sender_username": getattr(q.sender, "username", None),
+        }
+        for q in received_qs
+    ]
+
+    return JsonResponse({"sent": sent, "received": received})
