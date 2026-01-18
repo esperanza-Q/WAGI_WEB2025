@@ -41,11 +41,10 @@ def recruit_list(request):
     if status == 'open':
         recruits = recruits.filter(
             is_recruiting=True,
-            deadline__gte=today
         )
     elif status == 'closed':
         recruits = recruits.filter(
-            Q(is_recruiting=False) | Q(deadline__lt=today)
+            is_recruiting=False
         )
 
 

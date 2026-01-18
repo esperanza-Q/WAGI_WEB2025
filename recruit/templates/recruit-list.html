@@ -68,14 +68,27 @@
       </nav>
 
       <!-- 필터링 - 정렬 -->
-      <div class="recruit-sub-filter-bar">
-        <div class="recruit-sub-filters">
-          <ul>
-            <li><button type="button" class="order-btn {% if selected_order == 'latest' %}active{% endif %}" data-order="latest">최신순</button></li>
-            <li><button type="button" class="order-btn {% if selected_order == 'open' %}active{% endif %}" data-order="recruiting">모집중</button></li>
-            <li><button type="button" class="order-btn {% if selected_order == 'closed' %}active{% endif %}" data-order="closed">모집완료</button></li>
-          </ul>
-        </div>
+      <div class="recruit-sub-filters">
+        <ul>
+          <li>
+            <button type="submit" 
+                    name="order" 
+                    value="latest" 
+                    class="order-btn {% if selected_order == 'latest' %}active{% endif %}">최신순</button>
+          </li>
+          <li>
+            <button type="submit" 
+                    name="status" 
+                    value="open" 
+                    class="order-btn {% if selected_status == 'open' %}active{% endif %}">모집중</button>
+          </li>
+          <li>
+            <button type="submit" 
+                    name="status" 
+                    value="closed" 
+                    class="order-btn {% if selected_status == 'closed' %}active{% endif %}">모집완료</button>
+          </li>
+        </ul>
       </div>
 
       <!-- 맞춤 필터링 -->
