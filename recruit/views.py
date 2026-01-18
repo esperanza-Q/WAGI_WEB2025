@@ -6,6 +6,7 @@ from django.http import HttpResponseForbidden
 import json
 from django.utils.timezone import now
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 from .models import Recruit, RecruitLike, RecruitImage, RecruitTag, Category, Tag, Comment
 
@@ -47,6 +48,7 @@ def recruit_list(request):
             Q(is_recruiting=False) | Q(deadline__lt=today)
         )
 
+
     # =========================
     # 정렬 (🔥 최소 수정 핵심)
     # =========================
@@ -62,12 +64,18 @@ def recruit_list(request):
             '-created_at'
         )
 
+    page = request.GET.get('page', '1')  
+    paginator = Paginator(recruits, 10)  
+    page_obj = paginator.get_page(page)
+
     return render(request, 'recruit-list.html', {
-        'recruits': recruits,
+        'recruits': page_obj,
         'selected_category': category,
         'selected_status': status,
         'selected_order': order,
     })
+
+
 
 
 # =========================
