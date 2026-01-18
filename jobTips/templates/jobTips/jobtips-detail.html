@@ -18,23 +18,26 @@
 
     <nav class="main-nav">
       <ul class="main-nav-links">
-        <li><a href="#">활동 후기</a></li>
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
         <li><a href="{% url 'jobTips:list' %}">자소서·면접·포폴</a></li>
-        <li><a href="#">모집</a></li>
-        <li><a href="#">나의 로드맵</a></li>
+        <li><a href="{% url 'recruit:recruit_list' %}">모집</a></li>
+        <li><a href="{% url 'career:roadmap_home' %}">나의 로드맵</a></li>
       </ul>
     </nav>
 
     <div class="main-header-r">
-      <button class="header-mypage-btn">마이페이지</button>
-      <button class="header-login-btn">로그인</button>
+      <a href="{% url 'mypage:home' %}"><button class="header-mypage-btn">마이페이지</button></a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'accounts:logout' %}"><button class="header-login-btn">로그아웃</button></a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}"><button class="header-login-btn">로그인</button></a>
+      {% endif %}
     </div>
   </header>
 
   <main>
   <div class="container">
 
-    <!-- 상단 헤더 -->
     <div class="jobtips-detail-header">
       <div class="jobtips-detail-info">
         <div class="jobtips-detail-title">{{ post.title }}</div>
@@ -47,20 +50,17 @@
           </div>
 
           <div class="jobtips-detail-actions">
-            <!-- 수정/삭제 버튼 (작성자만) -->
             {% if user.is_authenticated and user == post.author %}
               <div class="jobtips-edit-delete">
                 <a href="{% url 'jobTips:edit' post.pk %}" class="jobtips-edit-btn">수정</a>
                 <span class="jobtips-divider-line">|</span>
                 <form method="POST" action="{% url 'jobTips:delete' post.pk %}" style="display:inline;">
                   {% csrf_token %}
-                  <button class="jobtips-delete-btn" type="submit"
-                          onclick="return confirm('정말 삭제할까요?');">삭제</button>
+                  <button class="jobtips-delete-btn" type="submit" onclick="return confirm('정말 삭제할까요?');">삭제</button>
                 </form>
               </div>
             {% endif %}
 
-            <!-- 공감해요(좋아요) -->
             <form method="POST" action="{% url 'jobTips:like' post.pk %}" class="jobtips-like-form">
               {% csrf_token %}
               <button type="submit" class="jobtips-detail-like-btn">
@@ -74,30 +74,35 @@
       </div>
     </div>
 
-    <!-- 합격 정보 + 첨부 파일 -->
     <div class="jobtips-detail-middle-box">
       <div class="jobtips-detail-important">{{ post.pass_info }}</div>
 
-      {% if post.file_attachment %}
-      <div class="jobtips-detail-files">
-        <img class="jobtips-detail-file-img" src="{% static 'img/file.svg' %}" width="18px" alt="file">
-        <a class="jobtips-detail-file-content" href="{{ post.file_attachment.url }}" download>
-          {{ post.file_attachment.name|cut:"jobtips/files/" }}
-        </a>
+      <!-- ✅ 첨부 파일 목록 (multiple) -->
+      {% if files %}
+      <div class="jobtips-detail-files" style="display:flex; flex-direction:column; gap:6px;">
+        {% for f in files %}
+          <div style="display:flex; align-items:center; gap:8px;">
+            <img class="jobtips-detail-file-img" src="{% static 'img/file.svg' %}" width="18px" alt="file">
+            <a class="jobtips-detail-file-content" href="{{ f.file.url }}" download>
+              {{ f.file.name|cut:"jobtips/files/" }}
+            </a>
+          </div>
+        {% endfor %}
       </div>
       {% endif %}
     </div>
 
-    <!-- 이미지 + 후기 내용 -->
     <div class="jobtips-detail-body">
 
-      <!-- 왼쪽: 이미지 슬라이더 (지금은 1장만이라도 구조는 그대로) -->
+      <!-- ✅ 왼쪽: 이미지 슬라이더(이미지 파일만) -->
       <div class="jobtips-detail-image-box">
         <button class="jobtips-image-scroll-btn left" type="button">&#8592;</button>
 
-        <div class="jobtips-detail-image-scroll">
-          {% if post.file_attachment %}
-            <img src="{{ post.file_attachment.url }}" alt="활동 이미지">
+        <div class="jobtips-detail-image-scroll" id="image-scroll">
+          {% if image_files %}
+            {% for img in image_files %}
+              <img src="{{ img.file.url }}" alt="활동 이미지">
+            {% endfor %}
           {% else %}
             <img src="{% static 'img/sample-img.png' %}" alt="활동 이미지">
           {% endif %}
@@ -106,7 +111,6 @@
         <button class="jobtips-image-scroll-btn right" type="button">&#8594;</button>
       </div>
 
-      <!-- 오른쪽: 후기 내용 -->
       <div class="jobtips-detail-text-box">
         <div class="jobtips-detail-text-title">후기 내용</div>
         <div class="jobtips-detail-text-content">
@@ -123,7 +127,6 @@
       </div>
     </div>
 
-    <!-- 태그 + 스크랩 -->
     <div class="jobtips-bottom-box">
       <div class="jobtips-detail-tags">
         {% for tag in tags_list %}
@@ -147,7 +150,6 @@
 
     <div class="jobtips-divider"></div>
 
-    <!-- 댓글 작성 -->
     {% if user.is_authenticated %}
       <form method="POST" action="{% url 'jobTips:comment_create' post.pk %}" class="jobtips-detail-comment-box">
         {% csrf_token %}
@@ -158,7 +160,6 @@
       </form>
     {% endif %}
 
-    <!-- 댓글 리스트 -->
     <div class="jobtips-comment-list">
       {% for c in comments %}
         <div class="jobtips-comment-item">
@@ -192,7 +193,21 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <!-- 프론트 JS 쓰려면 이렇게 연결 -->
+  <!-- 프론트 JS 유지 -->
   <script src="{% static 'js/jobtips-detail.js' %}"></script>
+
+  <!-- ✅ 슬라이더 최소 동작(프론트 JS가 없다면 대비) -->
+  <script>
+    (function(){
+      const sc = document.getElementById('image-scroll');
+      if (!sc) return;
+      const left = document.querySelector('.jobtips-image-scroll-btn.left');
+      const right = document.querySelector('.jobtips-image-scroll-btn.right');
+      if (!left || !right) return;
+
+      left.addEventListener('click', () => sc.scrollBy({ left: -300, behavior: 'smooth' }));
+      right.addEventListener('click', () => sc.scrollBy({ left: 300, behavior: 'smooth' }));
+    })();
+  </script>
 </body>
 </html>

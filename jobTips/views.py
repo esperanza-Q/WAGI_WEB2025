@@ -6,12 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_http_methods
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
+from django.core.paginator import Paginator
 
-from .models import JobTipPost, Comment
+from .models import JobTipPost, Comment, JobTipFile
 from .forms import JobTipPostForm
 
 
-# 카테고리/정렬 허용값
 VALID_CATEGORIES = {"resume", "interview", "portfolio"}
 VALID_SORT = {"latest", "likes"}
 
@@ -42,8 +42,13 @@ def post_list(request):
     else:
         posts = posts.order_by("-created_at")
 
-    return render(request, "jobTips/b_list.html", {
-        "posts": posts,
+    # ✅ 페이지네이션
+    page_number = request.GET.get("page", "1")
+    paginator = Paginator(posts, 8)  # 한 페이지 8개
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "jobTips/jobtips-list.html", {
+        "page_obj": page_obj,
         "q": q,
         "category": category,
         "sort": sort,
@@ -58,35 +63,37 @@ def post_detail(request, pk):
         pk=pk
     )
 
-    # 좋아요 여부 확인
     is_liked = (
         post.likes.filter(pk=request.user.pk).exists()
         if request.user.is_authenticated else False
     )
 
-    # ✅ 스크랩 여부 확인 (True/False 판단)
     is_scrapped = (
         post.scraps.filter(pk=request.user.pk).exists()
         if request.user.is_authenticated else False
     )
 
-    # "아이유, 졸려" -> ["아이유", "졸려"]
     tags_list = [t.strip() for t in (post.tags or "").split(",") if t.strip()]
-
-    # 댓글 목록
     comments = post.comments.select_related("author").all()
 
-    return render(request, "jobTips/b_detail.html", {
+    # ✅ 다중 파일: 이미지/그 외 분리
+    all_files = post.files.all().order_by("created_at")
+    image_files = [f for f in all_files if (f.file and str(f.file.name).lower().endswith((".png", ".jpg", ".jpeg", ".webp", ".gif")))]
+    other_files = [f for f in all_files if f not in image_files]
+
+    return render(request, "jobTips/jobtips-detail.html", {
         "post": post,
         "is_liked": is_liked,
-        "is_scrapped": is_scrapped,  # ✅ 이제 False 고정 아님!
+        "is_scrapped": is_scrapped,
         "tags_list": tags_list,
         "comments": comments,
+        "image_files": image_files,
+        "other_files": other_files,
     })
 
 
-@require_POST
 @login_required
+@require_POST
 def post_like(request, pk):
     post = get_object_or_404(JobTipPost, pk=pk)
 
@@ -98,9 +105,8 @@ def post_like(request, pk):
     return HttpResponseRedirect(reverse("jobTips:detail", args=[pk]))
 
 
-# ✅ 스크랩 기능 추가
-@require_POST
 @login_required
+@require_POST
 def post_scrap(request, pk):
     post = get_object_or_404(JobTipPost, pk=pk)
 
@@ -131,13 +137,17 @@ def post_create(request):
                     post.tags = ", ".join([t.strip() for t in tags_raw.split(",") if t.strip()])
 
             post.save()
+
+            # ✅ 다중 파일 저장: name="files"
+            for f in request.FILES.getlist("files"):
+                JobTipFile.objects.create(post=post, file=f)
+
             return redirect("jobTips:detail", pk=post.pk)
     else:
         form = JobTipPostForm()
 
-    return render(request, "jobTips/b_post.html", {
+    return render(request, "jobTips/jobtips-post.html", {
         "form": form,
-        "is_edit": False,
     })
 
 
@@ -164,14 +174,18 @@ def post_edit(request, pk):
                     edited.tags = ", ".join([t.strip() for t in tags_raw.split(",") if t.strip()])
 
             edited.save()
+
+            # ✅ edit에서 새 파일 추가 (기존 파일 유지)
+            for f in request.FILES.getlist("files"):
+                JobTipFile.objects.create(post=edited, file=f)
+
             return redirect("jobTips:detail", pk=edited.pk)
     else:
         form = JobTipPostForm(instance=post)
 
-    return render(request, "jobTips/b_post.html", {
+    return render(request, "jobTips/jobtips-edit.html", {
         "form": form,
         "post": post,
-        "is_edit": True,
     })
 
 
@@ -186,10 +200,6 @@ def post_delete(request, pk):
     post.delete()
     return redirect("jobTips:list")
 
-
-# =========================
-# ✅ 댓글 (작성/삭제)
-# =========================
 
 @login_required
 @require_POST
