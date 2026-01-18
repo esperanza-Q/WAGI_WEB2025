@@ -164,7 +164,16 @@
         <div class="ex-comment-item">
           <div class="ex-comment-top">
             <span class="ex-comment-nickname">{{ c.user.display_name }}</span>
-            <span class="ex-comment-date">{{ c.created_at|date:"Y.m.d" }}</span>
+            <div class="ex-comment-right">
+              <span class="ex-comment-date">{{ c.created_at|date:"Y.m.d" }}</span>
+              <div class="ex-comment-right-spacer">ㅣ</div>
+              {% if c.user == request.user %}
+              <form method="POST" action="{% url 'experience:delete_comment' review.id c.id %}" class="ex-comment-delete-form">
+                {% csrf_token %}
+                <button class="ex-comment-delete-btn" type="submit">삭제</button>
+              </form>
+              {% endif %}
+            </div>
           </div>
           <p class="ex-comment-text">
             {{ c.content }}
