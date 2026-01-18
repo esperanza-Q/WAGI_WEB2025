@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="{% static 'css/jobtips/jobtips-post.css' %}">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="{% url 'home:home' %}">
+            <img class="main-logo" src="{% static 'img/main-logo.svg' %}" alt="logo"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
+        <li><a href="{% url 'jobTips:list' %}">자소서·면접·포폴</a></li>
+        <li><a href="{% url 'recruit:recruit_list' %}">모집</a></li>
+        <li><a href="{% url 'career:roadmap_home' %}">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <a href="{% url 'mypage:home' %}"><button class="header-mypage-btn" >마이페이지</button></a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'accounts:logout' %}"><button class="header-login-btn">로그아웃</button></a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}"><button class="header-login-btn">로그인</button></a>
+      {% endif %}
+    </div>
+  </header>
+
+<main>
+  <div class="container">
+
+    <h2 class="jobtips-post-title">자소서·면접·포폴 후기 남기기</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="jobtips-post-form" action="{% url 'jobTips:create' %}">
+      {% csrf_token %}
+
+      <label class="jobtips-post-label">제목</label>
+      <input type="text" class="jobtips-post-input"
+             name="title"
+             placeholder="활동 제목을 간단히 입력해주세요 (예: 카카오 FE 인턴 합격 자소서)" required>
+
+      <label class="jobtips-post-label">카테고리</label>
+      <div class="jobtips-post-category">
+        <label><input type="radio" name="category" value="resume" required> 자소서</label>
+        <label><input type="radio" name="category" value="interview"> 면접</label>
+        <label><input type="radio" name="category" value="portfolio"> 포트폴리오</label>
+      </div>
+
+      <label class="jobtips-post-label">지원 분야</label>
+      <input type="text" class="jobtips-post-input" name="position" placeholder="직무 / 포지션" required>
+
+      <label class="jobtips-post-label">합격 연도와 전형 유형</label>
+      <input type="text" class="jobtips-post-input" name="pass_info" placeholder="예: 2023 동계 인턴 / 2024 교내 공모전" required>
+
+      <label class="jobtips-post-label">후기 본문</label>
+      <textarea class="jobtips-post-textarea" name="content" required></textarea>
+
+      <label class="jobtips-post-label">파일 업로드</label>
+      <div class="jobtips-post-upload-area">
+        <label class="jobtips-post-upload-btn">
+          +
+          <!-- ✅ multiple 업로드: name="files" -->
+          <input type="file" id="jobtips-upload-input" name="files" multiple required>
+        </label>
+
+        <div class="jobtips-post-upload-preview" id="jobtips-upload-preview"></div>
+      </div>
+
+      <label class="jobtips-post-label">개인 경험이나 팁</label>
+      <textarea class="jobtips-post-textarea" name="experience_tip" required></textarea>
+
+      <label class="jobtips-post-label">태그 추가</label>
+      <div class="jobtips-tag-input-wrapper">
+        <input type="text" id="jobtips-tag-input" class="jobtips-tag-input" placeholder="태그를 입력해주세요">
+        <button type="button" id="jobtips-add-tag-btn" class="jobtips-tag-add-btn">추가</button>
+      </div>
+
+      <div class="jobtips-tag-list" id="jobtips-tag-list"></div>
+
+      <!-- ✅ 서버로 보낼 hidden input name="tags" -->
+      <input type="hidden" id="jobtips-hidden-tags" name="tags">
+
+      <button type="submit" class="jobtips-post-submit-btn">완료하기</button>
+    </form>
+
+  </div>
+</main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+
+  <script src="{% static 'js/jobtips-post.js' %}"></script>
+
+  <!-- ✅ tags hidden input 채우기(프론트 JS가 안 넣는 경우 대비, UI 변화 없음) -->
+  <script>
+    (function(){
+      const hidden = document.getElementById('jobtips-hidden-tags');
+      if (!hidden) return;
+
+      // 프론트 JS가 tags 배열을 만들어서 리스트에 뿌릴 텐데,
+      // 혹시 hidden에 안 넣으면 submit 전에 한번 더 보정
+      const form = document.querySelector('.jobtips-post-form');
+      if (!form) return;
+
+      form.addEventListener('submit', function(){
+        // 이미 값 있으면 그대로 둠
+        if (hidden.value && hidden.value.trim()) return;
+
+        // #태그 리스트에서 텍스트 긁어와서 JSON 배열로 넣어줌
+        const tags = [];
+        document.querySelectorAll('#jobtips-tag-list .jobtips-tag-item, #jobtips-tag-list span, #jobtips-tag-list div').forEach(el=>{
+          const t = (el.innerText || '').replace('#','').trim();
+          if (t) tags.push(t);
+        });
+        if (tags.length) hidden.value = JSON.stringify(tags);
+      });
+    })();
+  </script>
+</body>
+</html>
