@@ -27,12 +27,3 @@ if (editBtn) {
     // location.href = '수정페이지url';
   });
 }
-const deleteBtn = document.querySelector('.roadmap-delete-btn');
-if (deleteBtn) {
-  deleteBtn.addEventListener('click', function () {
-    if (confirm('정말 삭제하시겠습니까?')) {
-      alert('삭제되었습니다.');
-      // 실제 삭제 로직 필요
-    }
-  });
-}
