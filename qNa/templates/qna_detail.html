@@ -1,94 +1,166 @@
-<header class="top-nav">
-    <span class="nav-center">
-        <button class="nav-btn">활동 후기</button>
-        <button class="nav-btn">자소서·면접·포폴</button>
-        <button class="nav-btn">모집</button>
-        <button class="nav-btn">나의 로드맵</button>
-    </span>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge | QnA 상세</title>
 
-    <span class="nav-right">
-        <button class="nav-btn">마이페이지</button>
-        <button class="nav-btn">로그인</button>
-    </span>
-</header>
+  <link rel="stylesheet" href="{% static 'css/otherQnA-detail.css' %}">
+</head>
 
-<h2>{{ qna.title }}</h2>
-<p>{{ qna.display_name }} | {{ qna.created_at|date:"Y-m-d H:i" }}</p>
-
-<hr>
-
-<p>{{ qna.content }}</p>
-
-<br>
-
-<!-- 돌아가기 + 답변하기 버튼 같은 줄 -->
-<div style="
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-">
-    <!-- 돌아가기 -->
-    <a href="{% url 'qna:my_list' %}">
-        ← 돌아가기
-    </a>
-
-    {% if request.user.is_authenticated and request.user != qna.sender and not answers %}
-        <!-- 답변 달기 버튼 -->
-        <div style="flex: 1; text-align: center;">
-            <button id="openModalBtn" style="padding: 6px 14px; cursor: pointer;">
-                답변달기
-            </button>
-        </div>
-    {% endif %}
-
-
-    <!-- 오른쪽 여백 맞추기 -->
-    <div style="width: 80px;"></div>
-</div>
-
-<hr>
-
-<!--  답변이 있을 때만 보여줌 -->
-{% if answers %}
-    <h3>ㄴ 답변</h3>
-
-    {% for a in answers %}
-        <div style="margin-bottom: 15px;">
-            <p>{{ a.content }}</p>
-        </div>
-    {% endfor %}
-
-{% endif %}
-
-<!-- 답변 작성 모달 -->
-<div id="answerModal" style="display:none;">
-    <div>
-        <!-- 닫기 버튼 -->
-        <div style="display:flex; justify-content:flex-end;">
-            <button id="closeModalBtn"
-                    style="border:none; background:none; font-size:20px; cursor:pointer;">
-                ×
-            </button>
-        </div>
-
-        <h3>답변 달기</h3>
-
-        <form method="POST" action="{% url 'qna:answer' qna.id %}">
-            {% csrf_token %}
-            <textarea name="content" rows="5" style="width:100%;" required></textarea>
-            <br><br>
-            <button type="submit">확인</button>
-        </form>
+<body>
+  <header class="main-header">
+    <div class="logo">
+      <a href="{% url 'home:home' %}">
+        <img class="main-logo" src="{% static 'img/main-logo.svg' %}" alt="SujeongBridge">
+      </a>
     </div>
-</div>
 
-<script>
-document.getElementById("openModalBtn").onclick = function() {
-    document.getElementById("answerModal").style.display = "block";
-}
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
+        <li><a href="{% url 'jobTips:list' %}">자소서·면접·포폴</a></li>
+        <li><a href="{% url 'recruit:recruit_list' %}">모집</a></li>
+        <li><a href="{% url 'career:roadmap_home' %}">나의 로드맵</a></li>
+      </ul>
+    </nav>
 
-document.getElementById("closeModalBtn").onclick = function() {
-    document.getElementById("answerModal").style.display = "none";
-}
-</script>
+    <div class="main-header-r">
+      <a href="{% url 'mypage:home' %}">
+        <button class="header-mypage-btn" type="button">마이페이지</button>
+      </a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'accounts:logout' %}">
+          <button class="header-login-btn" type="button">로그아웃</button>
+        </a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}">
+          <button class="header-login-btn" type="button">로그인</button>
+        </a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <div class="otherQnA-detail-wrapper">
+        <div class="otherQnA-detail-top">
+          <div class="otherQnA-detail-title">
+            {{ qna.title }}
+          </div>
+
+          <div class="otherQnA-detail-info">
+            <span class="otherQnA-detail-userId">
+              {% if qna.display_name %}
+                {{ qna.display_name }}
+              {% elif qna.sender %}
+                {{ qna.sender.username }}
+              {% else %}
+                알 수 없음
+              {% endif %}
+            </span>
+            <span class="otherQnA-detail-date">
+              {{ qna.created_at|date:"Y-m-d H:i" }}
+            </span>
+          </div>
+        </div>
+
+        <div class="otherQnA-detail-question">
+          <p>{{ qna.content }}</p>
+        </div>
+
+        {% if answers %}
+          <div class="otherQnA-detail-bottom">
+            <div>ㄴ 답변</div>
+            <div class="otherQnA-detail-answer">
+              {% for a in answers %}
+                <p>{{ a.content }}</p>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+          <a href="{% url 'qna:my_list' %}">← 돌아가기</a>
+
+          {% if can_answer %}
+            <button id="openModalBtn" type="button" class="header-login-btn" style="padding: 8px 14px;">
+              답변하기
+            </button>
+          {% endif %}
+
+          <div style="width: 60px;"></div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+
+  <div id="answerModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:2000;">
+    <div style="
+      max-width: 560px;
+      margin: 120px auto;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid rgba(146, 130, 161, 0.3);
+      border-radius: 16px;
+      padding: 18px;
+      backdrop-filter: blur(10px);
+    ">
+      <div style="display:flex; justify-content:flex-end;">
+        <button id="closeModalBtn" type="button"
+                style="border:none; background:none; font-size:22px; cursor:pointer;">
+          ×
+        </button>
+      </div>
+
+      <h3 style="margin-top:0; color: var(--purple-dark);">답변 하기</h3>
+
+      <form method="POST" action="{% url 'qna:answer' qna.id %}">
+        {% csrf_token %}
+        <textarea name="content" rows="6" style="width:100%; box-sizing:border-box;" required></textarea>
+        <div style="display:flex; justify-content:flex-end; margin-top:10px;">
+          <button type="submit" class="header-login-btn" style="padding: 8px 14px;">확인</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    const modal = document.getElementById("answerModal");
+    const openBtn = document.getElementById("openModalBtn");
+    const closeBtn = document.getElementById("closeModalBtn");
+
+    function openModal() {
+      if (!modal) return;
+      modal.style.display = "block";
+    }
+
+    function closeModal() {
+      if (!modal) return;
+      modal.style.display = "none";
+    }
+
+    if (openBtn) openBtn.addEventListener("click", openModal);
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+
+    if (modal) {
+      modal.addEventListener("click", function (e) {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeModal();
+    });
+  })();
+  </script>
+</body>
+</html>
