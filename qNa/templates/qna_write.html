@@ -1,31 +1,96 @@
-<header class="top-nav">
-    <span class="nav-center">
-        <button class="nav-btn">활동 후기</button>
-        <button class="nav-btn">자소서·면접·포폴</button>
-        <button class="nav-btn">모집</button>
-        <button class="nav-btn">나의 로드맵</button>
-    </span>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SujeongBridge | QnA 작성</title>
 
-    <span class="nav-right">
-        <button class="nav-btn">마이페이지</button>
-        <button class="nav-btn">로그인</button>
-    </span>
+  <link rel="stylesheet" href="{% static 'css/otherQnA-post.css' %}">
+</head>
+
+<body>
+
+<header class="main-header">
+  <div class="logo">
+    <a href="{% url 'home:home' %}">
+      <img class="main-logo" src="{% static 'img/main-logo.svg' %}" alt="logo">
+    </a>
+  </div>
+
+  <nav class="main-nav">
+    <ul class="main-nav-links">
+      <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
+      <li><a href="{% url 'jobTips:list' %}">자소서·면접·포폴</a></li>
+      <li><a href="{% url 'recruit:recruit_list' %}">모집</a></li>
+      <li><a href="{% url 'career:roadmap_home' %}">나의 로드맵</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-header-r">
+    <a href="{% url 'mypage:home' %}">
+      <button class="header-mypage-btn" type="button">마이페이지</button>
+    </a>
+
+    {% if user.is_authenticated %}
+      <a href="{% url 'accounts:logout' %}">
+        <button class="header-login-btn" type="button">로그아웃</button>
+      </a>
+    {% else %}
+      <a href="{% url 'accounts:login' %}">
+        <button class="header-login-btn" type="button">로그인</button>
+      </a>
+    {% endif %}
+  </div>
 </header>
 
-<h1>Q&A 작성하기</h1>
+<main>
+  <div class="container">
 
-<form action="{% url 'qna:submit' %}" method="POST">
-    {% csrf_token %}
+    <div class="otherQnA-post-wrapper">
+      <div class="otherQnA-post-top">
+        <div class="otherQnA-post-title">Q&A 작성하기</div>
+      </div>
 
-    <input type="hidden" name="receiver_id" value="{{ receiver.id }}">
-    
-    <!-- 제목 -->
-    <label for="title" style="font-weight: bold;">제목</label><br>
-    <input type="text" id="title" name="title" style="width: 100%; padding: 8px;" required><br><br>
+      <form class="otherQnA-post-bottom" method="post" action="{% url 'qna:submit' %}">
+        {% csrf_token %}
+        <input type="hidden" name="receiver_id" value="{{ receiver.id }}">
 
-    <!-- 내용 -->
-    <label for="content" style="font-weight: bold;">내용</label><br>
-    <textarea id="content" name="content" rows="10" style="width: 100%; padding: 8px;" required></textarea><br><br>
+        <div class="otherQnA-post-bottom-title">
+          <p>제목</p>
+          <input
+            class="otherQnA-post-title-input"
+            type="text"
+            name="title"
+            required
+          >
+        </div>
 
-    <button type="submit" style="padding: 8px 16px;">완료하기</button>
-</form>
+        <div class="otherQnA-post-bottom-detail">
+          <p>내용</p>
+          <textarea
+            class="otherQnA-post-detail-input"
+            name="content"
+            rows="8"
+            required
+          ></textarea>
+        </div>
+
+        <div class="otherQnA-post-submit">
+          <button class="otherQnA-post-submitBtn" type="submit">
+            완료하기
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>© SSWU_WAGI 3기 CampusBridge</p>
+  <p class="member">BACKEND<br>FRONTEND</p>
+</footer>
+
+</body>
+</html>
