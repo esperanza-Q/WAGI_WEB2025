@@ -6,6 +6,7 @@ from django.http import HttpResponseForbidden
 import json
 from django.utils.timezone import now
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 from .models import Recruit, RecruitLike, RecruitImage, RecruitTag, Category, Tag, Comment
 
@@ -40,12 +41,12 @@ def recruit_list(request):
     if status == 'open':
         recruits = recruits.filter(
             is_recruiting=True,
-            deadline__gte=today
         )
     elif status == 'closed':
         recruits = recruits.filter(
-            Q(is_recruiting=False) | Q(deadline__lt=today)
+            is_recruiting=False
         )
+
 
     # =========================
     # 정렬 (🔥 최소 수정 핵심)
@@ -62,31 +63,18 @@ def recruit_list(request):
             '-created_at'
         )
 
+    page = request.GET.get('page', '1')  
+    paginator = Paginator(recruits, 10)  
+    page_obj = paginator.get_page(page)
+
     return render(request, 'recruit-list.html', {
-        'recruits': recruits,
+        'recruits': page_obj,
         'selected_category': category,
         'selected_status': status,
         'selected_order': order,
     })
 
-@login_required
-def recruit_like(request, recruit_id):
-    recruit = get_object_or_404(Recruit, recruit_id=recruit_id)
 
-    like = RecruitLike.objects.filter(
-        user=request.user,
-        recruit=recruit
-    )
-
-    if like.exists():
-        like.delete()
-    else:
-        RecruitLike.objects.create(
-            user=request.user,
-            recruit=recruit
-        )
-
-    return redirect('recruit_list')
 
 
 # =========================
@@ -138,7 +126,7 @@ def recruit_post(request):
                 college=None
             )
 
-        return redirect('recruit_detail', recruit_id=recruit.recruit_id)
+        return redirect('recruit:recruit_detail', recruit_id=recruit.recruit_id)
 
     return render(request, 'recruit-post.html', {
         'categories': Category.objects.all()
@@ -185,7 +173,7 @@ def recruit_detail(request, recruit_id):
                 parent_id=parent_id if parent_id else None
             )
 
-        return redirect('recruit_detail', recruit_id=recruit_id)
+        return redirect('recruit:recruit_detail', recruit_id=recruit_id)
 
     return render(request, 'recruit-detail.html', {
         'recruit': recruit,
@@ -194,6 +182,26 @@ def recruit_detail(request, recruit_id):
         'reply_map': reply_map,
         'tags': tags,
     })
+
+@login_required
+def recruit_like(request, recruit_id):
+    recruit = get_object_or_404(Recruit, recruit_id=recruit_id)
+
+    like = RecruitLike.objects.filter(
+        user=request.user,
+        recruit=recruit
+    )
+
+    if like.exists():
+        like.delete()
+    else:
+        RecruitLike.objects.create(
+            user=request.user,
+            recruit=recruit
+        )
+
+    return redirect('recruit:recruit_detail', recruit_id=recruit_id)
+
 # =========================
 # 4. 댓글 수정/삭제/답글
 # =========================
@@ -212,7 +220,7 @@ def comment_edit(request, comment_id):
             comment.content = content
             comment.save()
 
-    return redirect('recruit_detail', recruit_id=comment.recruit.recruit_id)
+    return redirect('recruit:recruit_detail', recruit_id=comment.recruit.recruit_id)
 
 
 # 댓글 삭제 (원댓글 및 답글 공통)
@@ -226,7 +234,7 @@ def comment_delete(request, comment_id):
     recruit_id = comment.recruit.recruit_id
     comment.delete()
 
-    return redirect('recruit_detail', recruit_id=recruit_id)
+    return redirect('recruit:recruit_detail', recruit_id=recruit_id)
 
 
 # ✅ 답글 등록 (추가된 부분)
@@ -246,7 +254,7 @@ def comment_reply(request, recruit_id, comment_id):
                 parent=parent_comment  # 부모 댓글을 지정하여 답글로 저장
             )
 
-    return redirect('recruit_detail', recruit_id=recruit_id)
+    return redirect('recruit:recruit_detail', recruit_id=recruit_id)
 
 
 # =========================
@@ -261,7 +269,14 @@ def recruit_edit(request, recruit_id):
 
     if request.method == 'POST':
         # 제목
-        recruit.title = request.POST.get('title')
+        title = request.POST.get('title', '').strip()
+        if not title:
+            return render(request, 'recruit-edit.html', {
+                'recruit': recruit,
+                'categories': Category.objects.all(),
+                'error': '제목은 필수 입력입니다.'
+            })
+        recruit.title = title
 
         # 카테고리
         category_name = request.POST.get('category')
@@ -275,6 +290,11 @@ def recruit_edit(request, recruit_id):
                 break
             except ValueError:
                 continue
+
+        from django.utils import timezone
+        recruit.is_recruiting = recruit.deadline >= timezone.now().date()
+
+        recruit.field = request.POST.get('field', '').strip()
 
         # 본문 / 연락처
         recruit.body = request.POST.get('body')
@@ -326,7 +346,7 @@ def recruit_edit(request, recruit_id):
                 college=None
             )
 
-        return redirect('recruit_detail', recruit_id=recruit.recruit_id)
+        return redirect('recruit:recruit_detail', recruit_id=recruit.recruit_id)
 
     # GET 요청
     return render(request, 'recruit-edit.html', {
@@ -344,10 +364,10 @@ def recruit_delete(request, recruit_id):
 
     # 작성자 본인만 삭제 가능
     if request.user != recruit.user:
-        return redirect('recruit_detail', recruit_id=recruit_id)
+        return redirect('recruit:recruit_detail', recruit_id=recruit_id)
 
     if request.method == "POST":
         recruit.delete()
-        return redirect('recruit_list')  # 삭제 후 목록 페이지로 이동
+        return redirect('recruit:recruit_list')  # 삭제 후 목록 페이지로 이동
 
-    return render(request, 'recruit_confirm_delete.html', {'recruit': recruit})
+    return redirect('recruit:recruit_detail', recruit_id=recruit_id)

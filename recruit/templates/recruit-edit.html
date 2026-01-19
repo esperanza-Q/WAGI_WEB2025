@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/recruit/recruit-edit.css">
+  <link rel="stylesheet" href="{% static 'css/recruit/recruit-edit.css' %}">
 </head>
 
 <body>
@@ -35,50 +36,51 @@
   <div class="container">
     <h2 class="recruit-edit-title">모집글 수정하기</h2>
     <form method="POST" enctype="multipart/form-data" class="recruit-edit-form">
+      {% csrf_token %}
       <label class="recruit-edit-label">제목</label>
-      <input type="text" class="recruit-edit-input" value="기존 모집글 제목" required>
+      <input type="text" name="title" class="recruit-edit-input" value="{{ recruit.title }}" required>
       
       <label class="recruit-edit-label">카테고리</label>
       <div class="recruit-edit-category">
-        <label><input type="radio" value="동아리" required> 동아리</label>
-        <label><input type="radio" value="공모전"> 공모전</label>
-        <label><input type="radio" value="스터디"> 스터디</label>
+        <label><input type="radio" name="category" value="동아리" {% if recruit.category.category_name == '동아리' %}checked{% endif %} required> 동아리</label>
+        <label><input type="radio" name="category" value="공모전" {% if recruit.category.category_name == '공모전' %}checked{% endif %}> 공모전</label>
+        <label><input type="radio" name="category" value="스터디" {% if recruit.category.category_name == '스터디' %}checked{% endif %}> 스터디</label>
       </div>
 
       <label class="recruit-edit-label">모집 분야</label>
-      <input type="text" class="recruit-edit-input" value="기존 모집 분야" required>
+      <input type="text" name="field" class="recruit-edit-input" value="{{ recruit.field }}" required>
 
       <label class="recruit-edit-label">모집 마감일</label>
       <input
         type="date"
+        name="deadline"
         class="recruit-edit-input"
+        value="{{ recruit.deadline|date:'Y-m-d' }}"
         required
       >
 
       <label class="recruit-edit-label">활동 소개</label>
-      <textarea class="recruit-edit-textarea" required>기존 활동 소개 내용</textarea>
+      <textarea name="body" class="recruit-edit-textarea" required>{{ recruit.body }}</textarea>
 
       <label class="recruit-edit-label">파일 업로드</label>
       <div class="recruit-edit-upload-area">
         <label class="recruit-edit-upload-btn">
           +
-          <input type="file" id="recruit-edit-upload-input" multiple>
+          <input type="file" name="new_images" id="recruit-edit-upload-input" multiple>
         </label>
         <div class="recruit-edit-upload-preview" id="recruit-edit-upload-preview">
           <!-- 기존 업로드 파일/이미지 미리보기 -->
-          <div class="recruit-edit-preview-item">
-            <img src="../../static/img/sample-img.png" class="recruit-edit-preview-img" alt="기존 이미지">
-            <div class="recruit-edit-preview-remove">×</div>
+          {% for img in recruit.images.all %}
+          <div class="recruit-edit-preview-item" data-image-id="{{ img.image_id }}">
+            <img src="{{ img.image_url.url }}" class="recruit-edit-preview-img" alt="기존 이미지">
+            <div class="recruit-edit-preview-remove" onclick="removeExistingImage('{{ img.image_id }}', this)">×</div>
           </div>
-          <div class="recruit-edit-preview-item">
-            <div class="recruit-edit-preview-file">기존파일.pdf</div>
-            <div class="recruit-edit-preview-remove">×</div>
-          </div>
+          {% endfor %}
         </div>
       </div>
 
       <label class="recruit-edit-label">연결 링크</label>
-      <input class="recruit-edit-input" value="기존 링크" required>
+      <input type="text" class="recruit-edit-input" name="contact" value="{{ recruit.contact }}" required>
       
       <label class="recruit-edit-label">태그 추가</label>
       <div class="recruit-edit-tag-input-wrapper">
@@ -87,12 +89,14 @@
       </div>
         <!-- 태그 보여주는 영역 -->
       <div class="recruit-edit-tag-list" id="recruit-edit-tag-list">
-        <div class="recruit-edit-tag-item">#모집 <span class="recruit-edit-tag-remove">x</span></div>
-        <div class="recruit-edit-tag-item">#스터디 <span class="recruit-edit-tag-remove">x</span></div>
+        {% for tag in recruit.tags.all %}
+        <div class="recruit-edit-tag-item">#{{ tag.tag_name }}<span class="recruit-edit-tag-remove" data-tag-id="{{ tag.id }}">x</span></div>
+        {% empty %}
+        {% endfor %}
       </div>
 
-      <input type="hidden" id="recruit-deleted-files">
-      <input type="hidden" id="recruit-edit-hidden-tags">
+      <input type="hidden" id="recruit-deleted-files" name="deleted_files">
+      <input type="hidden" id="recruit-edit-hidden-tags" name="tags">
       <!--둘 다 "사용자가 직접 입력/조작한 값(삭제 파일, 태그)"을 서버로 넘기기 위한 숨겨진 데이터 필드(동기화 위함..)
         파일 - 기존에 업로드된 파일/이미지 중에서 사용자가 삭제한 파일의 id(혹은 이름)" 목록을 JSON 문자열로 담아 서버로 전송하는 용도
         태그 - 사용자가 입력한 태그 목록을 JSON 문자열로 담아 서버로 전송하는 용도-->
@@ -109,6 +113,6 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="../../static/js/recruit-edit.js"></script>
+  <script src="{% static 'js/recruit-edit.js' %}"></script>
 </body>
 </html>

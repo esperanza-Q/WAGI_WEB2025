@@ -499,7 +499,28 @@ main {
 }
 
 .ex-comment-date {
-  color: var(--purple-dark);
+  color: var(--purple-light-2);
+  font-size: 14px;
+}
+
+.ex-comment-right{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ex-comment-right-spacer{
+  color: var(--purple-light-2);
+  font-size: 14px;
+}
+
+.ex-comment-delete-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--purple-light-2);
+  cursor: pointer;
   font-size: 14px;
 }
 
