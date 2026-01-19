@@ -1,11 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/recruit/recruit-post.css">
+  <link rel="stylesheet" href="{% static 'css/recruit/recruit-post.css' %}">
 </head>
 
 <body>
@@ -38,34 +39,36 @@
     <h2 class="recruit-post-title">모집하기</h2>
 
     <form method="POST" enctype="multipart/form-data" class="recruit-post-form">
+      {% csrf_token %}
       <label class="recruit-post-label">제목</label>
-      <input type="text" class="recruit-post-input" placeholder="활동 제목을 간단히 입력해주세요 (예: Sungshin AI Study 3기 모집)" required>
+      <input type="text" name="title" class="recruit-post-input" placeholder="활동 제목을 간단히 입력해주세요 (예: Sungshin AI Study 3기 모집)" required>
       
       <label class="recruit-post-label">카테고리</label>
       <div class="recruit-post-category">
-        <label><input type="radio" value="동아리" required> 동아리</label>
-        <label><input type="radio" value="공모전"> 공모전</label>
-        <label><input type="radio" value="스터디"> 스터디</label>
+        <label><input type="radio" name="category" value="동아리" required> 동아리</label>
+        <label><input type="radio" name="category" value="공모전"> 공모전</label>
+        <label><input type="radio" name="category" value="스터디"> 스터디</label>
       </div>
 
       <label class="recruit-post-label">모집 분야</label>
-      <input type="text" class="recruit-post-input" placeholder="예: 프로그래밍, 글쓰기, 프레젠테이션" required>
+      <input type="text" name="field" class="recruit-post-input" placeholder="예: 프로그래밍, 글쓰기, 프레젠테이션" required>
 
       <label class="recruit-post-label">모집 마감일</label>
       <input
         type="date"
+        name="deadline"
         class="recruit-post-input"
         required
       >
 
       <label class="recruit-post-label">활동 소개</label>
-      <textarea class="recruit-post-textarea" required></textarea>
+      <textarea name="body" class="recruit-post-textarea" required></textarea>
 
       <label class="recruit-post-label">파일 업로드</label>
       <div class="recruit-post-upload-area">
         <label class="recruit-post-upload-btn">
           +
-          <input type="file" id="recruit-upload-input" multiple required>
+          <input type="file" name="images" id="recruit-upload-input" multiple required>
         </label>
 
         <div class="recruit-post-upload-preview" id="recruit-post-upload-preview">
@@ -74,7 +77,7 @@
       </div>
 
       <label class="recruit-post-label">연결 링크</label>
-      <input class="recruit-post-input" placeholder="카카오톡 오픈채팅방이나 메일 주소" required>
+      <input type="text" name="contact" class="recruit-post-input" placeholder="카카오톡 오픈채팅방이나 메일 주소" required>
       
       <label class="recruit-post-label">태그 추가</label>
       <div class="recruit-tag-input-wrapper">
@@ -100,6 +103,6 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
 
-  <script src="../../static/js/recruit-post.js"></script>
+  <script src="{% static 'js/recruit-post.js' %}"></script>
 </body>
 </html>

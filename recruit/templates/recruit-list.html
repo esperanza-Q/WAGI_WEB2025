@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/recruit/recruit-list.css">
+  <link rel="stylesheet" href="{% static 'css/recruit/recruit-list.css' %}">
 </head>
 
 <body>
@@ -35,43 +36,50 @@
   <div class="container">
 
    <!-- 전체 검색 + 필터 form 하나로 묶음 -->
-    <form method="GET" id="filter-form" class="recruit-search-form">
+    <form method="GET" id="filter-form" class="recruit-search-form" action="{% url 'search:search-recruit' %}">
       <!-- 검색창 -->
       <div class="recruit-search-section">
         <input 
           type="search" 
+          name="q"
+          value="{{ request.GET.q|default:'' }}"
           placeholder="활동명으로 검색하기"
           class="recruit-search-input"
         />
 
         <button type="submit" class="recruit-search-btn">
-          <img src="../../static/img/search.svg" alt="검색">
+          <img src="{% static 'img/search.svg' %}" alt="검색">
         </button>
       </div>
       
       <!-- 숨겨진 값 (카테고리 / 정렬) -->
-      <input type="hidden" id="filter-category">
-      <input type="hidden" id="filter-ordering">
+      <input type="hidden" name="category" id="filter-category" value="{{ category|default:'' }}">
+      <input type="hidden" name="status" id="filter-status" value="{{ status|default:'' }}">
+      <input type="hidden" name="order" id="filter-ordering" value="{{ order|default:'' }}">
       
       <!-- 필터링- 카테고리 -->
       <nav class="recruit-filter-tabs">
         <ul>
           <li><button type="button" class="tab-btn" data-category="">전체</button></li>
-          <li><button type="button" class="tab-btn" data-category="동아리">동아리</button></li>
-          <li><button type="button" class="tab-btn" data-category="공모전">공모전</button></li>
-          <li><button type="button" class="tab-btn" data-category="스터디">스터디</button></li>
+<li><button type="button" class="tab-btn" data-category="동아리">동아리</button></li>
+<li><button type="button" class="tab-btn" data-category="공모전">공모전</button></li>
+<li><button type="button" class="tab-btn" data-category="스터디">스터디</button></li>
         </ul>
       </nav>
 
       <!-- 필터링 - 정렬 -->
-      <div class="recruit-sub-filter-bar">
-        <div class="recruit-sub-filters">
-          <ul>
-            <li><button type="button" class="order-btn" data-order="latest">최신순</button></li>
-            <li><button type="button" class="order-btn" data-order="recruiting">모집중</button></li>
-            <li><button type="button" class="order-btn" data-order="closed">모집완료</button></li>
-          </ul>
-        </div>
+      <div class="recruit-sub-filters">
+        <ul>
+          <li>
+            <a href="?category={{ category|urlencode }}{% if q_query %}&q={{ q_query|urlencode }}{% endif %}{% if selected_college %}&college={{ selected_college|urlencode }}{% endif %}{% if selected_department %}&department={{ selected_department|urlencode }}{% endif %}{% if selected_grade %}&grade={{ selected_grade|urlencode }}{% endif %}&order=latest" class="order-btn{% if order == 'latest' %} active{% endif %}">최신순</a>
+          </li>
+          <li>
+            <a href="?category={{ category|urlencode }}&status=open{% if order %}&order={{ order|urlencode }}{% endif %}{% if q_query %}&q={{ q_query|urlencode }}{% endif %}{% if selected_college %}&college={{ selected_college|urlencode }}{% endif %}{% if selected_department %}&department={{ selected_department|urlencode }}{% endif %}{% if selected_grade %}&grade={{ selected_grade|urlencode }}{% endif %}" class="order-btn{% if status == 'open' %} active{% endif %}">모집중</a>
+          </li>
+          <li>
+            <a href="?category={{ category|urlencode }}&status=closed{% if order %}&order={{ order|urlencode }}{% endif %}{% if q_query %}&q={{ q_query|urlencode }}{% endif %}{% if selected_college %}&college={{ selected_college|urlencode }}{% endif %}{% if selected_department %}&department={{ selected_department|urlencode }}{% endif %}{% if selected_grade %}&grade={{ selected_grade|urlencode }}{% endif %}" class="order-btn{% if status == 'closed' %} active{% endif %}">모집완료</a>
+          </li>
+        </ul>
       </div>
 
       <!-- 맞춤 필터링 -->
@@ -79,67 +87,85 @@
         <div class="recruit-custom-filter">
           <select class="recruit-filter-select">
             <option value="">단과대 전체</option>
-            <option value="engineering">공과대학</option>
-            <option value="humanities">인문대학</option>
+            <option value="engineering" {% if request.GET.college == 'engineering' %}selected{% endif %}>공과대학</option>
+            <option value="humanities" {% if request.GET.college == 'humanities' %}selected{% endif %}>인문대학</option>
           </select>
 
-          <select class="recruit-filter-select">
+          <select name="department" class="recruit-filter-select">
             <option value="">학과 전체</option>
-            <option value="computer">컴퓨터공학과</option>
-            <option value="ai">AI학과</option>
+            <option value="computer" {% if request.GET.major == 'computer' %}selected{% endif %}>컴퓨터공학과</option>
+            <option value="ai" {% if request.GET.major == 'ai' %}selected{% endif %}>AI학과</option>
           </select>
 
-          <select class="recruit-filter-select">
+          <select class="recruit-filter-select" name="grade">
             <option value="">학년 전체</option>
-            <option value="1">1학년</option>
-            <option value="2">2학년</option>
-            <option value="3">3학년</option>
-            <option value="4">4학년</option>
-            <option value="5">휴학</option>
-            <option value="6">졸업</option>
+            <option value="1" {% if request.GET.grade == '1' %}selected{% endif %}>1학년</option>
+            <option value="2" {% if request.GET.grade == '2' %}selected{% endif %}>2학년</option>
+            <option value="3" {% if request.GET.grade == '3' %}selected{% endif %}>3학년</option>
+            <option value="4" {% if request.GET.grade == '4' %}selected{% endif %}>4학년</option>
+            <option value="5" {% if request.GET.grade == '5' %}selected{% endif %}>휴학</option>
+            <option value="6" {% if request.GET.grade == '6' %}selected{% endif %}>졸업</option>
           </select>
 
           <button type="submit" class="recruit-custom-filter-btn">
             맞춤 검색
           </button>
         </div>
-        <a class="recruit-write-btn" href="./recruit-post.html">글쓰기</a>
+        <a class="recruit-write-btn" href="{% url 'recruit:recruit_post' %}">글쓰기</a>
       </div>
     </form>
     <div class="recruit-divider"></div>
 
     <div class="recruit-list">
-
-      <!-- 연동 시 카드 구조 참고용
-
-      <a href="./recruit-detail.html" class="recruit-card-link">
+      
+      {% for recruit in recruits %}
+      <a href="{% url 'recruit:recruit_detail' recruit.recruit_id %}" class="recruit-card-link">
         <div class="recruit-card">
           <div class="recruit-card-header">
             <div class="recruit-card-header-box">
-            <div class="recruit-card-lcategory">동아리</div>
-            <div class="recruit-card-rcategory">모집중</div>
+            <div class="recruit-card-lcategory">{{ recruit.category.category_name }}</div>
+            <div class="recruit-card-rcategory">{% if recruit.is_recruiting %}모집중{% else %}모집완료{% endif %}</div>
             </div>
-            <div class="recruit-card-date">2024.11.12</div>
+            <div class="recruit-card-date">{{ recruit.created_at|date:"Y.m.d" }}</div>
           </div>
-          <div class="recruit-card-title">컴공 과동아리 신입 부원 모집</div>
-          <div class="recruit-card-nickname">코딩러버</div>
-          <div class="recruit-card-period">2024.03 - 2024.11</div>
+          <div class="recruit-card-title">{{ recruit.title }}</div>
+          <div class="recruit-card-nickname">{{ recruit.user.username }}</div>
+          <div class="recruit-card-period">~ {{ recruit.deadline|date:"Y.m.d" }}</div>
           <div class="recruit-card-footer">
-            <div class="recruit-card-field">모집 분야</div>
-            <div class="recruit-card-like"><img class="recruit-card-like-img" src="../../static/img/like.svg">15</div>
+            <div class="recruit-card-field">{{ recruit.field|default:"분야 미지정" }}</div>
+            <div class="recruit-card-like"><img class="recruit-card-like-img" src="{% static 'img/like.svg' %}">{{ recruit.like_count }}</div>
           </div>
         </div>
-      </a> -->
+      </a> 
+      {% empty %}
+      <div class="no-posts" style="grid-column: 1/-1; text-align: center; padding: 100px 0;">
+        <p>해당하는 모집글이 없습니다.</p>
+      </div>
+      {% endfor %}
 
     </div>
 
     <!-- 페이지네이션 -->
     <div class="recruit-pagination">
-      <button class="recruit-page-btn">&lt;</button>
-      <button class="recruit-page-btn active">1</button>
-      <button class="recruit-page-btn">2</button>
-      <button class="recruit-page-btn">3</button>
-      <button class="recruit-page-btn">&gt;</button>
+      {% if recruits.has_previous %}
+        <button class="recruit-page-btn" onclick="location.href='?page={{ recruits.previous_page_number }}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if order %}&order={{ order }}{% endif %}'">&lt;</button>
+      {% else %}
+        <button class="recruit-page-btn" disabled style="opacity: 0.5; cursor: default;">&lt;</button>
+      {% endif %}
+
+      {% for num in recruits.paginator.page_range %}
+        {% if recruits.number == num %}
+          <button class="recruit-page-btn active">{{ num }}</button>
+        {% elif num > recruits.number|add:'-3' and num < recruits.number|add:'3' %}
+          <button class="recruit-page-btn" onclick="location.href='?page={{ num }}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if order %}&order={{ order }}{% endif %}'">{{ num }}</button>
+        {% endif %}
+      {% endfor %}
+
+      {% if recruits.has_next %}
+        <button class="recruit-page-btn" onclick="location.href='?page={{ recruits.next_page_number }}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if order %}&order={{ order }}{% endif %}'">&gt;</button>
+      {% else %}
+        <button class="recruit-page-btn" disabled style="opacity: 0.5; cursor: default;">&gt;</button>
+      {% endif %}
     </div>
   </div>
   </main>
@@ -149,7 +175,7 @@
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
   
-  <script src="../../static/js/board-list.js"></script>
+  <script src="{% static 'js/board-list.js' %}"></script>
 </body>
 </html>
 

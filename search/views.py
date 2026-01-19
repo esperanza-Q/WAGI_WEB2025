@@ -71,13 +71,8 @@ def search_expr_test(request):
 def search_reviews_page(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '전체')
-    order = request.GET.get('order', 'latest')  # order 기본값 추가
-    category_map = {
-        '동아리': 'club',
-        '학회': 'academic',
-        '공모전': 'contest',
-        '인턴': 'intern',
-    }
+    order = request.GET.get('order', 'latest')
+    status = request.GET.get('status', '')
     code = category_map.get(category, None) if category != '전체' else None
     if code:
         reviews = Review.objects.filter(category=code)
@@ -124,26 +119,29 @@ from accounts.models import College, Department, User
 from django.db.models import Q
 import re
  # --- 검색 테스트용 뷰 (search/recruit/) ---
-def search_recruit_posts(request):
+def search_recruit(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '')
     order = request.GET.get('order', 'latest')
     college = request.GET.get('college', '')
     department = request.GET.get('department', '')
     grade = request.GET.get('grade', '')
+    status = request.GET.get('status', '')
 
-    # 카테고리 맵핑 (명칭은 기존 로직 유지)
-    category_map = {
-        '동아리': 'club',
-        '공모전': 'contest',
-        '스터디': 'study',
-    }
-    code = category_map.get(category, category) if category else ''
+
 
     posts = Recruit.objects.all()
-    if code:
-        posts = posts.filter(category__category_name=code)
+    # 1. 카테고리 필터
+    if category:
+        posts = posts.filter(category__category_name=category)
 
+    # 2. 모집중/모집완료(상태) 필터
+    if status == 'open':
+        posts = posts.filter(is_recruiting=True)
+    elif status == 'closed':
+        posts = posts.filter(is_recruiting=False)
+
+    # 3. 맞춤 필터링 (단과대, 학과, 학년)
     if college:
         posts = posts.filter(college__college_name=college)
     if department:
@@ -151,6 +149,7 @@ def search_recruit_posts(request):
     if grade:
         posts = posts.filter(user__username__startswith=grade)
 
+    # 4. 텍스트 검색 (활동명 등)
     if query and query.strip():
         keywords = [w.strip() for w in re.split(r'[ ,]+', query) if w.strip()]
         q_obj = Q()
@@ -159,23 +158,25 @@ def search_recruit_posts(request):
             q_obj |= Q(title__regex=regex) | Q(body__regex=regex)
         posts = posts.filter(q_obj).distinct()
 
-    if order == 'rating':
+    # 5. 정렬
+    if order == 'latest':
+        posts = posts.order_by('-created_at')
+    elif order == 'rating':
         posts = posts.order_by('-rating') if hasattr(Recruit, 'rating') else posts
     elif order == 'agree':
         posts = sorted(posts, key=lambda p: getattr(p, 'like_count', 0), reverse=True)
-    else:
-        posts = posts.order_by('-created_at')
 
     college_list = list(College.objects.values_list('college_name', flat=True))
     department_list = list(Department.objects.values_list('dept_name', flat=True))
     grade_list = sorted(set([u[:4] for u in User.objects.values_list('username', flat=True) if len(u) >= 4]))
 
     context = {
-        'posts': posts,
+        'recruits': posts,
         'q_query': query,
         'category': category,
         'categories': ['전체', '동아리', '공모전', '스터디'],
         'order': order,
+        'status': status,  # 상태 필터 값도 context에 추가
         'selected_college': college,
         'selected_department': department,
         'selected_grade': grade,
@@ -183,10 +184,10 @@ def search_recruit_posts(request):
         'department_list': department_list,
         'grade_list': grade_list,
     }
-    return render(request, "recruit-post.html", context)
+    return render(request, "recruit-list.html", context)
 
 # --- 취업후기게시판(커리어) 검색/필터/정렬 뷰 ---
-def search_career_reviews(request):
+def search_jobTips(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '')
     order = request.GET.get('order', 'latest')
@@ -227,7 +228,7 @@ def search_career_reviews(request):
         'reviews': reviews,
         'q_query': query,
         'category': category,
-        'categories': ['전체', '대기업', '공기업', '외국계', '스타트업'],
+        'categories': ['전체', '자소서', '면접', '포트폴리오'],
         'order': order,
         'selected_college': college,
         'selected_department': department,

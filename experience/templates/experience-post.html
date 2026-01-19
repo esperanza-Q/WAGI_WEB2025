@@ -73,13 +73,18 @@
       
       <label class="ex-post-label">태그 추가</label>
       <div class="ex-tag-input-wrapper">
-        <input type="text" id="ex-tag-input" name="tags" class="ex-tag-input" placeholder="태그를 입력해주세요">
+        <input
+          type="text"
+          id="ex-tag-input"
+          class="ex-tag-input"
+          placeholder="태그를 입력해주세요"
+        />
+
+        <input type="hidden" id="ex-hidden-tags" name="tags">
         <button type="button" id="ex-add-tag-btn" class="ex-tag-add-btn">추가</button>
       </div>
       <!-- 태그 보여주는 영역 -->
       <div class="ex-tag-list" id="ex-tag-list"></div>
-      <!-- 서버로 보낼 hidden input -->
-      <input type="hidden" id="ex-hidden-tags" name="tags">
 
       <button type="submit" class="ex-post-submit-btn">
         완료하기
