@@ -34,12 +34,46 @@
 
   <main class="fullpage">
     <section class="section main">
-      <h1>브릿지 애니메이션</h1>
-      <p class="sub">수정브릿지</p>
+      <div class="bridge-heartbeat-wrap" aria-hidden="true">
+      <svg class="bridge-heartbeat-svg" viewBox="0 0 900 140" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="bridgeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6b4c7d"/>
+            <stop offset="50%" stop-color="#9e8caa"/>
+            <stop offset="100%" stop-color="#f2b6d4"/>
+          </linearGradient>
+        </defs>
+
+        <path class="bridge-heartbeat-path"
+          d="M0 70 
+            L120 70 
+            C150 70, 160 40, 180 40 
+            C200 40, 210 100, 230 100
+            C250 100, 260 70, 280 70
+            L380 70
+            C420 70, 440 20, 470 20
+            C500 20, 520 120, 550 120
+            C580 120, 600 70, 620 70
+            L900 70"
+          fill="none"
+          stroke="url(#bridgeGradient)"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+
+      <div class="bridge-heartbeat-text">
+        <div class="bridge-heartbeat-title">Sujeong Bridge</div>
+        <div class="bridge-heartbeat-sub">기록된 경험이 연결이 되다</div>
+      </div>
+    </div>
     </section>
 
     <section class="section about">
-      <img class="about-bridge" src="../../static/img/bridge.svg"></img>
+      <div class="about-bridge-wrap">
+        <img class="about-bridge" src="{% static 'img/bridge.svg' %}" alt="bridge">
+      </div>
       <div class="about-top">수정 브릿지는 경험을 기록하고, <br>
         그 경험을 바탕으로 사람을 연결하는<br>
         우리 학교 진로 가이드 아카이브입니다.
