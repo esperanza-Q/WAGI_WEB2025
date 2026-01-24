@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/myhome-post.css">
+  <link rel="stylesheet" href="{% static 'css/myhome-post.css' %}">
 </head>
 
 <body>
@@ -38,37 +38,42 @@
         <div class="myhome-post-title">남긴 게시글 모아 보기</div>
         
         <div class="myhome-post-tabs">
-            <a href="?category=" class="active">전체</a>
-            <a href="?category=experience">활동 후기</a>
-            <a href="?category=resume">자소서·면접·포폴</a>
-            <a href="?category=recruit">모집</a>
+            <a href="{% url 'mypage:my_post_list' category='all' %}"
+            class="{% if current_category == 'all' %}active{% endif %}">
+              전체
+          </a>
+
+          <a href="{% url 'mypage:my_post_list' category='experience' %}"
+            class="{% if current_category == 'experience' %}active{% endif %}">
+              활동 후기
+          </a>
+
+          <a href="{% url 'mypage:my_post_list' category='jobTips' %}"
+            class="{% if current_category == 'jobTips' %}active{% endif %}">
+              자소서·면접·포폴
+          </a>
+
+          <a href="{% url 'mypage:my_post_list' category='recruit' %}"
+            class="{% if current_category == 'recruit' %}active{% endif %}">
+              모집
+          </a>
         </div>
 
         <div class="myhome-post-list">
-        <a href="#" class="myhome-post-item">
-            <span class="myhome-post-text">제목</span>
+        {% for post in posts %}
+        {% if post.3 == 'experience' %}
+        <a href="{%url 'experience:review_detail' review_id=post.0 %}" class="myhome-post-item">
+            <span class="myhome-post-text">{{post.1}}</span>
             <span class="myhome-post-arrow">&gt;</span>
         </a>
-        <a href="#" class="myhome-post-item">
-            <span class="myhome-post-text">제목</span>
+        {%endif%}
+        {% if post.3 == 'jobTips' %}
+        <a href="{%url 'jobTips:detail' pk=post.0 %}" class="myhome-post-item">
+            <span class="myhome-post-text">{{post.1}}</span>
             <span class="myhome-post-arrow">&gt;</span>
         </a>
-        <a href="#" class="myhome-post-item">
-            <span class="myhome-post-text">제목</span>
-            <span class="myhome-post-arrow">&gt;</span>
-        </a>
-        <a href="#" class="myhome-post-item">
-            <span class="myhome-post-text">제목ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</span>
-            <span class="myhome-post-arrow">&gt;</span>
-        </a>
-        <a href="#" class="myhome-post-item">
-            <span class="myhome-post-text">제목</span>
-            <span class="myhome-post-arrow">&gt;</span>
-        </a>
-        <a href="#" class="myhome-post-item">
-            <span class="myhome-post-text">제목</span>
-            <span class="myhome-post-arrow">&gt;</span>
-        </a>
+        {%endif%}
+        {% endfor %}
         </div>
 
   </div>
