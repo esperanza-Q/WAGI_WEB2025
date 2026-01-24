@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
-  <link rel="stylesheet" href="../../static/css/myhome-edit.css">
+  <link rel="stylesheet" href="{% static 'css/myhome-edit.css' %}">
 </head> 
 
 <body>
@@ -38,7 +39,8 @@
         <h2 class="profile-edit-title">프로필 수정</h2>
 
         <!-- 프로필 수정 form -->
-        <form class="profile-edit-form" id="profileEditForm">
+        <form class="profile-edit-form" id="profileEditForm" method="POST">
+          {% csrf_token %}
 
           <!-- 프로필 이미지 -->
           <div class="profile-image-box">
@@ -57,30 +59,30 @@
           <div class="profile-edit-row">
             <div class="profile-edit-field">
               <div class="profile-edit-label">학번</div>
-              <input type="text" class="profile-edit-input" value="20242024" disabled>
+              <input type="text" class="profile-edit-input" value="{{request.user.username}}" disabled>
             </div>
 
             <div class="profile-edit-field">
               <div class="profile-edit-label">이메일</div>
-              <input type="email" class="profile-edit-input" value="2024@naver.com" disabled>
+              <input type="email" class="profile-edit-input" value="{{request.user.email}}" disabled>
             </div>
           </div>
 
           <div class="profile-edit-row">
             <div class="profile-edit-field">
               <div class="profile-edit-label">닉네임</div>
-              <input type="text" class="profile-edit-input" value="long">
+              <input type="text" class="profile-edit-input" name="new_nickname" value="{{request.user.display_name}}">
             </div>
 
             <div class="profile-edit-field">
               <div class="profile-edit-label">학년</div>
-              <select class="profile-edit-input">
-                <option>1학년</option>
-                <option selected>2학년</option>
-                <option>3학년</option>
-                <option>4학년</option>
-                <option>휴학</option>
-                <option>졸업</option>
+              <select name="new_grade" class="profile-edit-input">
+                <option value="1" {% if selected_grade == "1" %}selected{% endif %}>1학년</option>
+                <option value="2" {% if selected_grade == "2" %}selected{% endif %}>2학년</option>
+                <option value="3" {% if selected_grade == "3" %}selected{% endif %}>3학년</option>
+                <option value="4" {% if selected_grade == "4" %}selected{% endif %}>4학년</option>
+                <option value="5" {% if selected_grade == "5" %}selected{% endif %}>휴학</option>
+                <option value="6" {% if selected_grade == "6" %}selected{% endif %}>졸업생</option>
               </select>
             </div>
           </div>
@@ -88,17 +90,25 @@
           <div class="profile-edit-row">
             <div class="profile-edit-field">
               <div class="profile-edit-label">단과대</div>
-              <select class="profile-edit-input">
-                <option selected>공과대학</option>
-                <option>인문대학</option>
+              <select id="new_collegeSelect" class="profile-edit-input" name="new_college">
+                <option value="" disabled {% if not selected_college %}selected{% endif %}>단과대 선택</option>
+                <option value="NUR" {% if selected_college == "NUR" %}selected{% endif %}>간호대학</option>
+                <option value="ENG" {% if selected_college == "ENG" %}selected{% endif %}>공과대학</option>
+                <option value="ART" {% if selected_college == "ART" %}selected{% endif %}>미술대학</option>
+                <option value="LAW" {% if selected_college == "LAW" %}selected{% endif %}>법과대학</option>
+                <option value="EDU" {% if selected_college == "EDU" %}selected{% endif %}>사범대학</option>
+                <option value="SOC" {% if selected_college == "SOC" %}selected{% endif %}>사회과학대학</option>
+                <option value="LIF" {% if selected_college == "LIF" %}selected{% endif %}>생활산업대학</option>
+                <option value="MUS" {% if selected_college == "MUS" %}selected{% endif %}>음악대학</option>
+                <option value="HUMA" {% if selected_college == "HUMA" %}selected{% endif %}>인문융합예술대학</option>
+                <option value="NAT" {% if selected_college == "NAT" %}selected{% endif %}>자연과학대학</option>
               </select>
             </div>
 
             <div class="profile-edit-field">
               <div class="profile-edit-label">학과</div>
-              <select class="profile-edit-input">
-                <option selected>컴퓨터공학과</option>
-                <option>AI학과</option>
+              <select id="new_deptSelect" name="new_deptSelect" class="profile-edit-input">
+                <option value="" disabled selected>학과 선택</option>
               </select>
             </div>
           </div>
@@ -119,7 +129,7 @@
 
   <!-- JS (연동 전 동작용) -->
   <script>
-    const imageEditBtn = document.getElementById("imageEditBtn");
+    {% comment %} const imageEditBtn = document.getElementById("imageEditBtn");
     const imageInput = document.getElementById("profileImageInput");
     const preview = document.getElementById("profilePreview");
     const form = document.getElementById("profileEditForm");
@@ -139,13 +149,82 @@
         preview.src = reader.result;
       };
       reader.readAsDataURL(file);
-    });
+    }); {% endcomment %}
 
     // submit (연동 전)
-    form.addEventListener("submit", (e) => {
+    {% comment %} form.addEventListener("submit", (e) => {
       e.preventDefault();
       alert("프로필 정보가 수정되었습니다.");
+    }); {% endcomment %}
+
+    {% comment %} 학과선택 {% endcomment %}
+    document.addEventListener("DOMContentLoaded", () => {
+      const collegeSelect = document.getElementById("new_collegeSelect");
+      const deptSelect = document.getElementById("new_deptSelect");
+      const form = document.querySelector("form"); // ✅ 일단 가장 확실하게 form 잡기
+
+      console.log("new_collegeSelect:", !!collegeSelect);
+      console.log("new_deptSelect:", !!deptSelect);
+      console.log("new_form:", form);
+
+      if (!collegeSelect || !deptSelect) return;
+
+      function resetDept(message = "학과 선택") {
+        deptSelect.innerHTML = `<option value="" disabled selected>${message}</option>`;
+        deptSelect.disabled = true;
+      }
+
+      collegeSelect.addEventListener("change", async () => {
+        const collegeCode = collegeSelect.value;
+        console.log("선택된 단과대:", collegeCode);
+
+        resetDept("불러오는 중...");
+        if (!collegeCode) return;
+
+        try {
+          const url = `/accounts/api/departments/?college_id=${encodeURIComponent(collegeCode)}`;
+          console.log("요청 URL:", url);
+
+          const res = await fetch(url);
+          console.log("응답 status:", res.status);
+          console.log("content-type:", res.headers.get("content-type"));
+
+          const data = await res.json();
+          console.log("응답 data:", data);
+
+          const departments = Array.isArray(data.departments) ? data.departments : [];
+          console.log("departments length:", departments.length);
+
+          if (departments.length === 0) {
+            resetDept("해당 단과대 학과가 없습니다");
+            return;
+          }
+
+          deptSelect.disabled = false;
+          deptSelect.innerHTML = `<option value="" disabled selected>학과 선택</option>`;
+
+          departments.forEach(d => {
+            const opt = document.createElement("option");
+            opt.value = d.dept_id;
+            opt.textContent = d.dept_name;
+            deptSelect.appendChild(opt);
+          });
+        } catch (e) {
+          console.error("학과 목록 불러오기 실패:", e);
+          resetDept("학과 목록을 불러오지 못했습니다");
+        }
+      });
+
+      resetDept();
+
+      if (form) {
+        form.addEventListener("submit", () => {
+          console.log("submit 직전 dept disabled:", deptSelect.disabled, "value:", deptSelect.value);
+          deptSelect.disabled = false;
+        });
+      }
     });
+
   </script>
 </body>
 </html>

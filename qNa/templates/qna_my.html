@@ -52,15 +52,15 @@
 
       <div class="other-profile-userId">
         {% if user.is_authenticated %}
-          {{ user.username }}
+          {{ user.display_name }}
         {% else %}
           닉네임
         {% endif %}
       </div>
 
       <div class="other-profile-academic">
-        <span class="other-profile-Grade"></span>
-        <span class="other-profile-major"></span>
+        <span class="other-profile-Grade">{{user.grade}}학년</span>
+        <span class="other-profile-major">{{user.department.dept_name}}</span>
       </div>
 
       <div class="other-profile-userEmail">
@@ -69,7 +69,7 @@
           {% if user.is_authenticated and user.email %}
             {{ user.email }}
           {% else %}
-            -
+            이메일이 없습니다.
           {% endif %}
         </span>
       </div>
