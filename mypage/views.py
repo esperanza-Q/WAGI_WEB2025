@@ -49,8 +49,8 @@ def scrap_list(request, category='all'):
 
         scrap_post.sort(key=lambda x: x[3], reverse=True)
         
-    print('final scrap_post length:', len(scrap_post))
-    print('scrap_post preview:', scrap_post[:3])
+    # print('final scrap_post length:', len(scrap_post))
+    # print('scrap_post preview:', scrap_post[:3])
         
     context = {
         'scrap_post': scrap_post,
@@ -59,8 +59,44 @@ def scrap_list(request, category='all'):
     
     return render(request, 'myhome-scrap.html', context)
 
-def my_post_list(request):
-    return render(request, 'myhome-post.html')
+def my_post_list(request, category='all'):
+    
+    jobTips = JobTipPost.objects.filter(author=request.user).order_by('-created_at')
+    
+    experience = Review.objects.filter(user=request.user).order_by('-created_at')
+    # jobTips = JobTipPost.objects.filter(id__in=jobTips_s.values_list('jobtippost_id', flat=True)).order_by('-created_at')
+    # jobTip = JobTipPost.objects.filter(pk=jobTip_s.jobtippost_id)
+    
+    posts = []
+    
+    if category == 'experience':
+        for e in experience:
+            posts.append([e.pk, e.title, e.created_at, 'experience'])
+
+    elif category == 'jobTips':
+        for j in jobTips:
+            posts.append([j.pk, j.title, j.created_at, 'jobTips'])
+            
+    # 모집 부분도 추가
+    # elif category == 'career':
+        
+    else:  # all
+        for e in experience:
+            posts.append([e.pk, e.title, e.created_at, 'experience'])
+        for j in jobTips:
+            posts.append([j.pk, j.title, j.created_at, 'jobTips'])
+
+        posts.sort(key=lambda x: x[2], reverse=True)
+        
+    # print('final scrap_post length:', len(posts))
+    # print('scrap_post preview:', posts[:3])
+        
+    context = {
+        'posts': posts,
+        'current_category': category,
+    }
+    
+    return render(request, 'myhome-post.html', context)
 
 def profile_update(request):
     
