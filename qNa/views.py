@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from .models import Qna, Answer
+from career.models import RoadmapEntry
 
 User = get_user_model()
 
@@ -21,7 +22,7 @@ def qna_my_list(request):
 def qna_user_list(request, user_id):
     # 자기 자신이면 마이페이지로
     if request.user.is_authenticated and request.user.id == user_id:
-        return redirect('qna:my_list')
+        return redirect('mypage:home')
 
     target_user = get_object_or_404(User, id=user_id)
 
@@ -175,3 +176,20 @@ def my_qna_api(request):
     ]
 
     return JsonResponse({"sent": sent, "received": received})
+
+def otherQna_roadmap(request, user_id):
+    
+    # ✅ date는 문자열이라 안정 정렬은 -id 기준
+    target_user = get_object_or_404(User, id=user_id)
+    entries = RoadmapEntry.objects.filter(user=target_user).order_by("-id")
+
+    # ✅ 시작 연도 기준 그룹핑 (models.py의 @property year 사용)
+    grouped = {}
+    for e in entries:
+        grouped.setdefault(e.year, []).append(e)
+
+    return render(request, "otherQnA-roadmap.html", {
+        'target_user': target_user,
+        "entries": entries,
+        "grouped_entries": grouped,
+    })

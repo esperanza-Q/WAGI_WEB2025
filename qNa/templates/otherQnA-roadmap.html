@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SujeongBridge</title>
 
-  <link rel="stylesheet" href="../../static/css/otherQnA-roadmap.css">
+  <link rel="stylesheet" href="{% static 'css/otherQnA-roadmap.css' %}">
 </head>
 
 <body>
@@ -38,31 +39,31 @@
       <!-- 프로필 상단 (Q&A 페이지와 동일) -->
       <div class="other-profile-userInfo">
         <div class="other-profile-userImg"></div>
-        <div class="other-profile-userId">닉네임</div>
+        <div class="other-profile-userId">{{ target_user.display_name }}</div>
 
         <div class="other-profile-academic">
-          <span class="other-profile-Grade">2학년</span>
-          <span class="other-profile-major">컴퓨터공학과</span>
+          <span class="other-profile-Grade">{{ target_user.grade }}</span>
+          <span class="other-profile-major">{{ target_user.department.dept_name }}</span>
         </div>
 
         <div class="other-profile-userEmail">
           <span class="other-profile-email-label">이메일 | </span>
-          <span class="otherQnA-profile-email-value">sujeong@naver.com</span>
+          <span class="otherQnA-profile-email-value">{{ target_user.email }}</span>
         </div>
       </div>
 
       <!-- 메뉴 -->
       <div class="otherQnA-list-wrapper">
         <div class="other-profile-menu">
-          <a href="otherQnA-roadmap.html">
+          <a href="{% url 'qna:otherQna_roadmap' user_id=target_user.id %}">
             <button type="button" class="other-profile-roadmap">로드맵</button>
           </a>
           
-          <a href="otherQnA-qna.html">
+          <a href="{% url 'qna:user_qna' target_user.id %}">
             <button type="button" class="other-profile-qna">Q&A</button>
           </a>
           
-          <a href="otherQnA-post.html">
+          <a href="{% url 'qna:write' %}?receiver={{ target_user.id }}">
             <button type="button" class="otherQnA-list-writeBtn">Q&A 남기기</button>
           </a>
         </div>
@@ -104,15 +105,19 @@
   <!-- mock 데이터 -->
   <script>
     const cardsData = [
-      { year: 2025, title: "제목1", category: "카테고리", date: "2025.05.03" },
-      { year: 2025, title: "제목2", category: "카테고리", date: "2025.04.10" },
-      { year: 2025, title: "제목3", category: "카테고리", date: "2025.03.18" },
-      { year: 2024, title: "제목1", category: "카테고리", date: "2024.11.11" },
-      { year: 2024, title: "제목2", category: "카테고리", date: "2024.09.20" },
-    ];
+    {% for e in entries %}
+      {
+        id: {{ e.id }},
+        year: {{ e.year }},
+        title: "{{ e.title|escapejs }}",
+        category: "{{ e.category|escapejs }}",
+        date: "{{ e.date|escapejs }}"
+      }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
   </script>
 
-  <script src="../../static/js/otherQnA-roadmap.js"></script>
+  <script src="{% static 'js/otherQnA-roadmap.js' %}"></script>
 </body>
 </html>
 
