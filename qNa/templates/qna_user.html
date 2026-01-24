@@ -51,15 +51,15 @@
 
       <div class="other-profile-userId">
         {% if target_user %}
-          {{ target_user.username }}
+          {{ target_user.display_name }}
         {% else %}
           닉네임
         {% endif %}
       </div>
 
       <div class="other-profile-academic">
-        <span class="other-profile-Grade"> </span>
-        <span class="other-profile-major"> </span>
+        <span class="other-profile-Grade">{{ target_user.grade }}</span>
+        <span class="other-profile-major">{{ target_user.department.dept_name }}</span>
       </div>
 
       <div class="other-profile-userEmail">
@@ -77,7 +77,7 @@
     <div class="otherQnA-list-wrapper">
 
       <div class="other-profile-menu">
-        <a href="{% url 'career:roadmap_home' %}">
+        <a href="{% url 'qna:otherQna_roadmap' user_id=target_user.id %}">
           <button type="button" class="other-profile-roadmap">로드맵</button>
         </a>
 

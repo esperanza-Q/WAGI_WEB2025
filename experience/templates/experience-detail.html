@@ -39,7 +39,7 @@
     <div class="ex-detail-header">
       <div class="ex-detail-info">
         <div class="ex-detail-title">{{ review.title }}</div>
-        <span class="ex-detail-nickname">{{ review.user.display_name }}</span>
+        <a href="{%url 'qna:user_qna' user_id=review.user.id%}" ><span class="ex-detail-nickname">{{ review.user.display_name }}</span></a>
 
         <div class="ex-detail-bottom">
           <div class="ex-detail-sub">
