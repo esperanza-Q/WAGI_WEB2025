@@ -112,6 +112,11 @@ def profile_update(request):
         user.grade = grade
         if dept:
             user.department = Department.objects.get(dept_id=dept)
+            
+        if 'profileImage' in request.FILES:
+            user.profileImage = request.FILES['profileImage']
+            print("변경하는 이미지 : " , request.FILES['profileImage'])
+            
         user.save()
         
         return redirect('mypage:home')

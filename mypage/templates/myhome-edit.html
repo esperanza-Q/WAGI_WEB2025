@@ -14,12 +14,17 @@
         <h2 class="profile-edit-title">프로필 수정</h2>
 
         <!-- 프로필 수정 form -->
-        <form class="profile-edit-form" id="profileEditForm" method="POST">
+        <form class="profile-edit-form" id="profileEditForm" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
 
           <!-- 프로필 이미지 -->
           <div class="profile-image-box">
-            <img class="profile-image" id="profilePreview">
+            <img
+              class="profile-image"
+              id="profilePreview"
+              src="{{ user.profileImage.url }}"
+              alt="profile"
+            >
             <button type="button" class="profile-image-edit-btn" id="imageEditBtn">✎</button>
 
             <!-- 실제 파일 input (숨김) -->
@@ -27,6 +32,7 @@
               type="file"
               accept="image/*"
               id="profileImageInput"
+              name="profileImage"
               style="display: none;"
             >
           </div>
@@ -152,6 +158,28 @@
           deptSelect.disabled = false;
         });
       }
+    });
+
+    
+    const editBtn = document.getElementById("imageEditBtn");
+    const fileInput = document.getElementById("profileImageInput");
+    const previewImg = document.getElementById("profilePreview");
+
+    // ✎ 버튼 → 파일 선택창 열기
+    editBtn.addEventListener("click", () => {
+      fileInput.click();
+    });
+
+    // 파일 선택 → 미리보기 변경
+    fileInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImg.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     });
   </script>
 {% endblock %}

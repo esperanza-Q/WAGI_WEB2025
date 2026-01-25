@@ -67,6 +67,11 @@ class User(AbstractUser): #기본적으로 username, password, email, is_active 
     #user_id = models.CharField(max_length=50, unique=True) #username이랑 중복된다고 생각해서 제거
     username = models.CharField("학번", max_length=20, unique=True)
     display_name = models.CharField(max_length=100) 
+    profileImage = models.ImageField(
+        upload_to='profile/',
+        default='profile/default.jpeg',
+        blank=True
+    )
     grade = models.PositiveSmallIntegerField("학년",
     choices=GradeChoices.choices,
     null=True,
