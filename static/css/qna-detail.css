@@ -226,21 +226,3 @@
 .qna-answer-confirm-btn:hover {
   background: rgba(117,83,122,0.18);
 }
-
-
-.footer {
-  text-align: center;
-  padding: 50px 10px 20px 10px;
-  color: var(--purple-dark);
-  font-size: 15px;
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(15px);
-  border-top: 1px solid rgba(200, 180, 220, 0.2);
-}
-
-.footer .member {
-  margin-top: 10px;
-  font-size: 14px;
-  opacity: 0.8;
-}
