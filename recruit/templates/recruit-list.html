@@ -104,7 +104,7 @@
             <div class="recruit-card-date">{{ recruit.created_at|date:"Y.m.d" }}</div>
           </div>
           <div class="recruit-card-title">{{ recruit.title }}</div>
-          <div class="recruit-card-nickname">{{ recruit.user.username }}</div>
+          <div class="recruit-card-nickname">{{ recruit.user.display_name }}</div>
           <div class="recruit-card-period">~ {{ recruit.deadline|date:"Y.m.d" }}</div>
           <div class="recruit-card-footer">
             <div class="recruit-card-field">{{ recruit.field|default:"분야 미지정" }}</div>
