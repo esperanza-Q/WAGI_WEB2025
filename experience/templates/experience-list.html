@@ -1,50 +1,22 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SujeongBridge</title>
+
+{% block head_extra %}
   <link rel="stylesheet" href="{% static 'css/experience/experience-list.css' %}">
-</head>
+{% endblock %}
 
-<body>
-  <header class="main-header">
-    <div class="logo">
-        <a href="{%url "home:home"%}">
-            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
-    </div>
-    <nav class="main-nav">
-      <ul class="main-nav-links">
-        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
-        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
-        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
-        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
-      </ul>
-    </nav>
-    <div class="main-header-r">
-      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
-      {% if user.is_authenticated %}
-        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
-      {% else %}
-        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
-      {% endif %}
-    </div>
-  </header>
-
-  <main>
+{% block content %}
   <div class="container">
 
-    <!-- 전체 검색 + 필터 form 하나로 묶음 -->
     <form method="GET" id="filter-form" class="ex-search-form" action="{% url 'search:search-expr-test' %}">
 
-      <!-- 검색창 -->
       <div class="ex-search-section">
-        <input 
-          type="search" 
+        <input
+          type="search"
           placeholder="활동명으로 검색하기"
           class="ex-search-input"
           name="q"
+          value="{{ request.GET.q }}"
         />
 
         <button type="submit" class="ex-search-btn">
@@ -52,11 +24,9 @@
         </button>
       </div>
 
-      <!-- 숨겨진 값 (카테고리 / 정렬) -->
       <input type="hidden" name="category" id="hidden-category" value="{{ category }}">
       <input type="hidden" name="order" id="hidden-order" value="{{ order }}">
 
-      <!-- 필터링- 카테고리 -->
       <nav class="ex-filter-tabs">
         <ul>
           <li><button type="button" class="tab-btn" onclick="setCategory('')">전체</button></li>
@@ -67,7 +37,6 @@
         </ul>
       </nav>
 
-      <!-- 필터링 - 정렬 -->
       <div class="ex-sub-filter-bar">
         <div class="ex-sub-filters">
           <ul>
@@ -78,7 +47,6 @@
         </div>
       </div>
 
-      <!-- 맞춤 필터링 -->
       <div class="ex-sub-filter-row">
         <div class="ex-custom-filter">
           <select class="ex-filter-select" name="college">
@@ -173,7 +141,7 @@
 
     <div class="ex-card-list">
       {% for r in reviews %}
-      
+
         <a href="{% url 'experience:review_detail' r.id %}" class="ex-card-link">
           <div class="ex-card">
             <div class="ex-card-header">
@@ -190,8 +158,8 @@
           </div>
         </a>
       {% endfor %}
+      </div>
 
-    <!-- 페이지네이션 -->
     <div class="ex-pagination">
       <button class="ex-page-btn">&lt;</button>
       <button class="ex-page-btn active">1</button>
@@ -200,13 +168,9 @@
       <button class="ex-page-btn">&gt;</button>
     </div>
   </div>
-</main>
+{% endblock %}
 
-  <footer class="footer">
-    <p>© SSWU_WAGI 3기 CampusBridge</p>
-    <p class="member">BACKEND  <br /> FRONTEND </p>
-  </footer>
-
+{% block scripts %}
   <script src="{% static 'js/experience-list.js' %}"></script>
   <script>
     function setCategory(val) {
@@ -218,7 +182,5 @@
       document.getElementById('filter-form').submit();
     }
   </script>
-</body>
-</html>
-
+{% endblock %}
 

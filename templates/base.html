@@ -1,11 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ko">
-<head>
+  <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SujeongBridge</title>
+  <title>{% block title %}SujeongBridge{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% block head_extra %}{% endblock %}
 </head>
 
 <body>
@@ -34,7 +35,7 @@
 
   <main>
     <div class="container">
-   <!--메인 콘텐츠 넣으면 됩니다-->
+      {% block content %}{% endblock %}
     </div>
   </main>
 
@@ -42,6 +43,7 @@
     <p>© SSWU_WAGI 3기 CampusBridge</p>
     <p class="member">BACKEND  <br /> FRONTEND </p>
   </footer>
+  {% block scripts %}{% endblock %}
 </body>
 </html>
 
