@@ -1,40 +1,12 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SujeongBridge</title>
+
+{% block head_extra %}
   <link rel="stylesheet" href="{% static 'css/experience/experience-edit.css' %}">
-</head>
+{% endblock %}
 
-<body>
-  <header class="main-header">
-    <div class="logo">
-        <a href="{%url "home:home"%}">
-            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
-    </div>
-    <nav class="main-nav">
-      <ul class="main-nav-links">
-        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
-        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
-        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
-        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
-      </ul>
-    </nav>
-    <div class="main-header-r">
-      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
-      {% if user.is_authenticated %}
-        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
-      {% else %}
-        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
-      {% endif %}
-    </div>
-  </header>
-
-
-  <main>
-    <div class="container">
+{% block content %}
+  <div class="container">
 
       <div class="ex-edit-title">후기 수정하기</div>
       <form method="POST" enctype="multipart/form-data" class="ex-edit-form">
@@ -65,7 +37,6 @@
 
             <div class="ex-edit-upload-preview" id="ex-edit-upload-preview">
               {% for f in review.files.all %}
-              <!-- 기존 업로드 파일/이미지 미리보기 -->
                 <div class="ex-edit-preview-item">
                   {% if f.is_image %}
                     <img src="{{ f.file.url }}" class="ex-edit-preview-img" alt="기존 이미지">
@@ -92,24 +63,16 @@
 
           <input type="hidden" id="ex-deleted-files" name="deleted_files">
           <input type="hidden" id="ex-edit-hidden-tags" name="tags" value="{{ form.initial.tags }}">
-        <!--둘 다 "사용자가 직접 입력/조작한 값(삭제 파일, 태그)"을 서버로 넘기기 위한 숨겨진 데이터 필드(동기화 위함..)
-        파일 - 기존에 업로드된 파일/이미지 중에서 사용자가 삭제한 파일의 id(혹은 이름)" 목록을 JSON 문자열로 담아 서버로 전송하는 용도
-        태그 - 사용자가 입력한 태그 목록을 JSON 문자열로 담아 서버로 전송하는 용도-->
 
           <button type="submit" class="ex-edit-submit-btn">
             수정 완료
           </button>
       </form>
 
-    </div>
-  </main>
+  </div>
+{% endblock %}
 
-
-  <footer class="footer">
-    <p>© SSWU_WAGI 3기 CampusBridge</p>
-    <p class="member">BACKEND <br> FRONTEND</p>
-  </footer>
-
+{% block scripts %}
   <script src="{% static 'js/experience-edit.js' %}"></script>
-</body>
-</html>
+{% endblock %}
+

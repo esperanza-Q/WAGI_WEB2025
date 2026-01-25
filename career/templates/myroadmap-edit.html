@@ -1,41 +1,12 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SujeongBridge</title>
 
-  <!-- ✅ Django static -->
+{% block head_extra %}
   <link rel="stylesheet" href="{% static 'css/myroadmap/myroadmap-edit.css' %}">
-</head>
+{% endblock %}
 
-<body>
-  <header class="main-header">
-    <div class="logo">
-        <a href="{%url "home:home"%}">
-            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
-    </div>
-    <nav class="main-nav">
-      <ul class="main-nav-links">
-        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
-        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
-        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
-        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
-      </ul>
-    </nav>
-    <div class="main-header-r">
-      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
-      {% if user.is_authenticated %}
-        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
-      {% else %}
-        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
-      {% endif %}
-    </div>
-  </header>
-
-  <main>
-    <div class="container">
+{% block content %}
+  <div class="container">
 
       <div class="roadmap-edit-title">나의 로드맵 수정하기</div>
 
@@ -130,9 +101,6 @@
   <div id="live-preview"></div>
 </div>
 
-  
-</div>
-
 
         <input type="hidden" name="deleted_files" id="roadmap-deleted-files" value="">
 
@@ -142,17 +110,10 @@
       </form>
       <input type="hidden" id="hiddenTagsInput" name="tags_json" value="[]">
 
+  </div>
+{% endblock %}
 
-
-    </div>
-  </main>
-
-  <footer class="footer">
-    <p>© SSWU_WAGI 3기 CampusBridge</p>
-    <p class="member">BACKEND <br> FRONTEND</p>
-  </footer>
-
-  <!-- ✅ Django static JS -->
+{% block scripts %}
   <script src="{% static 'js/myroadmap-edit.js' %}"></script>
-</body>
-</html>
+{% endblock %}
+

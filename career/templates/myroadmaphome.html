@@ -1,58 +1,27 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SujeongBridge</title>
+
+{% block head_extra %}
   <link rel="stylesheet" href="{% static 'css/myroadmap/myroadmaphome.css' %}">
-</head>
+{% endblock %}
 
-<body>
-  <header class="main-header"> 
-    <div class="logo">
-        <a href="{%url "home:home"%}">
-            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
-    </div>
-    <nav class="main-nav">
-      <ul class="main-nav-links">
-        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
-        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
-        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
-        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
-      </ul>
-    </nav>
-    <div class="main-header-r">
-      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
-      {% if user.is_authenticated %}
-        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
-      {% else %}
-        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
-      {% endif %}
-    </div>
-  </header>
+{% block content %}
+    <div class="container">
+      <div class="roadmap-title">나의 로드맵</div>
 
-<main>
-  <div class="container">
-    <div class="roadmap-title">나의 로드맵</div>
+      <div class="roadmap-container">
+        <div class="timeline">
+          {% if entries %}
+            <div class="dot"></div>
+          {% endif %}
+        </div>
 
-    <div class="roadmap-container">
-      <div class="timeline">
-        <div class="dot"></div>
+        <div class="roadmap-cards" id="roadmap-cards"></div>
       </div>
 
-      <div class="roadmap-cards" id="roadmap-cards"></div>
+      <a class="roadmap-post-btn" href="{% url 'career:roadmap_create_front' %}">+</a>
+
     </div>
-
-    <a class="roadmap-post-btn" href="{% url 'career:roadmap_create_front' %}">+</a>
-
-  </div>
-</main>
-
-  <footer class="footer">
-    <p>© SSWU_WAGI 3기 CampusBridge</p>
-    <p class="member">BACKEND  <br /> FRONTEND </p>
-  </footer>
 
   <template id="roadmap-card-template">
     <div class="card accordion" data-id="">
@@ -71,7 +40,10 @@
     </div>
   </template>
 
- <script>
+{% endblock %}
+
+{% block scripts %}
+<script>
   const cardsData = [
     {% for e in entries %}
       {
@@ -85,6 +57,5 @@
   ];
 </script>
 <script src="{% static 'js/myroadmap.js' %}"></script>
+{% endblock %}
 
-</body>
-</html>

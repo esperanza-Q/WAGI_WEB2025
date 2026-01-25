@@ -1,38 +1,13 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SujeongBridge</title>
+
+{% block title %}SujeongBridge - 프로필 수정{% endblock %}
+
+{% block head_extra %}
   <link rel="stylesheet" href="{% static 'css/myhome-edit.css' %}">
-</head> 
+{% endblock %}
 
-<body>
-  <header class="main-header">
-    <div class="logo">
-        <a href="{%url "home:home"%}">
-            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
-    </div>
-    <nav class="main-nav">
-      <ul class="main-nav-links">
-        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
-        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
-        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
-        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
-      </ul>
-    </nav>
-    <div class="main-header-r">
-      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
-      {% if user.is_authenticated %}
-        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
-      {% else %}
-        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
-      {% endif %}
-    </div>
-  </header>
-
-  <main>
+{% block content %}
     <div class="container">
 
       <section class="profile-edit-wrapper">
@@ -120,52 +95,17 @@
       </section>
 
     </div>
-  </main>
+{% endblock %}
 
-  <footer class="footer">
-    <p>© SSWU_WAGI 3기 CampusBridge</p>
-    <p class="member">BACKEND<br>FRONTEND</p>
-  </footer>
-
-  <!-- JS (연동 전 동작용) -->
+{% block scripts %}
   <script>
-    {% comment %} const imageEditBtn = document.getElementById("imageEditBtn");
-    const imageInput = document.getElementById("profileImageInput");
-    const preview = document.getElementById("profilePreview");
-    const form = document.getElementById("profileEditForm");
-
-    // ✎ 버튼 → 파일 선택
-    imageEditBtn.addEventListener("click", () => {
-      imageInput.click();
-    });
-
-    // 이미지 선택 → 미리보기
-    imageInput.addEventListener("change", () => {
-      const file = imageInput.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        preview.src = reader.result;
-      };
-      reader.readAsDataURL(file);
-    }); {% endcomment %}
-
-    // submit (연동 전)
-    {% comment %} form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      alert("프로필 정보가 수정되었습니다.");
-    }); {% endcomment %}
-
-    {% comment %} 학과선택 {% endcomment %}
+    // JS (연동 전 동작용)
+    // 이미지 편집 / 미리보기 코드는 주석 처리 상태로 유지
+    // 학과 선택 API 연동 스크립트
     document.addEventListener("DOMContentLoaded", () => {
       const collegeSelect = document.getElementById("new_collegeSelect");
       const deptSelect = document.getElementById("new_deptSelect");
-      const form = document.querySelector("form"); // ✅ 일단 가장 확실하게 form 잡기
-
-      console.log("new_collegeSelect:", !!collegeSelect);
-      console.log("new_deptSelect:", !!deptSelect);
-      console.log("new_form:", form);
+      const form = document.querySelector("form");
 
       if (!collegeSelect || !deptSelect) return;
 
@@ -176,24 +116,14 @@
 
       collegeSelect.addEventListener("change", async () => {
         const collegeCode = collegeSelect.value;
-        console.log("선택된 단과대:", collegeCode);
-
         resetDept("불러오는 중...");
         if (!collegeCode) return;
 
         try {
           const url = `/accounts/api/departments/?college_id=${encodeURIComponent(collegeCode)}`;
-          console.log("요청 URL:", url);
-
           const res = await fetch(url);
-          console.log("응답 status:", res.status);
-          console.log("content-type:", res.headers.get("content-type"));
-
           const data = await res.json();
-          console.log("응답 data:", data);
-
           const departments = Array.isArray(data.departments) ? data.departments : [];
-          console.log("departments length:", departments.length);
 
           if (departments.length === 0) {
             resetDept("해당 단과대 학과가 없습니다");
@@ -219,13 +149,10 @@
 
       if (form) {
         form.addEventListener("submit", () => {
-          console.log("submit 직전 dept disabled:", deptSelect.disabled, "value:", deptSelect.value);
           deptSelect.disabled = false;
         });
       }
     });
-
   </script>
-</body>
-</html>
+{% endblock %}
 
