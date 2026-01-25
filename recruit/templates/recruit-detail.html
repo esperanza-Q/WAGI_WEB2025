@@ -14,7 +14,7 @@
     <div class="recruit-detail-header">
       <div class="recruit-detail-info">
         <div class="recruit-detail-title">{{ recruit.title }}</div>
-        <span class="recruit-detail-nickname">{{ recruit.user.username }}</span>
+        <span class="recruit-detail-nickname">{{ recruit.user.display_name }}</span>
 
         <div class="recruit-detail-bottom">
           <div class="recruit-detail-sub">
@@ -109,6 +109,7 @@
           {% endfor %}
       </div>
       <form method="POST" class="recruit-scrap-form">
+        {% csrf_token %}
         <button type="submit" class="recruit-scrap-btn">
           <img src="{% static 'img/scrap.svg' %}" class="scrap-img">
         </button>
@@ -135,7 +136,7 @@
       {% for comment in comments %}
         <div class="recruit-comment-item">
           <div class="recruit-comment-top">
-            <span class="recruit-comment-nickname">{{ comment.user.username }}</span>
+            <span class="recruit-comment-nickname">{{ comment.user.display_name }}</span>
             <span class="recruit-comment-date">{{ comment.created_at|date:"Y.m.d" }}</span>
           </div>
           <p class="recruit-comment-text">
