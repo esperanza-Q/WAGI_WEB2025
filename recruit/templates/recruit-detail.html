@@ -108,11 +108,18 @@
         {% empty %}
           {% endfor %}
       </div>
-      <form method="POST" class="recruit-scrap-form">
+      <form method="POST" action="{% url 'recruit:recruit_scrap' recruit.recruit_id %}" class="recruit-scrap-form">
         {% csrf_token %}
         <button type="submit" class="recruit-scrap-btn">
-          <img src="{% static 'img/scrap.svg' %}" class="scrap-img">
+          {% comment %} <img src="{% static 'img/scrap.svg' %}" class="scrap-img"> {% endcomment %}
+          {% if is_scrapped %}
+            <img src="{% static 'img/scrap-fill.svg' %}" class="scrap-img" alt="스크랩 취소">
+          {% else %}
+            <img src="{% static 'img/scrap.svg' %}" class="scrap-img" alt="스크랩">
+          {% endif %}
         </button>
+
+        
       </form>
     </div>
 

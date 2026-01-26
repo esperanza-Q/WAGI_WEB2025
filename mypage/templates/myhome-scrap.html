@@ -46,6 +46,12 @@
             <span class="myhome-scrap-arrow">&gt;</span>
         </a>
         {%endif%}
+        {% if post.4 == 'recruit' %}
+        <a href="{%url 'recruit:recruit_detail' post.0 %}" class="myhome-scrap-item">
+            <span class="myhome-scrap-text">{{post.1}} | {{post.2.display_name}}</span>
+            <span class="myhome-scrap-arrow">&gt;</span>
+        </a>
+        {%endif%}
         {% comment %} 커리어부분도 추가 필요 {% endcomment %}
 
       {% endfor %}
