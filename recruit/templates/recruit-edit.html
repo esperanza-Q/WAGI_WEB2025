@@ -45,14 +45,17 @@
         </label>
         <div class="recruit-edit-upload-preview" id="recruit-edit-upload-preview">
           <!-- 기존 업로드 파일/이미지 미리보기 -->
-          {% for img in recruit.images.all %}
+          {% for img in images %}
           <div class="recruit-edit-preview-item" data-image-id="{{ img.image_id }}">
             <img src="{{ img.image_url.url }}" class="recruit-edit-preview-img" alt="기존 이미지">
             <div class="recruit-edit-preview-remove" onclick="removeExistingImage('{{ img.image_id }}', this)">×</div>
           </div>
+          
           {% endfor %}
         </div>
       </div>
+
+      
 
       <label class="recruit-edit-label">연결 링크</label>
       <input type="text" class="recruit-edit-input" name="contact" value="{{ recruit.contact }}" required>
@@ -63,12 +66,17 @@
         <button type="button" id="recruit-edit-add-tag-btn" class="recruit-edit-tag-add-btn">추가</button>
       </div>
         <!-- 태그 보여주는 영역 -->
-      <div class="recruit-edit-tag-list" id="recruit-edit-tag-list">
+      {% comment %} <div class="recruit-edit-tag-list" id="recruit-edit-tag-list">
         {% for tag in recruit.tags.all %}
         <div class="recruit-edit-tag-item">#{{ tag.tag_name }}<span class="recruit-edit-tag-remove" data-tag-id="{{ tag.id }}">x</span></div>
         {% empty %}
         {% endfor %}
-      </div>
+      </div> {% endcomment %}
+
+      <!-- 🔥 수정: Django 템플릿 태그 렌더링 제거, JS가 채움 -->
+        <div class="recruit-edit-tag-list" id="recruit-edit-tag-list">
+            <!-- JS의 renderTags()가 여기를 채웁니다 -->
+        </div>
 
       <input type="hidden" id="recruit-deleted-files" name="deleted_files">
       <input type="hidden" id="recruit-edit-hidden-tags" name="tags">
@@ -81,5 +89,11 @@
 {% endblock %}
 
 {% block scripts %}
+  
+  <script>
+    // 🔥 수정: Django에서 전달받은 JSON 데이터를 JS 변수에 저장
+    let tags = {{ tags_json|safe }};
+    let existingFiles = {{ existing_files_json|safe }};
+  </script>
   <script src="{% static 'js/recruit-edit.js' %}"></script>
 {% endblock %}
