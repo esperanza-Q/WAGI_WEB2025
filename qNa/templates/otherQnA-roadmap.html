@@ -1,94 +1,64 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SujeongBridge</title>
 
+{% block title %}SujeongBridge | QnA - 로드맵{% endblock %}
+
+{% block head_extra %}
   <link rel="stylesheet" href="{% static 'css/otherQnA-roadmap.css' %}">
-</head>
+{% endblock %}
 
-<body>
-  <header class="main-header">
-    <div class="logo">
-        <a href="{%url "home:home"%}">
-            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
-    </div>
-    <nav class="main-nav">
-      <ul class="main-nav-links">
-        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
-        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
-        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
-        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
-      </ul>
-    </nav>
-    <div class="main-header-r">
-      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
-      {% if user.is_authenticated %}
-        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
-      {% else %}
-        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
-      {% endif %}
-    </div>
-  </header>
+{% block content %}
+  <div class="container">
 
-  <main>
-    <div class="container">
+    <!-- 프로필 상단 (Q&A 페이지와 동일) -->
+    <div class="other-profile-userInfo">
+      <div class="other-profile-userImg"><img src={{target_user.profileImage.url}} class="other-profile-userImg"></div>
+      <div class="other-profile-userId">{{ target_user.display_name }}</div>
 
-      <!-- 프로필 상단 (Q&A 페이지와 동일) -->
-      <div class="other-profile-userInfo">
-        <div class="other-profile-userImg"><img src={{target_user.profileImage.url}} class="other-profile-userImg"></div>
-        <div class="other-profile-userId">{{ target_user.display_name }}</div>
-
-        <div class="other-profile-academic">
-          <span class="other-profile-Grade">{{ target_user.grade }}</span>
-          <span class="other-profile-major">{{ target_user.department.dept_name }}</span>
-        </div>
-
-        <div class="other-profile-userEmail">
-          <span class="other-profile-email-label">이메일 | </span>
-          <span class="otherQnA-profile-email-value">{{ target_user.email }}</span>
-        </div>
+      <div class="other-profile-academic">
+        <span class="other-profile-Grade">{{ target_user.grade }}학년</span>
+        <span class="other-profile-major">{{ target_user.department.dept_name }}</span>
       </div>
 
-      <!-- 메뉴 -->
-      <div class="otherQnA-list-wrapper">
-        <div class="other-profile-menu">
-          <a href="{% url 'qna:otherQna_roadmap' user_id=target_user.id %}">
-            <button type="button" class="other-profile-roadmap">로드맵</button>
-          </a>
-          
-          <a href="{% url 'qna:user_qna' target_user.id %}">
-            <button type="button" class="other-profile-qna">Q&A</button>
-          </a>
-          
-          <a href="{% url 'qna:write' %}?receiver={{ target_user.id }}">
-            <button type="button" class="otherQnA-list-writeBtn">Q&A 남기기</button>
-          </a>
-        </div>
-
-        <!-- 로드맵 -->
-
-        <div class="qna-roadmap-container">
-
-          <!-- 타임라인 -->
-          <div class="qna-timeline">
-            <div class="qna-dot"></div>
-          </div>
-
-          <!-- 카드 렌더링 -->
-          <div class="qna-roadmap-cards" id="qna-roadmap-cards"></div>
-        </div>
+      <div class="other-profile-userEmail">
+        <span class="other-profile-email-label">이메일 | </span>
+        <span class="otherQnA-profile-email-value">{{ target_user.email }}</span>
       </div>
     </div>
-  </main>
 
-  <footer class="footer">
-    <p>© SSWU_WAGI 3기 CampusBridge</p>
-    <p class="member">BACKEND <br /> FRONTEND</p>
-  </footer>
+    <!-- 메뉴 -->
+    <div class="otherQnA-list-wrapper">
+      <div class="other-profile-menu">
+        <a href="{% url 'qna:otherQna_roadmap' user_id=target_user.id %}">
+          <button type="button" class="other-profile-roadmap">로드맵</button>
+        </a>
+        
+        <a href="{% url 'qna:user_qna' target_user.id %}">
+          <button type="button" class="other-profile-qna">Q&A</button>
+        </a>
+        
+        <a href="{% url 'qna:write' %}?receiver={{ target_user.id }}">
+          <button type="button" class="otherQnA-list-writeBtn">Q&A 남기기</button>
+        </a>
+      </div>
 
+      <!-- 로드맵 -->
+
+      <div class="qna-roadmap-container">
+
+        <!-- 타임라인 -->
+        <div class="qna-timeline">
+          <div class="qna-dot"></div>
+        </div>
+
+        <!-- 카드 렌더링 -->
+        <div class="qna-roadmap-cards" id="qna-roadmap-cards"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
   <template id="roadmap-card-template">
     <div class="card accordion" data-id="">
       <div class="roadmap-card-title"></div>
@@ -102,7 +72,6 @@
     </div>
   </template>
 
-  <!-- mock 데이터 -->
   <script>
     const cardsData = [
     {% for e in entries %}
@@ -118,8 +87,7 @@
   </script>
 
   <script src="{% static 'js/otherQnA-roadmap.js' %}"></script>
-</body>
-</html>
+{% endblock %}
 
 
 
