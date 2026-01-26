@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <title>SujeongBridge - 후기 수정</title>
+  <link rel="stylesheet" href="{% static 'css/jobtips/jobtips-post.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <h2 class="jobtips-post-title">자소서·면접·포폴 후기 수정하기</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="jobtips-post-form" action="{% url 'jobTips:edit' post.pk %}">
+      {% csrf_token %}
+
+      <label class="jobtips-post-label">제목</label>
+      <input type="text" class="jobtips-post-input" name="title" value="{{ post.title }}" required>
+
+      <label class="jobtips-post-label">카테고리</label>
+      <div class="jobtips-post-category">
+        <label><input type="radio" name="category" value="resume" {% if post.category == 'resume' %}checked{% endif %} required> 자소서</label>
+        <label><input type="radio" name="category" value="interview" {% if post.category == 'interview' %}checked{% endif %}> 면접</label>
+        <label><input type="radio" name="category" value="portfolio" {% if post.category == 'portfolio' %}checked{% endif %}> 포트폴리오</label>
+      </div>
+
+      <label class="jobtips-post-label">지원 분야</label>
+      <input type="text" class="jobtips-post-input" name="position" value="{{ post.position }}" required>
+
+      <label class="jobtips-post-label">합격 연도와 전형 유형</label>
+      <input type="text" class="jobtips-post-input" name="pass_info" value="{{ post.pass_info }}" required>
+
+      <label class="jobtips-post-label">후기 본문</label>
+      <textarea class="jobtips-post-textarea" name="content" required>{{ post.content }}</textarea>
+
+      <label class="jobtips-post-label">파일 업로드</label>
+      <div class="jobtips-post-upload-area">
+        <label class="jobtips-post-upload-btn">
+          +
+          <input type="file" id="jobtips-upload-input" name="files" multiple>
+        </label>
+
+        <div class="jobtips-post-upload-preview" id="jobtips-upload-preview"></div>
+
+        <div style="margin-top:12px;">
+          {% for f in files %}
+            <div data-file-id="{{ f.id }}" style="display:flex; align-items:center; gap:8px; margin:6px 0;">
+              <a href="{{ f.file.url }}" download style="color:#666; text-decoration:underline;">
+                {{ f.file.name|cut:"jobtips/files/" }}
+              </a>
+              <button type="button" class="jobtips-file-delete-btn"
+                      style="border:none; background:none; color:#999; cursor:pointer;"
+                      data-file-id="{{ f.id }}">
+                삭제
+              </button>
+            </div>
+          {% empty %}
+            <p style="color:#999;">기존 첨부 파일이 없습니다.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <label class="jobtips-post-label">개인 경험이나 팁</label>
+      <textarea class="jobtips-post-textarea" name="experience_tip" required>{{ post.experience_tip }}</textarea>
+
+      <label class="jobtips-post-label">태그 추가</label>
+      <div class="jobtips-tag-input-wrapper">
+        <input type="text" id="jobtips-tag-input" class="jobtips-tag-input" placeholder="태그를 입력해주세요">
+        <button type="button" id="jobtips-add-tag-btn" class="jobtips-tag-add-btn">추가</button>
+      </div>
+
+      <div class="jobtips-tag-list" id="jobtips-tag-list">
+        {% for t in tags_list %}
+          <span class="jobtips-tag-item">#{{ t }}</span>
+        {% endfor %}
+      </div>
+
+      <input type="hidden" id="jobtips-hidden-tags" name="tags" value="{{ post.tags }}">
+      <input type="hidden" id="jobtips-deleted-files" name="deletedFiles" value="[]">
+
+      <button type="submit" class="jobtips-post-submit-btn">수정 완료</button>
+    </form>
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/jobtips-post.js' %}"></script>
+
+  <!-- 삭제할 파일 id들을 hidden(JSON 배열)로 모아서 전송 -->
+  <script>
+    (function(){
+      const deletedInput = document.getElementById('jobtips-deleted-files');
+      const deleted = new Set();
+
+      document.querySelectorAll('.jobtips-file-delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.fileId;
+          if (!id) return;
+
+          deleted.add(Number(id));
+          deletedInput.value = JSON.stringify(Array.from(deleted));
+
+          // 화면에서 제거(UX)
+          const row = document.querySelector(`[data-file-id="${id}"]`);
+          if (row) row.remove();
+        });
+      });
+    })();
+  </script>
+{% endblock %}

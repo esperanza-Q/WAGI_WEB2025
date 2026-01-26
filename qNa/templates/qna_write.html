@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SujeongBridge | QnA 작성{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/otherQnA-post.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <div class="otherQnA-post-wrapper">
+      <div class="otherQnA-post-top">
+        <div class="otherQnA-post-title">Q&A 작성하기</div>
+      </div>
+
+      <form class="otherQnA-post-bottom" method="post" action="{% url 'qna:submit' %}">
+        {% csrf_token %}
+        <input type="hidden" name="receiver_id" value="{{ receiver.id }}">
+
+        <div class="otherQnA-post-bottom-title">
+          <p>제목</p>
+          <input
+            class="otherQnA-post-title-input"
+            type="text"
+            name="title"
+            required
+          >
+        </div>
+
+        <div class="otherQnA-post-bottom-detail">
+          <p>내용</p>
+          <textarea
+            class="otherQnA-post-detail-input"
+            name="content"
+            rows="8"
+            required
+          ></textarea>
+        </div>
+
+        <div class="otherQnA-post-submit">
+          <button class="otherQnA-post-submitBtn" type="submit">
+            완료하기
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/experience/experience-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <!-- 상단 헤더 -->
+    <div class="ex-detail-header">
+      <div class="ex-detail-info">
+        <div class="ex-detail-title">{{ review.title }}</div>
+        <a href="{% url 'qna:user_qna' user_id=review.user.id %}" ><span class="ex-detail-nickname">{{ review.user.display_name }}</span></a>
+
+        <div class="ex-detail-bottom">
+          <div class="ex-detail-sub">
+            <span class="ex-detail-category">{{ review.get_category_display }}</span>
+            <span class="ex-detail-period">{{ review.activity_period }}</span>
+          </div>
+
+          <div class="ex-detail-actions">
+            {% if request.user == review.user %}
+              <div class="ex-edit-delete">
+                <a href="{% url 'experience:review_edit' review.id %}" class="ex-edit-btn">수정</a>
+                <span class="ex-divider-line">|</span>
+                <a href="{% url 'experience:review_delete' review.id %}">
+                  <button class="ex-delete-btn" type="button">삭제</button>
+                </a>
+              </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'experience:toggle_like' review.id %}" class="ex-like-form">
+              {% csrf_token %}
+              <button type="submit" class="ex-detail-like-btn">
+                <img class="post-like-img" src="{% static 'img/like.svg' %}">
+                <span class="ex-like-count">{{ like_count }}</span>
+              </button>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    {% if files %}
+      <div class="ex-detail-files">
+        <img class="ex-detail-file-img" src="{% static 'img/file.svg' %}" width="18px">
+        <span class="ex-detail-file-content">
+          {% for f in files %}
+            {% if not f.is_image %}
+              <a href="{{ f.file.url }}" target="_blank">
+                {{ f.filename }}
+              </a>
+              {% if not forloop.last %}, {% endif %}
+            {% endif %}
+          {% endfor %}
+        </span>
+      </div>
+    {% endif %}
+
+    <div class="ex-detail-body">
+
+      <div class="ex-detail-image-box">
+        <button class="ex-image-scroll-btn left">&#8592;</button>
+        <div class="ex-detail-image-scroll">
+          {% for f in files %}
+            {% if f.is_image %}
+              <img src="{{ f.file.url }}" alt="활동 이미지">
+            {% endif %}
+          {% endfor %}
+        </div>
+        <button class="ex-image-scroll-btn right">&#8594;</button>
+      </div>
+
+      <div class="ex-detail-text-box">
+        <div class="ex-detail-text-title">후기 내용</div>
+        <div class="ex-detail-text-content">
+          {{ review.content }}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ex-detail-rating">
+      <div class="ex-detail-rating-label">평점</div>
+      <span class="ex-rating-value">{{ review.rating }}</span>
+      <span class="ex-rating-divider">/</span>
+      <span class="ex-rating-max">5</span>
+    </div>
+
+    <div class="ex-bottom-box">
+      <div class="ex-detail-tags">
+        {% for tag in review.tags.all %}
+        <span class="ex-tag-item">#{{ tag.name }}</span>
+        {% endfor %}
+      </div>
+      <form method="POST" action="{% url 'experience:toggle_scrap' review.id %}" class="ex-scrap-form">
+        {% csrf_token %}
+        <button type="submit" class="ex-scrap-btn">
+          {% if scrapped_by_user %}
+            <img src="{% static 'img/scrap-fill.svg' %}" class="scrap-img">
+          {% else %}
+            <img src="{% static 'img/scrap.svg' %}" class="scrap-img">
+          {% endif %}
+        </button>
+      </form>
+    </div>
+
+    <div class="ex-divider"></div>
+
+    <form method="POST" action="{% url 'experience:add_comment' review.id %}" class="ex-detail-comment-box">
+      {% csrf_token %}
+      <textarea class="ex-detail-comment-content" name="content" placeholder="댓글 작성하기" required></textarea>
+        <div class="ex-comment-btn-wrap">
+          <button type="submit" class="ex-comment-submit-btn">
+        보내기
+      </button>
+    </div>
+    </form>
+
+    <div class="ex-comment-list">
+      {% for c in comments %}
+        <div class="ex-comment-item">
+          <div class="ex-comment-top">
+            <span class="ex-comment-nickname">{{ c.user.display_name }}</span>
+            <div class="ex-comment-right">
+              <span class="ex-comment-date">{{ c.created_at|date:"Y.m.d" }}</span>
+              <div class="ex-comment-right-spacer">ㅣ</div>
+              {% if c.user == request.user %}
+              <form method="POST" action="{% url 'experience:delete_comment' review.id c.id %}" class="ex-comment-delete-form">
+                {% csrf_token %}
+                <button class="ex-comment-delete-btn" type="submit">삭제</button>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+          <p class="ex-comment-text">
+            {{ c.content }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/experience-detail.js' %}"></script>
+{% endblock %}

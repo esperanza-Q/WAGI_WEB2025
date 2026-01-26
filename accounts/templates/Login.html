@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/Login.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="login-wrapper">
+
+      <div class="login-top">
+        <a href="{% url 'home:home' %}">
+          <img class="login-logo" src="{% static 'img/main-logo.svg' %}">
+        </a>
+      </div>
+
+      <div class="login-bottom">
+        {% if messages %}
+          <div class="msg-box">
+            {% for message in messages %}
+              {% if message.tags == "error" %}
+                <p class="msg {{ message.tags }}">{{ message }}</p>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        <form method="post">
+          {% csrf_token %}
+          <input type="text" class="login-input" name="username" placeholder="학번">
+          <input type="password" class="login-input" name="password" placeholder="비밀번호">
+          <button type="submit" class="login-btn">로그인</button>
+        </form>
+
+        <a class="signup-btn" href="{% url 'accounts:signup' %}">회원가입</a>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
+
+
+

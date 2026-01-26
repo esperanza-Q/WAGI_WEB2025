@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/myroadmap/myroadmaphome.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+      <div class="roadmap-title">나의 로드맵</div>
+
+      <div class="roadmap-container">
+        <div class="timeline">
+          {% if entries %}
+            <div class="dot"></div>
+          {% endif %}
+        </div>
+
+        <div class="roadmap-cards" id="roadmap-cards"></div>
+      </div>
+
+      <a class="roadmap-post-btn" href="{% url 'career:roadmap_create_front' %}">+</a>
+
+    </div>
+
+  <template id="roadmap-card-template">
+    <div class="card accordion" data-id="">
+      <div class="roadmap-card-title"></div>
+
+      <div class="roadmap-content">
+        <div class="roadmap-meta">
+          <span class="roadmap-category"></span>
+          <span class="roadmap-date"></span>
+
+          <a class="roadmap-detail" href="#">
+            상세보기 &gt;
+          </a>
+        </div>
+      </div>
+    </div>
+  </template>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const cardsData = [
+    {% for e in entries %}
+      {
+        id: {{ e.id }},
+        year: {{ e.year }},
+        title: "{{ e.title|escapejs }}",
+        category: "{{ e.category|escapejs }}",
+        date: "{{ e.date|escapejs }}"
+      }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+</script>
+<script src="{% static 'js/myroadmap.js' %}"></script>
+{% endblock %}
+

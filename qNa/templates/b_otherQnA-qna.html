@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/otherQnA-qna.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="{%url "home:home"%}">
+            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
+        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
+        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
+        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
+      {% if user.is_authenticated %}
+        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
+      {% else %}
+        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+    <div class="other-profile-userInfo">
+      <div class="other-profile-userImg"></div>
+      <div class="other-profile-userId">닉네임</div>
+      <div class="other-profile-academic">
+        <span class="other-profile-Grade">2학년</span>
+        <span class="other-profile-major">컴퓨터공학과</span>
+      </div>
+      <div class="other-profile-userEmail">
+        <span class="other-profile-email-label">이메일 | </span>
+        <span class="otherQnA-profile-email-value">sujeong@naver.com</span>
+      </div>
+    </div>
+
+    <div class="otherQnA-list-wrapper">
+      <div class="other-profile-menu">
+        <a href="otherQnA-roadmap.html">
+          <button type="button" class="other-profile-roadmap">로드맵</button>
+        </a>
+        
+        <a href="otherQnA-qna.html">
+          <button type="button" class="other-profile-qna">Q&A</button>
+        </a>
+        
+        <a href="otherQnA-post.html">
+          <button type="button" class="otherQnA-list-writeBtn">Q&A 남기기</button>
+        </a>
+      </div>
+
+      <!--mock 데이터-->
+      <div class="otherQnA-list">
+        <a href="otherQnA-detail.html" class="otherQnA-list-link">
+          <div class="otherQnA-list-card">
+            <span class="otherQnA-list-title">제목</span>
+            <span> | </span>
+            <span class="otherQnA-list-userId">닉네임</span>
+            <span>></span>
+          </div>
+        </a>
+
+        <a href="otherQnA-detail.html" class="otherQnA-list-link">
+          <div class="otherQnA-list-card">
+            <span class="otherQnA-list-title">제목</span>
+            <span> | </span>
+            <span class="otherQnA-list-userId">닉네임</span>
+            <span>></span>
+          </div>
+        </a>
+
+        <a href="otherQnA-detail.html" class="otherQnA-list-link">
+          <div class="otherQnA-list-card">
+            <span class="otherQnA-list-title">제목</span>
+            <span> | </span>
+            <span class="otherQnA-list-userId">닉네임</span>
+            <span>></span>
+          </div>
+        </a>
+
+        <a href="otherQnA-detail.html" class="otherQnA-list-link">
+          <div class="otherQnA-list-card">
+            <span class="otherQnA-list-title">제목</span>
+            <span> | </span>
+            <span class="otherQnA-list-userId">닉네임</span>
+            <span>></span>
+          </div>
+        </a>
+
+        <a href="otherQnA-detail.html" class="otherQnA-list-link">
+          <div class="otherQnA-list-card">
+            <span class="otherQnA-list-title">제목</span>
+            <span> | </span>
+            <span class="otherQnA-list-userId">닉네임</span>
+            <span>></span>
+          </div>
+        </a>
+
+        <a href="otherQnA-detail.html" class="otherQnA-list-link">
+          <div class="otherQnA-list-card">
+            <span class="otherQnA-list-title">제목ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</span>
+            <span> | </span>
+            <span class="otherQnA-list-userId">닉네임dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</span>
+            <span>></span>
+          </div>
+        </a>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKENDㅣ 손정민 권수정 노혜린 송정민 이윤서 이지현 조하늘 최은솔<br /> FRONTENDㅣ 이가윤 김비주 이원지</p>
+  </footer>
+</body>
+</html>
+
+

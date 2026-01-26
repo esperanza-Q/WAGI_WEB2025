@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/jobtips/jobtips-post.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="{%url "home:home"%}">
+            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
+        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
+        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
+        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
+      {% if user.is_authenticated %}
+        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
+      {% else %}
+        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
+      {% endif %}
+    </div>
+  </header>
+
+<main>
+  <div class="container">
+
+    <h2 class="jobtips-post-title">자소서·면접·포폴 후기 남기기</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="jobtips-post-form">
+      <label class="jobtips-post-label">제목</label>
+      <input type="text" class="jobtips-post-input" placeholder="활동 제목을 간단히 입력해주세요 (예: 카카오 FE 인턴 합격 자소서)" required>
+      
+      <label class="jobtips-post-label">카테고리</label>
+      <div class="jobtips-post-category">
+        <label><input type="radio" value="자소서" required> 자소서</label>
+        <label><input type="radio" value="면접"> 면접</label>
+        <label><input type="radio" value="포트폴리오"> 포트폴리오</label>
+      </div>
+
+      <label class="jobtips-post-label">지원 분야</label>
+      <input type="text" class="jobtips-post-input" placeholder="직무 / 포지션" required>
+
+      <label class="jobtips-post-label">합격 연도와 전형 유형</label>
+      <input type="text" class="jobtips-post-input" placeholder="예: 2023 동계 인턴 / 2024 교내 공모전" required>
+
+      <label class="jobtips-post-label">후기 본문</label>
+      <textarea class="jobtips-post-textarea" required></textarea>
+
+      <label class="jobtips-post-label">파일 업로드</label>
+      <div class="jobtips-post-upload-area">
+        <label class="jobtips-post-upload-btn">
+          +
+          <input type="file" id="jobtips-upload-input" multiple required>
+        </label>
+
+        <div class="jobtips-post-upload-preview" id="jobtips-upload-preview">
+          <!-- 업로드된 이미지 미리보기, 파일명 미리보기(다중 선택 가능) -->
+        </div>
+      </div>
+
+      <label class="jobtips-post-label">개인 경험이나 팁</label>
+      <textarea class="jobtips-post-textarea" required></textarea>
+      
+      <label class="jobtips-post-label">태그 추가</label>
+      <div class="jobtips-tag-input-wrapper">
+        <input type="text" id="jobtips-tag-input" class="jobtips-tag-input" placeholder="태그를 입력해주세요">
+        <button type="button" id="jobtips-add-tag-btn" class="jobtips-tag-add-btn">추가</button>
+      </div>
+      <!-- 태그 보여주는 영역 -->
+      <div class="jobtips-tag-list" id="jobtips-tag-list"></div>
+      <!-- 서버로 보낼 hidden input -->
+      <input type="hidden" id="jobtips-hidden-tags">
+
+      <button type="submit" class="jobtips-post-submit-btn">
+        완료하기
+      </button>
+    </form>
+
+  </div>
+</main>
+
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKEND  <br /> FRONTEND </p>
+  </footer>
+
+  <script src="../../static/js/jobtips-post.js"></script>
+</body>
+</html>

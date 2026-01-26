@@ -1,0 +1,152 @@
+.container {
+  max-width: 1016px;
+  margin: 0 auto;
+  padding: 0 24px;  /* 양옆 패딩 */
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 80px; /* footer와 간격 */
+}
+
+.roadmap-title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 60px;
+  color: var(--purple-dark);
+  margin-top: 80px;
+}
+
+/* 전체 레이아웃 */
+.roadmap-container {
+  display: grid;
+  grid-template-columns: 50px auto;
+  justify-content: center;
+  margin-top: 40px;
+  align-items: stretch;
+}
+
+/* 타임라인 */
+.timeline {
+  width: 30px;
+  background: rgba(105,57,90,0.25);
+  border-radius: 20px;
+  position: relative;
+  height: 100%;
+}
+
+.timeline .dot {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background: #f6eef8;
+  border: 2px solid #a897b3;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+/* 연도 라벨 */
+.year-label {
+  font-size: 27px;
+  font-weight: 400;
+  color: var(--purple-light-2);
+  margin: 30px 0 10px;
+}
+
+/* 카드 리스트 */
+.roadmap-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* 카드 */
+.card {
+  background: rgba(105,57,90,0.15);
+  width: 700px;
+  padding: 18px 22px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  color: var(--purple-dark);
+  transition: background 0.2s;
+}
+
+.card:hover {
+  background: rgba(139, 89, 123, 0.22);
+}
+
+/* 카드 제목 */
+.roadmap-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 아코디언 내용 */
+.card .roadmap-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.roadmap-meta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;   /* tag와 date 간 간격 */
+  margin-top: 15px;
+}
+
+/* 상세보기 오른쪽 끝 고정 */
+.roadmap-detail {
+  margin-left: auto;
+  font-size: 13px;
+  color: #6e5b75;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.roadmap-detail:hover{
+  text-decoration: underline;
+}
+
+.roadmap-category {
+  display: inline-block;
+  background: rgba(120, 60, 130, 0.32);
+  padding: 5px 12px;
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-right: 10px;
+}
+
+.roadmap-date {
+  font-size: 14px;
+  color: #6e5b75;
+}
+
+.roadmap-post-btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(105, 57, 90, 0.338);
+  width: 50px;
+  height: 50px;
+  margin: 30px auto 0px;
+  border-radius: 30px;
+  color: white;
+  font-size: 35px;
+  font-weight : 200;
+  border: 1px solid rgba(146, 130, 161, 0.3);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.roadmap-post-btn:hover{
+  background: rgba(105, 37, 90, 0.31);
+}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SujeongBridge - 남긴 게시글{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/myhome-post.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="myhome-post-wrapper">
+      <div class="myhome-post-title">남긴 게시글 모아 보기</div>
+      
+      <div class="myhome-post-tabs">
+          <a href="{% url 'mypage:my_post_list' category='all' %}"
+          class="{% if current_category == 'all' %}active{% endif %}">
+            전체
+        </a>
+
+        <a href="{% url 'mypage:my_post_list' category='experience' %}"
+          class="{% if current_category == 'experience' %}active{% endif %}">
+            활동 후기
+        </a>
+
+        <a href="{% url 'mypage:my_post_list' category='jobTips' %}"
+          class="{% if current_category == 'jobTips' %}active{% endif %}">
+            자소서·면접·포폴
+        </a>
+
+        <a href="{% url 'mypage:my_post_list' category='recruit' %}"
+          class="{% if current_category == 'recruit' %}active{% endif %}">
+            모집
+        </a>
+      </div>
+
+      <div class="myhome-post-list">
+      {% for post in posts %}
+        {% if post.3 == 'experience' %}
+        <a href="{%url 'experience:review_detail' review_id=post.0 %}" class="myhome-post-item">
+            <span class="myhome-post-text">{{post.1}}</span>
+            <span class="myhome-post-arrow">&gt;</span>
+        </a>
+        {% endif %}
+        {% if post.3 == 'jobTips' %}
+        <a href="{%url 'jobTips:detail' pk=post.0 %}" class="myhome-post-item">
+            <span class="myhome-post-text">{{post.1}}</span>
+            <span class="myhome-post-arrow">&gt;</span>
+        </a>
+        {% endif %}
+        {% if post.3 == 'recruit' %}
+        <a href="{%url 'recruit:recruit_detail' post.0 %}" class="myhome-post-item">
+            <span class="myhome-post-text">{{post.1}}</span>
+            <span class="myhome-post-arrow">&gt;</span>
+        </a>
+        {% endif %}
+      {% endfor %}
+      </div>
+  </div>
+{% endblock %}

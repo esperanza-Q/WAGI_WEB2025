@@ -1,0 +1,26 @@
+<form method="get">
+    <label>카테고리:</label>
+    {% for cat in categories %}
+        <button type="submit" name="category" value="{{ cat }}" {% if category == cat %}style="font-weight:bold;"{% endif %}>{{ cat }}</button>
+    {% endfor %}
+    <input type="text" name="q" placeholder="검색어" value="{{ q_query }}">
+    <select name="sort">
+        <option value="latest" {% if sort == 'latest' %}selected{% endif %}>최신순</option>
+        <option value="agree" {% if sort == 'agree' %}selected{% endif %}>공감순</option>
+    </select>
+    <button type="submit">검색</button>
+</form>
+<hr>
+{% if posts %}
+    {% for post in posts %}
+        <div>
+            <strong>{{ post.title }}</strong>
+            <p>{{ post.content }}</p>
+            <p>좋아요: {{ post.like_count }}</p>
+            <p>작성일: {{ post.created_at|date:"Y-m-d" }}</p>
+        </div>
+    {% empty %}
+        <p>검색 결과가 없습니다.</p>
+{% else %}
+    <p>검색 결과가 없습니다.</p>
+{% endif %}

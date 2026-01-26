@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge | 나의 QnA</title>
+
+  <link rel="stylesheet" href="{% static 'css/otherQnA-qna.css' %}">
+</head>
+
+<body>
+<header class="main-header">
+  <div class="logo">
+    <a href="{% url 'home:home' %}">
+      <img class="main-logo" src="{% static 'img/main-logo.svg' %}" alt="SujeongBridge">
+    </a>
+  </div>
+
+  <nav class="main-nav">
+    <ul class="main-nav-links">
+      <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
+      <li><a href="{% url 'jobTips:list' %}">자소서·면접·포폴</a></li>
+      <li><a href="{% url 'recruit:recruit_list' %}">모집</a></li>
+      <li><a href="{% url 'career:roadmap_home' %}">나의 로드맵</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-header-r">
+    <a href="{% url 'mypage:home' %}">
+      <button class="header-mypage-btn" type="button">마이페이지</button>
+    </a>
+
+    {% if user.is_authenticated %}
+      <a href="{% url 'accounts:logout' %}">
+        <button class="header-login-btn" type="button">로그아웃</button>
+      </a>
+    {% else %}
+      <a href="{% url 'accounts:login' %}">
+        <button class="header-login-btn" type="button">로그인</button>
+      </a>
+    {% endif %}
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <!-- 프로필 상단 -->
+    <div class="other-profile-userInfo">
+      <div class="other-profile-userImg"></div>
+
+      <div class="other-profile-userId">
+        {% if user.is_authenticated %}
+          {{ user.display_name }}
+        {% else %}
+          닉네임
+        {% endif %}
+      </div>
+
+      <div class="other-profile-academic">
+        <span class="other-profile-Grade">{{user.grade}}학년</span>
+        <span class="other-profile-major">{{user.department.dept_name}}</span>
+      </div>
+
+      <div class="other-profile-userEmail">
+        <span class="other-profile-email-label">이메일 | </span>
+        <span class="otherQnA-profile-email-value">
+          {% if user.is_authenticated and user.email %}
+            {{ user.email }}
+          {% else %}
+            이메일이 없습니다.
+          {% endif %}
+        </span>
+      </div>
+    </div>
+
+    <!-- 리스트 -->
+    <div class="otherQnA-list-wrapper">
+
+      <h2 style="margin: 0 0 12px 0;">나의 QnA</h2>
+
+      <!-- 탭 메뉴 -->
+      <div class="other-profile-menu" style="justify-content:flex-start; gap:10px;">
+        <button id="btn-received" type="button" class="other-profile-qna">내가 받은</button>
+        <button id="btn-send" type="button" class="other-profile-qna">내가 보낸</button>
+      </div>
+
+      <!-- 내가 받은 -->
+      <div id="list-received">
+        <div class="otherQnA-list">
+          {% for q in received_list %}
+            <a href="{% url 'qna:detail' q.id %}" class="otherQnA-list-link">
+              <div class="otherQnA-list-card">
+                <span class="otherQnA-list-title">{{ q.title }}</span>
+                <span class="otherQnA-list-arrow">&gt;</span>
+              </div>
+            </a>
+          {% empty %}
+            <div class="otherQnA-list-empty">받은 QnA가 없습니다.</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- 내가 보낸 -->
+      <div id="list-send" style="display:none;">
+        <div class="otherQnA-list">
+          {% for q in sent_list %}
+            <a href="{% url 'qna:detail' q.id %}" class="otherQnA-list-link">
+              <div class="otherQnA-list-card">
+                <span class="otherQnA-list-title">{{ q.title }}</span>
+                <span class="otherQnA-list-arrow">&gt;</span>
+              </div>
+            </a>
+          {% empty %}
+            <div class="otherQnA-list-empty">보낸 QnA가 없습니다.</div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>© SSWU_WAGI 3기 CampusBridge</p>
+  <p class="member">BACKENDㅣ 손정민 권수정 노혜린 송정민 이윤서 이지현 조하늘 최은솔<br /> FRONTENDㅣ 이가윤 김비주 이원지</p>
+</footer>
+
+<script>
+(function () {
+  const btnSend = document.getElementById("btn-send");
+  const btnReceived = document.getElementById("btn-received");
+  const listSend = document.getElementById("list-send");
+  const listReceived = document.getElementById("list-received");
+
+  function showReceived() {
+    listSend.style.display = "none";
+    listReceived.style.display = "block";
+    btnReceived.classList.add("is-active");
+    btnSend.classList.remove("is-active");
+  }
+
+  function showSend() {
+    listSend.style.display = "block";
+    listReceived.style.display = "none";
+    btnSend.classList.add("is-active");
+    btnReceived.classList.remove("is-active");
+  }
+
+  btnSend.addEventListener("click", showSend);
+  btnReceived.addEventListener("click", showReceived);
+
+  showReceived();
+})();
+</script>
+
+</body>
+</html>

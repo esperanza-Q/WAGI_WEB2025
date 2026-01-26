@@ -1,0 +1,169 @@
+.container {
+  max-width: 1016px;
+  margin: 0 auto;
+  padding: 0 24px;  /* 양옆 패딩 */
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 80px; /* footer와 간격 */
+}
+
+.roadmap-post-title {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--purple-dark);
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.roadmap-post-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--purple-dark);
+}
+
+.roadmap-post-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(84, 56, 112, 0.3);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--purple-dark);
+  margin-bottom: 20px;
+  outline: none;
+  font-size: 15px;
+}
+
+.roadmap-post-input::placeholder {
+  color: var(--purple-light);
+}
+
+.roadmap-post-category {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  color: var(--purple-dark);
+}
+
+.roadmap-post-category input {
+  margin-right: 4px;
+}
+
+.roadmap-post-textarea {
+  width: 100%;
+  height: 180px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(84, 56, 112, 0.3);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.6);
+  outline: none;
+  resize: vertical;
+  font-size: 15px;
+  color: var(--purple-dark);
+  margin-bottom: 20px;
+}
+
+.roadmap-post-upload-area {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.roadmap-post-upload-btn {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--purple-dark);
+  border: 1px solid rgba(84, 56, 112, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.roadmap-post-upload-btn input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.roadmap-post-upload-preview {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 이미지 미리보기 */
+.roadmap-preview-item {
+  position: relative;
+  display: inline-block;
+}
+
+.roadmap-preview-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #ddd;
+}
+
+.roadmap-preview-file {
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--purple-dark);
+  border: 1px solid rgba(150,120,180,0.3);
+}
+
+/* 삭제 버튼 */
+.roadmap-preview-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+  border: 1px solid rgba(150,120,180,0.5);
+  font-size: 12px;
+  color: var(--purple-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.roadmap-post-submit-btn {
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px auto;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(120, 80, 140, 0.35);
+  border: 1px solid rgba(120, 80, 140, 0.4);
+  color: white;
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.roadmap-post-submit-btn:hover {
+  background: rgba(120, 80, 140, 0.45);
+}

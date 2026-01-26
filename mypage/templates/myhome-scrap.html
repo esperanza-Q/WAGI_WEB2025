@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/myhome-scrap.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="myhome-scrap-wrapper">
+      <div class="myhome-scrap-title">스크랩 모아 보기</div>
+
+      <div class="myhome-scrap-tabs">
+        <a href="{% url 'mypage:scrap_list' category='all' %}"
+          class="{% if current_category == 'all' %}active{% endif %}">
+            전체
+        </a>
+
+        <a href="{% url 'mypage:scrap_list' category='experience' %}"
+          class="{% if current_category == 'experience' %}active{% endif %}">
+            활동 후기
+        </a>
+
+        <a href="{% url 'mypage:scrap_list' category='jobTips' %}"
+          class="{% if current_category == 'jobTips' %}active{% endif %}">
+            자소서·면접·포폴
+        </a>
+
+        <a href="{% url 'mypage:scrap_list' category='recruit' %}"
+          class="{% if current_category == 'recruit' %}active{% endif %}">
+            모집
+        </a>
+      </div>
+
+      <div class="myhome-scrap-list">
+
+      {% for post in scrap_post %}
+        {% if post.4 == 'experience' %}
+        <a href="{%url 'experience:review_detail' review_id=post.0 %}" class="myhome-scrap-item">
+            <span class="myhome-scrap-text">{{post.1}} | {{post.2.display_name}}</span>
+            <span class="myhome-scrap-arrow">&gt;</span>
+        </a>
+        {%endif%}
+        {% if post.4 == 'jobTips' %}
+        <a href="{%url 'jobTips:detail' pk=post.0 %}" class="myhome-scrap-item">
+            <span class="myhome-scrap-text">{{post.1}} | {{post.2.display_name}}</span>
+            <span class="myhome-scrap-arrow">&gt;</span>
+        </a>
+        {%endif%}
+        {% if post.4 == 'recruit' %}
+        <a href="{%url 'recruit:recruit_detail' post.0 %}" class="myhome-scrap-item">
+            <span class="myhome-scrap-text">{{post.1}} | {{post.2.display_name}}</span>
+            <span class="myhome-scrap-arrow">&gt;</span>
+        </a>
+        {%endif%}
+        {% comment %} 커리어부분도 추가 필요 {% endcomment %}
+
+      {% endfor %}
+      </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <title>SujeongBridge - 자소서·면접·포폴</title>
+  <link rel="stylesheet" href="{% static 'css/jobtips/jobtips-list.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    
+    <form method="GET" id="filter-form" class="jobtips-search-form" action="{% url 'jobTips:list' %}">
+
+      <div class="jobtips-search-section">
+        <input 
+          type="search"
+          name="q"
+          value="{{ q|default_if_none:'' }}"
+          placeholder="활동명으로 검색하기"
+          class="jobtips-search-input"
+        />
+
+        <button type="submit" class="jobtips-search-btn">
+          <img src="{% static 'img/search.svg' %}" alt="검색">
+        </button>
+      </div>
+
+      <input type="hidden" id="filter-category" name="category" value="{{ category|default_if_none:'' }}">
+      <input type="hidden" id="filter-ordering" name="sort" value="{{ sort|default:'latest' }}">
+
+      <nav class="jobtips-filter-tabs">
+        <ul>
+          <li>
+            <button type="button" class="tab-btn {% if not category %}active{% endif %}" data-category="">전체</button>
+          </li>
+          <li>
+            <button type="button" class="tab-btn {% if category == 'resume' %}active{% endif %}" data-category="resume">자소서</button>
+          </li>
+          <li>
+            <button type="button" class="tab-btn {% if category == 'interview' %}active{% endif %}" data-category="interview">면접</button>
+          </li>
+          <li>
+            <button type="button" class="tab-btn {% if category == 'portfolio' %}active{% endif %}" data-category="portfolio">포트폴리오</button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="jobtips-sub-filter-bar">
+        <div class="jobtips-sub-filters">
+          <ul>
+            <li>
+              <button type="button" class="order-btn {% if sort != 'likes' %}active{% endif %}" data-order="latest">최신순</button>
+            </li>
+            <li>
+              <button type="button" class="order-btn {% if sort == 'likes' %}active{% endif %}" data-order="likes">공감순</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="jobtips-sub-filter-row">
+        <div class="jobtips-custom-filter">
+          <select class="jobtips-filter-select" name="college">
+            <option value="">단과대 전체</option>
+            <option value="engineering">공과대학</option>
+            <option value="humanities">인문대학</option>
+          </select>
+
+          <select class="jobtips-filter-select" name="department">
+            <option value="">학과 전체</option>
+            <option value="computer">컴퓨터공학과</option>
+            <option value="ai">AI학과</option>
+          </select>
+
+          <select class="jobtips-filter-select" name="grade">
+            <option value="">학년 전체</option>
+            <option value="1">1학년</option>
+            <option value="2">2학년</option>
+            <option value="3">3학년</option>
+            <option value="4">4학년</option>
+            <option value="5">휴학</option>
+            <option value="6">졸업</option>
+          </select>
+
+          <button type="submit" class="jobtips-custom-filter-btn">
+            맞춤 검색
+          </button>
+        </div>
+
+        <a class="jobtips-write-btn" href="{% url 'jobTips:create' %}">글쓰기</a>
+      </div>
+    </form>
+
+    <div class="jobtips-divider"></div>
+
+    <div class="jobtips-list">
+      {% for post in page_obj %}
+        <a href="{% url 'jobTips:detail' post.pk %}" class="jobtips-card-link">
+          <div class="jobtips-card">
+            <div class="jobtips-card-header">
+              <div class="jobtips-card-category">{{ post.get_category_display }}</div>
+              <div class="jobtips-card-date">{{ post.created_at|date:"Y.m.d" }}</div>
+            </div>
+            <div class="jobtips-card-title">{{ post.title }}</div>
+            <div class="jobtips-card-nickname">{{ post.author.display_name }}</div>
+            <div class="jobtips-card-period">{{ post.pass_info }}</div>
+            <div class="jobtips-card-footer">
+              <div class="jobtips-card-field">{{ post.position }}</div>
+              <div class="jobtips-card-like">
+                <img class="jobtips-card-like-img" src="{% static 'img/like.svg' %}" alt="like">
+                {{ post.like_count }}
+              </div>
+            </div>
+          </div>
+        </a>
+      {% empty %}
+        <p style="color:#999; padding:20px;">아직 게시글이 없습니다.</p>
+      {% endfor %}
+    </div>
+
+    <!-- ✅ 페이지네이션(실제 연동) -->
+    <div class="jobtips-pagination">
+      {% if page_obj.has_previous %}
+        <a class="jobtips-page-btn"
+           href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+          &lt;
+        </a>
+      {% else %}
+        <button class="jobtips-page-btn" disabled>&lt;</button>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+          <button class="jobtips-page-btn active">{{ num }}</button>
+        {% else %}
+          <a class="jobtips-page-btn"
+             href="?page={{ num }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+            {{ num }}
+          </a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="jobtips-page-btn"
+           href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+          &gt;
+        </a>
+      {% else %}
+        <button class="jobtips-page-btn" disabled>&gt;</button>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/board-list.js' %}"></script>
+
+  <script>
+    (function () {
+      const form = document.getElementById('filter-form');
+      const categoryInput = document.getElementById('filter-category');
+      const sortInput = document.getElementById('filter-ordering');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          categoryInput.value = btn.dataset.category || '';
+          form.submit();
+        });
+      });
+
+      document.querySelectorAll('.order-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          sortInput.value = btn.dataset.order || 'latest';
+          form.submit();
+        });
+      });
+    })();
+  </script>
+{% endblock %}

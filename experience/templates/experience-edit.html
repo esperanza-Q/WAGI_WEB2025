@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/experience/experience-edit.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+      <div class="ex-edit-title">후기 수정하기</div>
+      <form method="POST" enctype="multipart/form-data" class="ex-edit-form">
+        {% csrf_token %}
+          <label class="ex-edit-label">제목</label>
+          <input type="text" name="title" class="ex-edit-input" value="{{ review.title }}" required>
+        
+          <label class="ex-edit-label">카테고리</label>
+          <div class="ex-edit-category">
+            <label><input type="radio" name="category" value="club" {% if review.category == "club" %}checked{% endif %}> 동아리</label>
+            <label><input type="radio" name="category" value="academic" {% if review.category == "academic" %}checked{% endif %}> 학회</label>
+            <label><input type="radio" name="category" value="contest" {% if review.category == "contest" %}checked{% endif %}> 공모전</label>
+            <label><input type="radio" name="category" value="intern" {% if review.category == "intern" %}checked{% endif %}> 인턴</label>
+          </div>
+
+          <label class="ex-edit-label">활동 기간</label>
+          <input type="text" name="activity_period" class="ex-edit-input" value="{{ review.activity_period }}" required>
+
+          <label class="ex-edit-label">후기 본문</label>
+          <textarea name="content" class="ex-edit-textarea" required>{{ review.content }}</textarea>
+
+          <label class="ex-edit-label">파일 업로드</label>
+          <div class="ex-edit-upload-area">
+            <label class="ex-edit-upload-btn">
+              +
+              <input type="file" name="files" id="ex-edit-upload-input" multiple>
+            </label>
+
+            <div class="ex-edit-upload-preview" id="ex-edit-upload-preview">
+              {% for f in review.files.all %}
+                <div class="ex-edit-preview-item">
+                  {% if f.is_image %}
+                    <img src="{{ f.file.url }}" class="ex-edit-preview-img" alt="기존 이미지">
+                  {% else %}
+                    <a href="{{ f.file.url }}">
+                      <div class="ex-edit-preview-file">{{ f.filename }}</div>
+                    </a>
+                  {% endif %}
+                  <div class="ex-edit-preview-remove" data-file-id="{{ f.id }}">×</div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <label class="ex-edit-label">평점</label>
+          <input type="number" name="rating" class="ex-edit-input" value="{{ review.rating }}" step="0.5" min="0" max="5" required>
+        
+          <label class="ex-edit-label">태그 추가</label>
+          <div class="ex-edit-tag-input-wrapper">
+            <input type="text" id="ex-edit-tag-input" class="ex-edit-tag-input">
+            <button type="button" id="ex-edit-add-tag-btn" class="ex-edit-tag-add-btn">추가</button>
+          </div>
+          <div class="ex-edit-tag-list" id="ex-edit-tag-list"></div>
+
+          <input type="hidden" id="ex-deleted-files" name="deleted_files">
+          <input type="hidden" id="ex-edit-hidden-tags" name="tags" value="{{ form.initial.tags }}">
+
+          <button type="submit" class="ex-edit-submit-btn">
+            수정 완료
+          </button>
+      </form>
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/experience-edit.js' %}"></script>
+{% endblock %}
+

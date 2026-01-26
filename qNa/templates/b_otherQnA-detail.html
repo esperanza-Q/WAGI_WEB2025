@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SujeongBridge</title>
+  <link rel="stylesheet" href="../../static/css/otherQnA-detail.css">
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="logo">
+        <a href="{%url "home:home"%}">
+            <img class="main-logo" src="{% static "img/main-logo.svg"%}"></a>
+    </div>
+    <nav class="main-nav">
+      <ul class="main-nav-links">
+        <li><a href="{% url 'experience:review_list' %}">활동 후기</a></li>
+        <li><a href="{%url "jobTips:list"%}">자소서·면접·포폴</a></li>
+        <li><a href="{%url "recruit:recruit_list"%}">모집</a></li>
+        <li><a href="{%url "career:roadmap_home"%}">나의 로드맵</a></li>
+      </ul>
+    </nav>
+    <div class="main-header-r">
+      <a href="{%url "mypage:home"%}"><button class="header-mypage-btn" >마이페이지</button></a>
+      {% if user.is_authenticated %}
+        <a href="{%url "accounts:logout"%}"><button class="header-login-btn">로그아웃</button></a>
+      {% else %}
+        <a href="{%url "accounts:login"%}"><button class="header-login-btn">로그인</button></a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main>
+  <div class="container">
+
+    <div class="otherQnA-detail-wrapper">
+      <div class="otherQnA-detail-top">
+        <div class="otherQnA-detail-title">Q&A 제목</div>
+        <div class="otherQnA-detail-info">
+          <span class="otherQnA-detail-userId">닉네임</span>
+          <span class="otherQnA-detail-date">작성일시</span>
+        </div>
+      </div>
+
+      <div class="otherQnA-detail-question">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae erat ipsum. Ut nec faucibus turpis. Nam in maximus urna. Sed a tincidunt tellus. Etiam pretium mi et mauris semper placerat. Duis ultricies purus enim, ac tincidunt urna ultricies eget.
+          Praesent sed ante a velit sollicitudin blandit eu et mauris. Etiam rhoncus auctor lacus, nec rutrum erat.
+          Pellentesque hendrerit vitae sapien eget sodales. Aliquam id metus eget nisi dapibus porttitor at id metus.
+          Donec rhoncus id est eu blandit. Maecenas ac tristique nulla. Nunc est odio, posuere ut mauris id, volutpat molestie nisl.
+          Nullam ornare, justo in viverra mollis, lacus tellus hendrerit metus, non ultricies sapien quam vitae turpis.
+          Nulla pulvinar, dolor sed pellentesque interdum, tortor purus ultricies purus, ut vulputate mi arcu non ipsum. Nullam in tristique mi, sit amet euismod risus.
+          Quisque finibus nulla at semper sodales. Cras vel molestie lacus.</p>
+      </div>
+      
+      <div class="otherQnA-detail-bottom">
+        <div>ㄴ 답변</div>
+        <div class="otherQnA-detail-answer">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae erat ipsum. Ut nec faucibus turpis. Nam in maximus urna. Sed a tincidunt tellus. Etiam pretium mi et mauris semper placerat. Duis ultricies purus enim, ac tincidunt urna ultricies eget.
+          Praesent sed ante a velit sollicitudin blandit eu et mauris. Etiam rhoncus auctor lacus, nec rutrum erat.
+          Pellentesque hendrerit vitae sapien eget sodales. Aliquam id metus eget nisi dapibus porttitor at id metus.
+          Donec rhoncus id est eu blandit. Maecenas ac tristique nulla. Nunc est odio, posuere ut mauris id, volutpat molestie nisl.
+          Nullam ornare, justo in viverra mollis, lacus tellus hendrerit metus, non ultricies sapien quam vitae turpis.
+          Nulla pulvinar, dolor sed pellentesque interdum, tortor purus ultricies purus, ut vulputate mi arcu non ipsum. Nullam in tristique mi, sit amet euismod risus.
+          Quisque finibus nulla at semper sodales. Cras vel molestie lacus.</p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© SSWU_WAGI 3기 CampusBridge</p>
+    <p class="member">BACKENDㅣ 손정민 권수정 노혜린 송정민 이윤서 이지현 조하늘 최은솔<br /> FRONTENDㅣ 이가윤 김비주 이원지</p>
+  </footer>
+</body>
+</html>
+
+

@@ -1,0 +1,67 @@
+<html>
+<head>
+    <title>검색 테스트</title>
+</head>
+ 
+<body>
+    <h2>검색 테스트</h2>
+    <form id="searchForm" method="get" style="margin-bottom:10px;">
+        <label>카테고리:</label>
+        {% for cat in categories %}
+            {% if category == cat %}
+                <a href="#" onclick="document.getElementById('categoryInput').value='{{ cat }}'; document.getElementById('searchForm').submit(); return false;"
+                   style="font-weight:bold; margin-right:8px; text-decoration:none; color:inherit;">
+                    {{ cat }}
+                </a>
+            {% else %}
+                <a href="#" onclick="document.getElementById('categoryInput').value='{{ cat }}'; document.getElementById('searchForm').submit(); return false;"
+                   style="font-weight:normal; margin-right:8px; text-decoration:none; color:inherit;">
+                    {{ cat }}
+                </a>
+            {% endif %}
+        {% endfor %}
+        <input type="hidden" id="categoryInput" name="category" value="{{ category }}">
+        <br><br>
+        <input type="text" name="q" placeholder="검색어" value="{{ q_query }}">
+        <select name="sort">
+            <option value="latest" {% if sort == 'latest' %}selected{% endif %}>최신순</option>
+            <option value="agree" {% if sort == 'agree' %}selected{% endif %}>공감순</option>
+        </select>
+        <!-- 맞춤필터링: 단과대, 학과, 학번 드롭다운 -->
+        <span style="margin-left:10px; font-weight:bold;">맞춤필터링</span>
+        <select name="college" style="width:100px;">
+            <option value="">단과대</option>
+            {% for c in college_list %}
+                <option value="{{ c }}" {% if selected_college == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+        <select name="department" style="width:110px;">
+            <option value="">학과</option>
+            {% for d in department_list %}
+                <option value="{{ d }}" {% if selected_department == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+        </select>
+        <select name="grade" style="width:90px;">
+            <option value="">학번(연도)</option>
+            {% for g in grade_list %}
+                <option value="{{ g }}" {% if selected_grade == g %}selected{% endif %}>{{ g }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">검색</button>
+    </form>
+    <hr>
+    {% if reviews and reviews|length > 0 %}
+        {% for r in reviews %}
+            <div>
+                <strong>{{ r.title }}</strong>
+                <p>{{ r.content|truncatechars:100 }}</p>
+                <p>작성자: {{ r.user.username }} / 날짜: {{ r.created_at|date:"Y-m-d" }}</p>
+                <p>좋아요: {{ r.like_count }}</p>
+                <hr>
+            </div>
+        {% endfor %}
+    {% elif q_query %}
+        <p>검색 결과가 없습니다.</p>
+    {% endif %}
+</body>
+</html>

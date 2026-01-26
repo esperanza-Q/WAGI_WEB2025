@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/myroadmap/myroadmap-edit.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+      <div class="roadmap-edit-title">나의 로드맵 수정하기</div>
+
+      <form method="POST" enctype="multipart/form-data" class="roadmap-edit-form">
+        {% csrf_token %}
+
+        <label class="roadmap-edit-label">제목</label>
+        <input
+          type="text"
+          name="title"
+          class="roadmap-edit-input"
+          value="{{ entry.title }}"
+          required
+        >
+
+        <label class="roadmap-edit-label">카테고리</label>
+        <div class="roadmap-edit-category">
+          <label>
+            <input type="radio" name="category" value="동아리"
+              {% if entry.category == "동아리" %}checked{% endif %} required> 동아리
+          </label>
+          <label>
+            <input type="radio" name="category" value="학회"
+              {% if entry.category == "학회" %}checked{% endif %}> 학회
+          </label>
+          <label>
+            <input type="radio" name="category" value="공모전"
+              {% if entry.category == "공모전" %}checked{% endif %}> 공모전
+          </label>
+          <label>
+            <input type="radio" name="category" value="인턴"
+              {% if entry.category == "인턴" %}checked{% endif %}> 인턴
+          </label>
+          <label>
+            <input type="radio" name="category" value="기타"
+              {% if entry.category == "기타" %}checked{% endif %}> 기타
+          </label>
+        </div>
+
+        <label class="roadmap-edit-label">활동 기간</label>
+        <input
+          type="text"
+          name="date"
+          class="roadmap-edit-input"
+          value="{{ entry.date }}"
+          required
+        >
+
+        <label class="roadmap-edit-label">후기 본문</label>
+        <textarea
+          name="description"
+          class="roadmap-edit-textarea"
+          required>{{ entry.description }}</textarea>
+
+        <label class="roadmap-edit-label">파일 업로드</label>
+<div class="roadmap-edit-upload-area">
+  <label class="roadmap-edit-upload-btn">
+    +
+    <input
+      type="file"
+      id="roadmap-edit-upload-input"
+      name="files"
+      multiple
+      accept="image/*"
+    >
+  </label>
+
+  <!-- ✅ 기존 이미지: 딱 한 번만 -->
+  <div
+    class="roadmap-edit-upload-preview"
+    id="roadmap-edit-upload-preview"
+  >
+    {% for img in entry.images.all %}
+    <div class="roadmap-edit-preview-item existing-item">
+      <img
+        src="{{ img.image.url }}"
+        class="roadmap-edit-preview-img"
+      >
+    </div>
+    {% endfor %}
+
+    {% if entry.attachment %}
+    <div class="roadmap-edit-preview-item">
+      <div class="roadmap-edit-preview-file">
+        {{ entry.attachment.name }}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ✅ 새로 선택한 파일 전용 -->
+  <div id="live-preview"></div>
+</div>
+
+
+        <input type="hidden" name="deleted_files" id="roadmap-deleted-files" value="">
+
+        <button type="submit" class="roadmap-edit-submit-btn">
+          수정 완료
+        </button>
+      </form>
+      <input type="hidden" id="hiddenTagsInput" name="tags_json" value="[]">
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/myroadmap-edit.js' %}"></script>
+{% endblock %}
+

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/myroadmap/myroadmap-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+      <!-- 상단 헤더 -->
+      <div class="roadmap-detail-header">
+        <div class="roadmap-detail-info">
+
+          <div class="roadmap-detail-title">{{ entry.title }}</div>
+          <span class="roadmap-detail-category">{{ entry.category }}</span>
+
+          <div class="roadmap-detail-bottom">
+            <div class="roadmap-detail-sub">
+              <span class="roadmap-detail-period">{{ entry.date }}</span>
+            </div>
+
+            <div class="roadmap-detail-actions">
+              <div class="roadmap-edit-delete">
+                <a href="{% url 'career:roadmap_update_front' entry.pk %}"
+                   class="roadmap-edit-btn">수정</a>
+
+                <span class="roadmap-divider-line">|</span>
+
+                <form method="POST"
+                  action="{% url 'career:roadmap_delete' entry.pk %}"
+                  style="display:inline;">
+                  {% csrf_token %}
+                  <button
+                   class="roadmap-delete-btn"
+                   type="submit"
+                   onclick="return confirm('정말 삭제하시겠습니까?');"
+                  >
+                   삭제
+                  </button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 첨부 파일 -->
+      <div class="roadmap-detail-files">
+        <img class="roadmap-detail-file-img"
+             src="{% static 'img/file.svg' %}" width="18px">
+
+        {% if entry.attachment %}
+          <span class="roadmap-detail-file-content">
+            {{ entry.attachment.name }}
+          </span>
+        {% endif %}
+      </div>
+
+      <!-- 이미지 + 후기 -->
+      <div class="roadmap-detail-body">
+
+        <div class="roadmap-detail-image-box">
+          <button class="roadmap-image-scroll-btn left">&#8592;</button>
+
+          <div class="roadmap-detail-image-scroll">
+            {% for img in entry.images.all %}
+              <img src="{{ img.image.url }}" alt="활동 이미지">
+            {% empty %}
+              <p>이미지가 없습니다.</p>
+            {% endfor %}
+
+          </div>
+
+          <button class="roadmap-image-scroll-btn right">&#8594;</button>
+        </div>
+
+        <div class="roadmap-detail-text-box">
+          <div class="roadmap-detail-text-title">후기 내용</div>
+          <div class="roadmap-detail-text-content">
+            {{ entry.description }}
+          </div>
+        </div>
+
+      </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/myroadmap-detail.js' %}"></script>
+{% endblock %}
+

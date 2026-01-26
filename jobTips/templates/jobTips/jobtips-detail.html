@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <title>SujeongBridge - {{ post.title }}</title>
+  <link rel="stylesheet" href="{% static 'css/jobtips/jobtips-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <div class="jobtips-detail-header">
+      <div class="jobtips-detail-info">
+        <div class="jobtips-detail-title">{{ post.title }}</div>
+        <span class="jobtips-detail-nickname">{{ post.author.display_name }}</span>
+
+        <div class="jobtips-detail-bottom">
+          <div class="jobtips-detail-sub">
+            <span class="jobtips-detail-category">{{ post.get_category_display }}</span>
+            <span class="jobtips-detail-field">{{ post.position }}</span>
+          </div>
+
+          <div class="jobtips-detail-actions">
+            {% if user.is_authenticated and user == post.author %}
+              <div class="jobtips-edit-delete">
+                <a href="{% url 'jobTips:edit' post.pk %}" class="jobtips-edit-btn">수정</a>
+                <span class="jobtips-divider-line">|</span>
+                <form method="POST" action="{% url 'jobTips:delete' post.pk %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button class="jobtips-delete-btn" type="submit" onclick="return confirm('정말 삭제할까요?');">삭제</button>
+                </form>
+              </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'jobTips:like' post.pk %}" class="jobtips-like-form">
+              {% csrf_token %}
+              <button type="submit" class="jobtips-detail-like-btn">
+                <img class="post-like-img" src="{% static 'img/like.svg' %}" alt="like">
+                <span class="jobtips-like-count">{{ post.like_count }}</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="jobtips-detail-middle-box">
+      <div class="jobtips-detail-important">{{ post.pass_info }}</div>
+
+      <!-- ✅ 첨부 파일 목록 (multiple) -->
+      {% if files %}
+      <div class="jobtips-detail-files" style="display:flex; flex-direction:column; gap:6px;">
+        {% for f in files %}
+          <div style="display:flex; align-items:center; gap:8px;">
+            <img class="jobtips-detail-file-img" src="{% static 'img/file.svg' %}" width="18px" alt="file">
+            <a class="jobtips-detail-file-content" href="{{ f.file.url }}" download>
+              {{ f.file.name|cut:"jobtips/files/" }}
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="jobtips-detail-body">
+
+      <!-- ✅ 왼쪽: 이미지 슬라이더(이미지 파일만) -->
+      <div class="jobtips-detail-image-box">
+        <button class="jobtips-image-scroll-btn left" type="button">&#8592;</button>
+
+        <div class="jobtips-detail-image-scroll" id="image-scroll">
+          {% if image_files %}
+            {% for img in image_files %}
+              <img src="{{ img.file.url }}" alt="활동 이미지">
+            {% endfor %}
+          {% else %}
+            <img src="{% static 'img/sample-img.png' %}" alt="활동 이미지">
+          {% endif %}
+        </div>
+
+        <button class="jobtips-image-scroll-btn right" type="button">&#8594;</button>
+      </div>
+
+      <div class="jobtips-detail-text-box">
+        <div class="jobtips-detail-text-title">후기 내용</div>
+        <div class="jobtips-detail-text-content">
+          {{ post.content|linebreaks }}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="jobtips-detail-tip-box">
+      <div class="jobtips-detail-tip-title">개인 경험이나 팁</div>
+      <div class="jobtips-detail-tip-content">
+        {{ post.experience_tip|default:""|linebreaks }}
+      </div>
+    </div>
+
+    <div class="jobtips-bottom-box">
+      <div class="jobtips-detail-tags">
+        {% for tag in tags_list %}
+          <span class="jobtips-tag-item">#{{ tag }}</span>
+        {% empty %}
+          <span class="jobtips-tag-item">#태그없음</span>
+        {% endfor %}
+      </div>
+
+      <form method="POST" action="{% url 'jobTips:post_scrap' post.pk %}" class="jobtips-scrap-form">
+        {% csrf_token %}
+        <button type="submit" class="jobtips-scrap-btn">
+          {% if is_scrapped %}
+            <img src="{% static 'img/scrap-fill.svg' %}" class="scrap-img" alt="스크랩 취소">
+          {% else %}
+            <img src="{% static 'img/scrap.svg' %}" class="scrap-img" alt="스크랩">
+          {% endif %}
+        </button>
+      </form>
+    </div>
+
+    <div class="jobtips-divider"></div>
+
+    {% if user.is_authenticated %}
+      <form method="POST" action="{% url 'jobTips:comment_create' post.pk %}" class="jobtips-detail-comment-box">
+        {% csrf_token %}
+        <textarea name="content" class="jobtips-detail-comment-content" placeholder="댓글 작성하기" required></textarea>
+        <div class="jobtips-comment-btn-wrap">
+          <button type="submit" class="jobtips-comment-submit-btn">보내기</button>
+        </div>
+      </form>
+    {% endif %}
+
+    <div class="jobtips-comment-list">
+      {% for c in comments %}
+        <div class="jobtips-comment-item">
+          <div class="jobtips-comment-top">
+            <span class="jobtips-comment-nickname">{{ c.author.username }}</span>
+            <span class="jobtips-comment-date">{{ c.created_at|date:"Y.m.d" }}</span>
+          </div>
+
+          <p class="jobtips-comment-text">{{ c.content }}</p>
+
+          {% if user.is_authenticated and c.author == user %}
+            <form method="POST" action="{% url 'jobTips:comment_delete' post.pk c.pk %}">
+              {% csrf_token %}
+              <button type="submit" style="background:none; border:none; color:#999; cursor:pointer;"
+                      onclick="return confirm('댓글 삭제할까요?');">
+                삭제
+              </button>
+            </form>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p style="color:#999;">아직 댓글이 없습니다.</p>
+      {% endfor %}
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/jobtips-detail.js' %}"></script>
+  <script>
+    (function(){
+      const sc = document.getElementById('image-scroll');
+      if (!sc) return;
+      const left = document.querySelector('.jobtips-image-scroll-btn.left');
+      const right = document.querySelector('.jobtips-image-scroll-btn.right');
+      if (!left || !right) return;
+
+      left.addEventListener('click', () => sc.scrollBy({ left: -300, behavior: 'smooth' }));
+      right.addEventListener('click', () => sc.scrollBy({ left: 300, behavior: 'smooth' }));
+    })();
+  </script>
+{% endblock %}

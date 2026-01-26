@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SujeongBridge - 모집 상세{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/recruit/recruit-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <!-- 상단 헤더 -->
+    <div class="recruit-detail-header">
+      <div class="recruit-detail-info">
+        <div class="recruit-detail-title">{{ recruit.title }}</div>
+        <span class="recruit-detail-nickname">{{ recruit.user.display_name }}</span>
+
+        <div class="recruit-detail-bottom">
+          <div class="recruit-detail-sub">
+            <span class="recruit-detail-category">{{ recruit.category.category_name }}</span>
+            <span class="recruit-detail-period">~ {{ recruit.deadline|date:"Y.m.d" }}</span>
+          </div>
+
+          <div class="recruit-detail-actions">
+            {% if request.user == recruit.user %}
+            <div class="recruit-edit-delete">
+              <a href="{% url 'recruit:recruit_edit' recruit.recruit_id %}" class="recruit-edit-btn">수정</a>
+              <span class="recruit-divider-line">|</span>
+              <form method="post" action="{% url 'recruit:recruit_delete' recruit.recruit_id %}" class="recruit-delete-form" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                {% csrf_token %}
+                <button type="submit" class="recruit-delete-btn">삭제</button>
+              </form>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'recruit:recruit_like' recruit.recruit_id %}" class="recruit-detail-like-form">
+              {% csrf_token %}
+              <button type="submit" class="recruit-detail-like-btn">
+                <img class="recruit-detail-post-like-img" src="{% static 'img/like.svg' %}">
+                <span class="recruit-detail-like-count">{{ recruit.like_count }}</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="recruit-detail-middle-box">
+      <div class="recruit-detail-important">{{ recruit.field|default:"분야 미지정" }}</div>
+    <!-- 첨부 파일 있다면 표시-->
+      {% if images %}
+      <div class="recruit-detail-files">
+        <img class="recruit-detail-file-img" src="{% static 'img/file.svg' %}" width="18px">
+        <span class="recruit-detail-file-content">
+          {% for img in images %}
+            {{ img.image_url.name|cut:"recruits/" }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </span>
+      </div>
+      {% endif %}
+    </div>
+
+
+    <!-- 이미지 + 후기 내용 -->
+    <div class="recruit-detail-body">
+
+      <!-- 왼쪽: 이미지 슬라이더 -->
+      <div class="recruit-detail-image-box">
+        <button class="recruit-image-scroll-btn left">&#8592;</button>
+        <div class="recruit-detail-image-scroll">
+          {% if images %}
+            {% for img in images %}
+              <img src="{{ img.image_url.url }}" alt="활동 이미지">
+            {% endfor %}
+          {% else %}
+          <img src="{% static 'img/default-recruit.png' %}" alt="기본 이미지">
+          {% endif %}
+        </div>
+        <button class="recruit-image-scroll-btn right">&#8594;</button>
+      </div>
+
+      <!-- 오른쪽: 후기 내용 -->
+      <div class="recruit-detail-text-box">
+        <div class="recruit-detail-text-title">소개</div>
+        <div class="recruit-detail-text-content">
+          {{ recruit.body|linebreaksbr }}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="recruit-detail-link-box">
+      <div class="recruit-detail-link-title">링크로 연결해주세요</div>
+      <div class="recruit-detail-link-content">
+        {% if recruit.contact %}
+          {{ recruit.contact|urlize }}
+        {% else %}
+          등록된 링크나 연락처가 없습니다.
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="recruit-bottom-box">
+      <div class="recruit-detail-tags">
+        {% for r_tag in tags %}
+          <span class="recruit-tag-item">#{{ r_tag.tag.tag_name }}</span>
+        {% empty %}
+          {% endfor %}
+      </div>
+      <form method="POST" action="{% url 'recruit:recruit_scrap' recruit.recruit_id %}" class="recruit-scrap-form">
+        {% csrf_token %}
+        <button type="submit" class="recruit-scrap-btn">
+          {% comment %} <img src="{% static 'img/scrap.svg' %}" class="scrap-img"> {% endcomment %}
+          {% if is_scrapped %}
+            <img src="{% static 'img/scrap-fill.svg' %}" class="scrap-img" alt="스크랩 취소">
+          {% else %}
+            <img src="{% static 'img/scrap.svg' %}" class="scrap-img" alt="스크랩">
+          {% endif %}
+        </button>
+
+        
+      </form>
+    </div>
+
+    <div class="divider"></div>
+
+
+    <!-- 댓글 작성 -->
+    <form method="POST" action="{% url 'recruit:recruit_detail' recruit.recruit_id %}" class="recruit-detail-comment-box">
+      {% csrf_token %}
+      <textarea name="content" class="recruit-detail-comment-content" placeholder="댓글 작성하기" required></textarea>
+      <div class="recruit-comment-btn-wrap">
+        <button type="submit" class="recruit-comment-submit-btn">
+          보내기
+        </button>
+      </div>
+    </form>
+
+
+    <!-- 댓글 리스트 -->
+    <div class="recruit-comment-list">
+      {% for comment in comments %}
+        <div class="recruit-comment-item">
+          <div class="recruit-comment-top">
+            <span class="recruit-comment-nickname">{{ comment.user.display_name }}</span>
+            <span class="recruit-comment-date">{{ comment.created_at|date:"Y.m.d" }}</span>
+          </div>
+          <p class="recruit-comment-text">
+            {{ comment.content }}
+          </p>
+      </div> 
+    </div>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/recruit-detail.js' %}"></script>
+{% endblock %}

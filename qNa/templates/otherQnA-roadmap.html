@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SujeongBridge | QnA - 로드맵{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/otherQnA-roadmap.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <!-- 프로필 상단 (Q&A 페이지와 동일) -->
+    <div class="other-profile-userInfo">
+      <div class="other-profile-userImg"><img src={{target_user.profileImage.url}} class="other-profile-userImg"></div>
+      <div class="other-profile-userId">{{ target_user.display_name }}</div>
+
+      <div class="other-profile-academic">
+        <span class="other-profile-Grade">{{ target_user.grade }}학년</span>
+        <span class="other-profile-major">{{ target_user.department.dept_name }}</span>
+      </div>
+
+      <div class="other-profile-userEmail">
+        <span class="other-profile-email-label">이메일 | </span>
+        <span class="otherQnA-profile-email-value">{{ target_user.email }}</span>
+      </div>
+    </div>
+
+    <!-- 메뉴 -->
+    <div class="otherQnA-list-wrapper">
+      <div class="other-profile-menu">
+        <a href="{% url 'qna:otherQna_roadmap' user_id=target_user.id %}">
+          <button type="button" class="other-profile-roadmap">로드맵</button>
+        </a>
+        
+        <a href="{% url 'qna:user_qna' target_user.id %}">
+          <button type="button" class="other-profile-qna">Q&A</button>
+        </a>
+        
+        <a href="{% url 'qna:write' %}?receiver={{ target_user.id }}">
+          <button type="button" class="otherQnA-list-writeBtn">Q&A 남기기</button>
+        </a>
+      </div>
+
+      <!-- 로드맵 -->
+
+      <div class="qna-roadmap-container">
+
+        <!-- 타임라인 -->
+        <div class="qna-timeline">
+          <div class="qna-dot"></div>
+        </div>
+
+        <!-- 카드 렌더링 -->
+        <div class="qna-roadmap-cards" id="qna-roadmap-cards"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <template id="roadmap-card-template">
+    <div class="card accordion" data-id="">
+      <div class="roadmap-card-title"></div>
+
+      <div class="roadmap-content">
+        <div class="roadmap-meta">
+          <span class="roadmap-category"></span>
+          <span class="roadmap-date"></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const cardsData = [
+    {% for e in entries %}
+      {
+        id: {{ e.id }},
+        year: {{ e.year }},
+        title: "{{ e.title|escapejs }}",
+        category: "{{ e.category|escapejs }}",
+        date: "{{ e.date|escapejs }}"
+      }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+  </script>
+
+  <script src="{% static 'js/otherQnA-roadmap.js' %}"></script>
+{% endblock %}
+
+
+

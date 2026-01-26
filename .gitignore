@@ -9,3 +9,8 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media/image
+media/jobtips/
+media/recruit_images/
+media/review_files/
+media/roadmap/
+media/verification_docs/

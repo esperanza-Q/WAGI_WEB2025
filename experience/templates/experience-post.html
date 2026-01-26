@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{% static 'css/experience/experience-post.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <div class="ex-post-title">활동 후기 남기기</div>
+
+    <form method="POST" action="{% url 'experience:review_create' %}" enctype="multipart/form-data" class="ex-post-form">
+      {% csrf_token %}
+      <label class="ex-post-label">제목</label>
+      <input type="text" name="title" class="ex-post-input" placeholder="활동 제목을 간단히 입력해주세요 (예: WAGI 3기 동아리 활동 후기)" required>
+      
+      <label class="ex-post-label">카테고리</label>
+      <div class="ex-post-category">
+        <label><input type="radio" name="category" value="club" required> 동아리</label>
+        <label><input type="radio" name="category" value="academic"> 학회</label>
+        <label><input type="radio" name="category" value="contest"> 공모전</label>
+        <label><input type="radio" name="category" value="intern"> 인턴</label>
+      </div>
+
+      <label class="ex-post-label">활동 기간</label>
+      <input type="text" name="activity_period" class="ex-post-input" placeholder="예: 2024.03 - 2024.11" required>
+
+      <label class="ex-post-label">후기 본문</label>
+      <textarea name="content" class="ex-post-textarea" required></textarea>
+
+      <label class="ex-post-label">파일 업로드</label>
+      <div class="ex-post-upload-area">
+        <label class="ex-post-upload-btn">
+          +
+          <input type="file" name="files" id="ex-upload-input" multiple required>
+        </label>
+
+        <div class="ex-post-upload-preview" id="ex-upload-preview">
+          <!-- 업로드된 이미지 미리보기, 파일명 미리보기(다중 선택 가능) -->
+        </div>
+      </div>
+
+      <label class="ex-post-label">평점</label>
+      <input type="number" name='rating' class="ex-post-input" placeholder="평점을 입력해주세요 (5점 만점)" min="1" max="5" required>
+      
+      <label class="ex-post-label">태그 추가</label>
+      <div class="ex-tag-input-wrapper">
+        <input
+          type="text"
+          id="ex-tag-input"
+          class="ex-tag-input"
+          placeholder="태그를 입력해주세요"
+        />
+
+        <input type="hidden" id="ex-hidden-tags" name="tags">
+        <button type="button" id="ex-add-tag-btn" class="ex-tag-add-btn">추가</button>
+      </div>
+      <div class="ex-tag-list" id="ex-tag-list"></div>
+
+      <button type="submit" class="ex-post-submit-btn">
+        완료하기
+      </button>
+    </form>
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/experience-post.js' %}"></script>
+{% endblock %}
