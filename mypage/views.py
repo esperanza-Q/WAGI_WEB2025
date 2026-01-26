@@ -3,6 +3,7 @@ from experience.models import ReviewScrap, Review
 from jobTips.models import JobTipPost
 from qNa.models import Qna, Answer
 from accounts.models import Department
+from recruit.models import Recruit, RecruitScrap
 
 
 # Create your views here.
@@ -28,6 +29,9 @@ def scrap_list(request, category='all'):
     # jobTips = JobTipPost.objects.filter(id__in=jobTips_s.values_list('jobtippost_id', flat=True)).order_by('-created_at')
     # jobTip = JobTipPost.objects.filter(pk=jobTip_s.jobtippost_id)
     
+    career_s = RecruitScrap.objects.filter(user=request.user)
+    career = Recruit.objects.filter(recruit_id__in=career_s.values_list('recruit_id', flat=True)).order_by('-created_at')
+    
     scrap_post = []
     
     if category == 'experience':
@@ -39,13 +43,17 @@ def scrap_list(request, category='all'):
             scrap_post.append([j.pk, j.title, j.author, j.created_at, 'jobTips'])
             
     # 모집 부분도 추가
-    # elif category == 'career':
+    elif category == 'recruit':
+        for c in career:
+            scrap_post.append([c.pk, c.title, c.user, c.created_at, 'recruit'])
         
     else:  # all
         for e in experience:
             scrap_post.append([e.pk, e.title, e.user, e.created_at, 'experience'])
         for j in jobTips:
             scrap_post.append([j.pk, j.title, j.author, j.created_at, 'jobTips'])
+        for c in career:
+            scrap_post.append([c.pk, c.title, c.user, c.created_at, 'recruit'])
 
         scrap_post.sort(key=lambda x: x[3], reverse=True)
         
@@ -67,6 +75,8 @@ def my_post_list(request, category='all'):
     # jobTips = JobTipPost.objects.filter(id__in=jobTips_s.values_list('jobtippost_id', flat=True)).order_by('-created_at')
     # jobTip = JobTipPost.objects.filter(pk=jobTip_s.jobtippost_id)
     
+    career = Recruit.objects.filter(user=request.user).order_by('-created_at')
+    
     posts = []
     
     if category == 'experience':
@@ -78,13 +88,17 @@ def my_post_list(request, category='all'):
             posts.append([j.pk, j.title, j.created_at, 'jobTips'])
             
     # 모집 부분도 추가
-    # elif category == 'career':
+    elif category == 'recruit':
+        for c in career:
+            posts.append([c.pk, c.title, c.created_at, 'recruit'])
         
     else:  # all
         for e in experience:
             posts.append([e.pk, e.title, e.created_at, 'experience'])
         for j in jobTips:
             posts.append([j.pk, j.title, j.created_at, 'jobTips'])
+        for c in career:
+            posts.append([c.pk, c.title, c.created_at, 'recruit'])
 
         posts.sort(key=lambda x: x[2], reverse=True)
         

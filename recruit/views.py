@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from django.db.models import Q
 from django.core.paginator import Paginator
 
-from .models import Recruit, RecruitLike, RecruitImage, RecruitTag, Category, Tag, Comment
+from .models import Recruit, RecruitLike, RecruitImage, RecruitTag, Category, Tag, Comment, RecruitScrap
 
 
 # =========================
@@ -174,6 +174,11 @@ def recruit_detail(request, recruit_id):
             )
 
         return redirect('recruit:recruit_detail', recruit_id=recruit_id)
+    
+    is_scrapped = RecruitScrap.objects.filter(
+        user=request.user,
+        recruit=recruit
+    ).exists()  # 스크랩이 존재하면 True, 없으면 False
 
     return render(request, 'recruit-detail.html', {
         'recruit': recruit,
@@ -181,6 +186,7 @@ def recruit_detail(request, recruit_id):
         'comments': parent_comments,
         'reply_map': reply_map,
         'tags': tags,
+        'is_scrapped' : is_scrapped
     })
 
 @login_required
@@ -400,3 +406,33 @@ def recruit_delete(request, recruit_id):
         return redirect('recruit:recruit_list')  # 삭제 후 목록 페이지로 이동
 
     return redirect('recruit:recruit_detail', recruit_id=recruit_id)
+
+
+@login_required
+def recruit_scrap(request, recruit_id):
+    print("request.method : ", request.method)
+    if request.method=='POST':
+        # 🔥 수정: get_object_or_404로 게시글 존재 확인
+        recruit = get_object_or_404(Recruit, recruit_id=recruit_id)
+        print("recruit:", recruit)
+        
+        # 🔥 수정: filter()로 현재 사용자의 스크랩 찾기 (exists()는 True/False만 반환)
+        scrap = RecruitScrap.objects.filter(
+            user=request.user,  # 🔥 추가: 현재 사용자 기준
+            recruit=recruit
+        ).first()
+        
+        print("🔥🔥🔥🔥", scrap)
+        
+        # 🔥 수정: 스크랩이 있으면 삭제, 없으면 생성 (토글)
+        if scrap:
+            scrap.delete()  # 🔥 수정: remove()가 아니라 delete()
+            is_scrapped=False
+        else:
+            RecruitScrap.objects.create(
+                user=request.user,
+                recruit=recruit
+            )
+            is_scrapped=True
+
+    return redirect('recruit:recruit_detail',  recruit_id=recruit_id)

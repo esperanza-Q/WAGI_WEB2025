@@ -171,3 +171,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content[:20]
+    
+class RecruitScrap(models.Model):
+    recruit = models.ForeignKey(Recruit, on_delete=models.CASCADE, related_name="scrap")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+
