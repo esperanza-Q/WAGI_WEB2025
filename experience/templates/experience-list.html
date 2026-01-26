@@ -50,82 +50,82 @@
       <div class="ex-sub-filter-row">
         <div class="ex-custom-filter">
           <select class="ex-filter-select" name="college">
-            <option value="">단과대 전체</option>
-            <option value="공과대학">공과대학</option>
-            <option value="인문대학">인문대학</option>
-            <option value="간호대학">간호대학</option>
-            <option value="미술대학">미술대학</option>
-            <option value="법과대학">법과대학</option>
-            <option value="사범대학">사범대학</option>
-            <option value="사회과학대학">사회과학대학</option>
-            <option value="생활산업대학">생활산업대학</option>
-            <option value="인문융합예술대학">인문융합예술대학</option>
-            <option value="사회과학대학">사회과학대학</option>
-            <option value="자연과학대학">자연과학대학</option>
+            <option value="" {% if selected_college == '' %}selected{% endif %}>단과대 전체</option>
+            <option value="공과대학" {% if selected_college == '공과대학' %}selected{% endif %}>공과대학</option>
+            <option value="인문대학" {% if selected_college == '인문대학' %}selected{% endif %}>인문대학</option>
+            <option value="음악대학" {% if selected_college == '음악대학' %}selected{% endif %}>음악대학</option>
+            <option value="간호대학" {% if selected_college == '간호대학' %}selected{% endif %}>간호대학</option>
+            <option value="미술대학" {% if selected_college == '미술대학' %}selected{% endif %}>미술대학</option>
+            <option value="법과대학" {% if selected_college == '법과대학' %}selected{% endif %}>법과대학</option>
+            <option value="사범대학" {% if selected_college == '사범대학' %}selected{% endif %}>사범대학</option>
+            <option value="사회과학대학" {% if selected_college == '사회과학대학' %}selected{% endif %}>사회과학대학</option>
+            <option value="생활산업대학" {% if selected_college == '생활산업대학' %}selected{% endif %}>생활산업대학</option>
+            <option value="인문융합예술대학" {% if selected_college == '인문융합예술대학' %}selected{% endif %}>인문융합예술대학</option>
+            <option value="자연과학대학" {% if selected_college == '자연과학대학' %}selected{% endif %}>자연과학대학</option>
           </select>
 
           <select class="ex-filter-select" name="department">
-            <option value="">학과 전체</option>
-            <option value="간호학과">간호학과</option>
-            <option value="바이오생명공학과">바이오생명공학과</option>
-            <option value="바이오식품공학과">바이오식품공학과</option>
-            <option value="바이오신약의과학부">바이오신약의과학부</option>
-            <option value="청정신소재공학과">청정신소재공학과</option>
-            <option value="AI융합학부">AI융합학부</option>
-            <option value="서비스·디자인공학과">서비스·디자인공학과</option>
-            <option value="융합보안공학과">융합보안공학과</option>
-            <option value="컴퓨터공학과">컴퓨터공학과</option>
-            <option value="공예과">공예과</option>
-            <option value="동양화과">동양화과</option>
-            <option value="디자인과">디자인과</option>
-            <option value="서양화과">서양화과</option>
-            <option value="조소과">조소과</option>
-            <option value="법학부">법학부</option>
-            <option value="교육학과">교육학과</option>
-            <option value="사회교육과">사회교육과</option>
-            <option value="유아교육과">유아교육과</option>
-            <option value="윤리교육과">윤리교육과</option>
-            <option value="한문교육과">한문교육과</option>
-            <option value="경영학과">경영학과</option>
-            <option value="경제학과">경제학과</option>
-            <option value="미디어커뮤니케이션학과">미디어커뮤니케이션학과</option>
-            <option value="사회복지학과">사회복지학과</option>
-            <option value="심리학과">심리학과</option>
-            <option value="정치외교학과">정치외교학과</option>
-            <option value="지리학과">지리학과</option>
-            <option value="뷰티산업학과">뷰티산업학과</option>
-            <option value="소비자산업학과">소비자산업학과</option>
-            <option value="스포츠과학부">스포츠과학부</option>
-            <option value="의류산업학과">의류산업학과</option>
-            <option value="기악과">기악과</option>
-            <option value="성악과">성악과</option>
-            <option value="작곡과">작곡과</option>
-            <option value="국어국문학과">국어국문학과</option>
-            <option value="독일어문·문화학과">독일어문·문화학과</option>
-            <option value="무용예술학과">무용예술학과</option>
-            <option value="문화예술경영학과">문화예술경영학과</option>
-            <option value="미디어영상연기학과">미디어영상연기학과</option>
-            <option value="사학과">사학과</option>
-            <option value="영어영문학과">영어영문학과</option>
-            <option value="일본어문·문화학과">일본어문·문화학과</option>
-            <option value="중국어문·문화학과">중국어문·문화학과</option>
-            <option value="프랑스어문·문화학과">프랑스어문·문화학과</option>
-            <option value="현대실용음악학과">현대실용음악학과</option>
-            <option value="바이오헬스융합학부">바이오헬스융합학부</option>
-            <option value="수리통계데이터사이언스학과">수리통계데이터사이언스학과</option>
-            <option value="화학·에너지융합학부">화학·에너지융합학부</option>
-            <option value="심리학과">심리학과</option>
+            <option value="" {% if selected_department == '' %}selected{% endif %}>학과 전체</option>
+            <option value="간호학과" {% if selected_department == '간호학과' %}selected{% endif %}>간호학과</option>
+            <option value="바이오생명공학과" {% if selected_department == '바이오생명공학과' %}selected{% endif %}>바이오생명공학과</option>
+            <option value="바이오식품공학과" {% if selected_department == '바이오식품공학과' %}selected{% endif %}>바이오식품공학과</option>
+            <option value="바이오신약의과학부" {% if selected_department == '바이오신약의과학부' %}selected{% endif %}>바이오신약의과학부</option>
+            <option value="청정신소재공학과" {% if selected_department == '청정신소재공학과' %}selected{% endif %}>청정신소재공학과</option>
+            <option value="AI융합학부" {% if selected_department == 'AI융합학부' %}selected{% endif %}>AI융합학부</option>
+            <option value="서비스·디자인공학과" {% if selected_department == '서비스·디자인공학과' %}selected{% endif %}>서비스·디자인공학과</option>
+            <option value="융합보안공학과" {% if selected_department == '융합보안공학과' %}selected{% endif %}>융합보안공학과</option>
+            <option value="컴퓨터공학과" {% if selected_department == '컴퓨터공학과' %}selected{% endif %}>컴퓨터공학과</option>
+            <option value="공예과" {% if selected_department == '공예과' %}selected{% endif %}>공예과</option>
+            <option value="동양화과" {% if selected_department == '동양화과' %}selected{% endif %}>동양화과</option>
+            <option value="디자인과" {% if selected_department == '디자인과' %}selected{% endif %}>디자인과</option>
+            <option value="서양화과" {% if selected_department == '서양화과' %}selected{% endif %}>서양화과</option>
+            <option value="조소과" {% if selected_department == '조소과' %}selected{% endif %}>조소과</option>
+            <option value="법학부" {% if selected_department == '법학부' %}selected{% endif %}>법학부</option>
+            <option value="교육학과" {% if selected_department == '교육학과' %}selected{% endif %}>교육학과</option>
+            <option value="사회교육과" {% if selected_department == '사회교육과' %}selected{% endif %}>사회교육과</option>
+            <option value="유아교육과" {% if selected_department == '유아교육과' %}selected{% endif %}>유아교육과</option>
+            <option value="윤리교육과" {% if selected_department == '윤리교육과' %}selected{% endif %}>윤리교육과</option>
+            <option value="한문교육과" {% if selected_department == '한문교육과' %}selected{% endif %}>한문교육과</option>
+            <option value="경영학과" {% if selected_department == '경영학과' %}selected{% endif %}>경영학과</option>
+            <option value="경제학과" {% if selected_department == '경제학과' %}selected{% endif %}>경제학과</option>
+            <option value="미디어커뮤니케이션학과" {% if selected_department == '미디어커뮤니케이션학과' %}selected{% endif %}>미디어커뮤니케이션학과</option>
+            <option value="사회복지학과" {% if selected_department == '사회복지학과' %}selected{% endif %}>사회복지학과</option>
+            <option value="심리학과" {% if selected_department == '심리학과' %}selected{% endif %}>심리학과</option>
+            <option value="정치외교학과" {% if selected_department == '정치외교학과' %}selected{% endif %}>정치외교학과</option>
+            <option value="지리학과" {% if selected_department == '지리학과' %}selected{% endif %}>지리학과</option>
+            <option value="뷰티산업학과" {% if selected_department == '뷰티산업학과' %}selected{% endif %}>뷰티산업학과</option>
+            <option value="소비자산업학과" {% if selected_department == '소비자산업학과' %}selected{% endif %}>소비자산업학과</option>
+            <option value="스포츠과학부" {% if selected_department == '스포츠과학부' %}selected{% endif %}>스포츠과학부</option>
+            <option value="의류산업학과" {% if selected_department == '의류산업학과' %}selected{% endif %}>의류산업학과</option>
+            <option value="기악과" {% if selected_department == '기악과' %}selected{% endif %}>기악과</option>
+            <option value="성악과" {% if selected_department == '성악과' %}selected{% endif %}>성악과</option>
+            <option value="작곡과" {% if selected_department == '작곡과' %}selected{% endif %}>작곡과</option>
+            <option value="국어국문학과" {% if selected_department == '국어국문학과' %}selected{% endif %}>국어국문학과</option>
+            <option value="독일어문·문화학과" {% if selected_department == '독일어문·문화학과' %}selected{% endif %}>독일어문·문화학과</option>
+            <option value="무용예술학과" {% if selected_department == '무용예술학과' %}selected{% endif %}>무용예술학과</option>
+            <option value="문화예술경영학과" {% if selected_department == '문화예술경영학과' %}selected{% endif %}>문화예술경영학과</option>
+            <option value="미디어영상연기학과" {% if selected_department == '미디어영상연기학과' %}selected{% endif %}>미디어영상연기학과</option>
+            <option value="사학과" {% if selected_department == '사학과' %}selected{% endif %}>사학과</option>
+            <option value="영어영문학과" {% if selected_department == '영어영문학과' %}selected{% endif %}>영어영문학과</option>
+            <option value="일본어문·문화학과" {% if selected_department == '일본어문·문화학과' %}selected{% endif %}>일본어문·문화학과</option>
+            <option value="중국어문·문화학과" {% if selected_department == '중국어문·문화학과' %}selected{% endif %}>중국어문·문화학과</option>
+            <option value="프랑스어문·문화학과" {% if selected_department == '프랑스어문·문화학과' %}selected{% endif %}>프랑스어문·문화학과</option>
+            <option value="현대실용음악학과" {% if selected_department == '현대실용음악학과' %}selected{% endif %}>현대실용음악학과</option>
+            <option value="바이오헬스융합학부" {% if selected_department == '바이오헬스융합학부' %}selected{% endif %}>바이오헬스융합학부</option>
+            <option value="수리통계데이터사이언스학과" {% if selected_department == '수리통계데이터사이언스학과' %}selected{% endif %}>수리통계데이터사이언스학과</option>
+            <option value="화학·에너지융합학부" {% if selected_department == '화학·에너지융합학부' %}selected{% endif %}>화학·에너지융합학부</option>
+            <option value="심리학과" {% if selected_department == '심리학과' %}selected{% endif %}>심리학과</option>
 
           </select>
 
           <select class="ex-filter-select" name="grade">
-            <option value="">학년 전체</option>
-            <option value="1">1학년</option>
-            <option value="2">2학년</option>
-            <option value="3">3학년</option>
-            <option value="4">4학년</option>
-            <option value="5">휴학</option>
-            <option value="6">졸업</option>
+            <option value="" {% if selected_grade == '' %}selected{% endif %}>학년 전체</option>
+            <option value="1" {% if selected_grade == '1' %}selected{% endif %}>1학년</option>
+            <option value="2" {% if selected_grade == '2' %}selected{% endif %}>2학년</option>
+            <option value="3" {% if selected_grade == '3' %}selected{% endif %}>3학년</option>
+            <option value="4" {% if selected_grade == '4' %}selected{% endif %}>4학년</option>
+            <option value="5" {% if selected_grade == '5' %}selected{% endif %}>휴학</option>
+            <option value="6" {% if selected_grade == '6' %}selected{% endif %}>졸업</option>
           </select>
 
           <button type="submit" class="ex-custom-filter-btn">
