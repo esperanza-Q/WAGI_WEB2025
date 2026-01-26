@@ -339,7 +339,7 @@ def recruit_edit(request, recruit_id):
             ).delete()
 
         # 새 파일 업로드
-        for file in request.FILES.getlist('files'):
+        for file in request.FILES.getlist('new_images'):
             RecruitImage.objects.create(
                 recruit=recruit,
                 image_url=file,
@@ -348,10 +348,39 @@ def recruit_edit(request, recruit_id):
 
         return redirect('recruit:recruit_detail', recruit_id=recruit.recruit_id)
 
+    # images = RecruitImage.objects.filter(recruit_id=recruit_id)
+    # print("이미지객체", images)
+
+    # # GET 요청
+    # return render(request, 'recruit-edit.html', {
+    #     'recruit': recruit,
+    #     'categories': Category.objects.all(),
+    #     'images':images
+    # })
+    # ===== 🔥 GET 요청 수정 부분 (기존 파일 데이터를 JS용 JSON으로 변환) =====
+    images = RecruitImage.objects.filter(recruit_id=recruit_id)
+    print("이미지객체", images)
+    
+    # 🔥 추가: 기존 이미지를 JS가 이해할 수 있는 형식으로 변환
+    existing_files = []
+    for img in images:
+        existing_files.append({
+            'id': img.image_id,  # 삭제 시 필요한 ID
+            'name': img.image_url.name.split('/')[-1] if img.image_url.name else 'image.jpg',  # 파일명 추출
+            'url': img.image_url.url,  # 이미지 URL
+            'type': 'image'  # 이미지 타입
+        })
+    
+    # 🔥 추가: 태그도 JSON 형식으로 변환
+    tags_list = [tag.tag_name for tag in recruit.tags.all()]
+
     # GET 요청
     return render(request, 'recruit-edit.html', {
         'recruit': recruit,
         'categories': Category.objects.all(),
+        'images': images,
+        'existing_files_json': json.dumps(existing_files),  # 🔥 추가
+        'tags_json': json.dumps(tags_list)  # 🔥 추가
     })
 
 
