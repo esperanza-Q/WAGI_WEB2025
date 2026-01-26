@@ -88,6 +88,11 @@ class RecruitImage(models.Model):
         null=True,
         related_name='recruit_images'
     )
+    
+    @property
+    def is_image(self):
+        name = self.image_url.name.lower()
+        return name.endswith(('.jpg', '.jpeg', '.png', '.gif', '.webp'))
 
     def __str__(self):
         return f"Image for {self.recruit.title}"
