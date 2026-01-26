@@ -1,0 +1,16 @@
+[Unit]
+Description=uWSGI service
+After=syslog.target
+
+[Service]
+ExecStart=/home/ubuntu/venv/bin/uwsgi -i /home/ubuntu/WAGI_WEB2025/.config/uwsgi/SujeongBridge.ini
+//요거 굉장히 익숙하지요? 위에서 실행했던 위스기 명령어입니다~ 이걸 서비스로 등록해 계속 백그라운드에서 실행시킬거에요
+
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
