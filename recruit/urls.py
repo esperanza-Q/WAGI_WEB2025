@@ -10,6 +10,8 @@ urlpatterns = [
     path('detail/<int:recruit_id>/', views.recruit_detail, name='recruit_detail'),
     path('edit/<int:recruit_id>/', views.recruit_edit, name='recruit_edit'),
     path('delete/<int:recruit_id>/', views.recruit_delete, name='recruit_delete'),
+    path('detail/<int:recruit_id>/scrap/', views.recruit_scrap, name='recruit_scrap'),
+
 
     # 좋아요 기능
     path('like/<int:recruit_id>/', views.recruit_like, name='recruit_like'),
