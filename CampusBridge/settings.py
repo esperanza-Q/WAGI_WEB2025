@@ -26,12 +26,9 @@ SECRET_KEY = 'django-insecure-e=s-^8%s3s=sb63lbsti8$52sfjrd+&duu6zw)j7=wdm=hcxhm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["surunserver.store"]
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
+CSRF_TRUSTED_ORIGINS = ["surunserver.store"]
 
 # Application definition
 
