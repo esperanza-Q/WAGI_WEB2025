@@ -29,7 +29,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['https://surunserver.store',
     'http://surunserver.store','surunserver.store',
     'www.surunserver.store',
-    '*.surunserver.store',]
+    '*.surunserver.store',
+    'http://localhost:8000',
+    '127.0.0.1',
+    ]
 
 CSRF_TRUSTED_ORIGINS = ['https://surunserver.store',
     'http://surunserver.store',]
@@ -61,6 +64,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    "accounts.middleware.VerificationRequiredMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
